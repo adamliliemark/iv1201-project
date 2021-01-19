@@ -4,3 +4,8 @@
     font-size: large;
     padding: 1em;
 }
+
+.header-logo {
+    font-size: x-large;
+    font-family: "DejaVu Serif Condensed", serif;
+}
