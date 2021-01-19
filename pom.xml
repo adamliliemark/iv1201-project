@@ -61,6 +61,13 @@
             <artifactId>maven-dependency-plugin</artifactId>
             <version>3.1.2</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs -->
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>4.2.0</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -99,6 +106,11 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.1.3</version>
+             </plugin>
         </plugins>
     </build>
 
