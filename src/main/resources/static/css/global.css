@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+}
+
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+.header {
+    grid-row: 1;
+    background-color: darkcyan;
+}
+
+.content {
+    grid-row: 2;
+    overflow: auto;
+    background-color: lightcyan;
+}
+
+.footer {
+    grid-row: 3;
+    background-color: darkcyan;
+}

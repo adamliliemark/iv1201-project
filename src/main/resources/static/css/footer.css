@@ -1,0 +1,6 @@
+.footer-outer {
+    display: flex;
+    justify-content: space-between;
+    font-size: large;
+    padding: 1em;
+}
