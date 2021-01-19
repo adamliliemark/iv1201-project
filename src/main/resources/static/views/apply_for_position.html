@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Recruitment Application</title>
     <link th:href="@{../css/global.css}" rel="stylesheet">
-    <link th:href="@{../css/home.css}" rel="stylesheet">
     <link th:href="@{../css/footer.css}" rel="stylesheet">
     <link th:href="@{../css/header.css}" rel="stylesheet">
 </head>
@@ -15,14 +14,7 @@
     </div>
 
     <div class="content">
-        <div class="title" th:text="Placeholder + ' ' + ${msg}"></div>
-
-        <div class="home-middle">
-            Middle section placeholder text.
-            <form method="post">
-                <input type="submit" value="tjabba">
-            </form>
-        </div>
+        <div th:replace="../fragments/apply_for_position_fragment"></div>
     </div>
 
     <div class="footer">
