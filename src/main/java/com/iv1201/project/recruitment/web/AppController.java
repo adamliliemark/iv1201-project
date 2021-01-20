@@ -1,4 +1,4 @@
-package com.iv1201.project.recruitment;
+package com.iv1201.project.recruitment.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,5 +38,4 @@ public class AppController {
     public String applyForPosition(Model model) {
         return "apply_for_position";
     }
-
 }
