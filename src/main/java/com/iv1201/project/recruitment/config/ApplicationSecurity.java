@@ -24,7 +24,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
         System.err.println(passwordEncoder().encode("pass"));
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("select email, password, enabled"
+                .usersByUsernameQuery("select email, password, enabled "
                 + "from users "
                 + "where email = ?")
                 .authoritiesByUsernameQuery("select email,authority "
