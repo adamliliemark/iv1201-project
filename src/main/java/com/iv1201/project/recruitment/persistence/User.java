@@ -30,5 +30,17 @@ public class User {
     public String getEmail() {
         return this.email;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 }
 

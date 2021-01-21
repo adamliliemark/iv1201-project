@@ -16,6 +16,19 @@ public class AppController {
 
     @GetMapping("/test")
     public String test(Model model) {
+        /*
+        String email = "test@example.com";
+        long i= userRepo.count();
+        System.err.println(i);
+        Optional<User> userOrNot = userRepo.findById(email);
+        if(userOrNot.isPresent()) {
+            User u =  userOrNot.get();
+            System.err.println(u.getEmail());
+            u.setFirstName("Adam");
+            userRepo.save(u);
+        } else
+            System.err.println("NO USER: " + email + " found :(");
+        */
         return "test";
     }
 
