@@ -20,7 +20,7 @@ public class HttpRequestTest {
 
     @Test
     public void simpleTest() throws Exception {
-        assertThat(this.webClient.getForObject("http://localhost:" + port + "/",
-                String.class)).contains("Green Garden");
+        assertThat(this.webClient.getForObject("http://localhost:" + port + "/login",
+                String.class)).contains("Login");
     }
 }

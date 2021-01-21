@@ -1,5 +1,6 @@
 package com.iv1201.project.recruitment;
 
+import com.iv1201.project.recruitment.web.AppController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
