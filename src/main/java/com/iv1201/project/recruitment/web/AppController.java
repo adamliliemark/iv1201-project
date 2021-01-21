@@ -1,11 +1,29 @@
 package com.iv1201.project.recruitment.web;
+import com.iv1201.project.recruitment.persistence.User;
+import com.iv1201.project.recruitment.persistence.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Optional;
+
 @Controller
 public class AppController {
+    @Autowired
+    private UserRepository userRepo;
+
+    @GetMapping("/test")
+    public String test(Model model) {
+        return "test";
+    }
+
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login";
+    }
 
     @GetMapping("/")
     public String home(Model model) {

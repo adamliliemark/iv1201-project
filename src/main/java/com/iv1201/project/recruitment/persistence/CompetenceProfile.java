@@ -22,7 +22,7 @@ public class CompetenceProfile {
     @JoinColumn
     private Competence competence;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private User userEmail;
 }

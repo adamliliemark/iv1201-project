@@ -26,5 +26,9 @@ public class User {
 
     @Column(nullable = false, unique = false)
     private Boolean enabled;
+
+    public String getEmail() {
+        return this.email;
+    }
 }
 

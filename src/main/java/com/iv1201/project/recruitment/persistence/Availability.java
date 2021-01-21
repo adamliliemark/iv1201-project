@@ -19,7 +19,7 @@ public class Availability {
     @Column(columnDefinition = "DATE", nullable = false, unique = false)
     private LocalDate toDate;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private User user;
 }

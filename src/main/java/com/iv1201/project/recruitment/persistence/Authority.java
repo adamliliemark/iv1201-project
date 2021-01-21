@@ -15,7 +15,7 @@ public class Authority {
     @Column(nullable = false, unique = false)
     private String authority;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private User user;
 }
