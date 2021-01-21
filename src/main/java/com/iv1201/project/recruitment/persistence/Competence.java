@@ -3,19 +3,15 @@ package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
 
-@Entity(name = "authorities")
-public class Authority {
+@Entity
+public class Competence {
 
-    protected Authority() {}
+    protected Competence() {}
 
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = false)
-    private String authority;
-
-    @ManyToOne
-    @JoinColumn
-    private User user;
+    private String name;
 }
