@@ -1,10 +1,7 @@
 package com.iv1201.project.recruitment.persistence;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Entity(name = "authorities")
 public class Authority {
@@ -18,6 +15,7 @@ public class Authority {
     @Column(nullable = false, unique = false)
     private String authority;
 
-    @Column(nullable = false, unique = false)
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "user_email")
+    private User user;
 }

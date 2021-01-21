@@ -27,9 +27,9 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery("select email, password, enabled "
                 + "from users "
                 + "where email = ?")
-                .authoritiesByUsernameQuery("select email,authority "
+                .authoritiesByUsernameQuery("select user_email, authority "
                 + "from authorities "
-                + "where email = ?");
+                + "where user_email = ?");
     }
 
     @Bean
