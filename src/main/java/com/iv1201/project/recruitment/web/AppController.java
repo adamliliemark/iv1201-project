@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Controller
@@ -65,8 +67,25 @@ public class AppController {
         return "create_account";
     }
 
+    HashMap<String, Integer> exp = new HashMap<>();
     @GetMapping("/apply")
-    public String applyForPosition(Model model) {
+    public String applyForPosition(@ModelAttribute Appl appl, Model model) {
+        appl.setExpertise("Hot dogs");
+        appl.setYears(39);
+        model.addAttribute("application", appl);
+        System.out.println(appl.getExpertise());
+        System.out.println(appl.getYears());
+        return "apply_for_position";
+    }
+
+    @PostMapping("/apply")
+    public String fetchApplication(@ModelAttribute Appl appl, Model model) {
+        String exps = appl.getExpertise();
+        int years = appl.getYears();
+        System.out.println(exps);
+        exp.put(exps, years);
+        model.addAttribute("experiences", exp);
+        model.addAttribute("application", appl);
         return "apply_for_position";
     }
 }
