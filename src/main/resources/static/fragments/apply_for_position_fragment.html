@@ -8,8 +8,7 @@
 
 <div class="create-account-outer" th:fragment="create_account" >
     <div class="title">Apply for a position</div>
-
-    <form th:action="@{/apply}" action="#" class="form" method="post" th:object="${expertise}">
+    <form action="/apply" class="form" method="post" th:object="${application}">
         <label for="expertise">Expertise</label>
         <select name="expertise" id="expertise" th:field="*{expertise}">
             <option value="Sales">Sales</option>
@@ -19,20 +18,17 @@
         <label for="expertise-years">Years of experience</label>
         <input id="expertise-years" type="number" th:field="*{years}">
         <p>
-            <input type="submit" value="Add expertise" >
+            <input type="submit" value="Add expertise">
             <input type="submit" value="Finished adding expertise(s)">
     </form>
 
-
-
-    <div th:text="${user.getUser.getFirstName} + ', here is your application so far: '"></div>
-    <div th:each="comp : ${user.getCompetences}">
-        <div th:text="${comp.getCompetence.getName}"></div>
-        <div th:text="${comp.getYearsOfExperience}"></div>
+    Your application:
+    <div th:each="expertise : ${expertises}">
+        <div th:text="${expertise.getKey} + ', ' + ${expertise.getValue} + ' years'"></div>
     </div>
-
-
-
+Placeholding
+    <div th:text="${appl.getExpertise}"></div>
+    <div th:text="${appl.getYears}"></div>
 </div>
 </body>
 </html>
