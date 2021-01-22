@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthorityRepo extends CrudRepository<Authority, String> {
+public interface AuthorityRepository extends CrudRepository<Authority, String> {
 
 }
