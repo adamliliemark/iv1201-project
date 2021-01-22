@@ -6,28 +6,29 @@
 </head>
 <body>
 
-<div class="create-account-outer" th:fragment="create_account">
+<div class="create-account-outer" th:fragment="create_account" >
     <div class="title">Apply for a position</div>
-    This form does not satisfy what is described in the task. It is just a mockup.
-    Testing workflow.
-    Testing more.
-    Testing again.
-    <form class="form" method="post" action="/apply">
+    <form action="/apply" class="form" method="post" th:object="${application}">
         <label for="expertise">Expertise</label>
-        <select name="expertise" id="expertise">
+        <select name="expertise" id="expertise" th:field="*{expertise}">
             <option value="Sales">Sales</option>
             <option value="Cleaning">Cleaning</option>
             <option value="Hot Dogs">Hot Dogs</option>
         </select>
         <label for="expertise-years">Years of experience</label>
-        <input id="expertise-years" type="number">
-        <label for="startdate" type="text">Available from</label>
-        <input id="startdate" type="date">
-        <label for="enddate">Available until</label>
-        <input id="enddate" type="date">
+        <input id="expertise-years" type="number" th:field="*{years}">
         <p>
-            <input type="submit" value="Apply">
+            <input type="submit" value="Add expertise">
+            <input type="submit" value="Finished adding expertise(s)">
     </form>
+
+    Your application:
+    <div th:each="expertise : ${expertises}">
+        <div th:text="${expertise.getKey} + ', ' + ${expertise.getValue} + ' years'"></div>
+    </div>
+Placeholding
+    <div th:text="${appl.getExpertise}"></div>
+    <div th:text="${appl.getYears}"></div>
 </div>
 </body>
 </html>
