@@ -17,6 +17,11 @@ public class AppController {
         return "login";
     }
 
+    @GetMapping("/admin")
+    public String admin(Model model) {
+        return "admin";
+    }
+
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("msg", "hejsan");
