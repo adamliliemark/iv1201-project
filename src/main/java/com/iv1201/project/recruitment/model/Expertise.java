@@ -1,6 +1,6 @@
-package com.iv1201.project.recruitment.web;
+package com.iv1201.project.recruitment.model;
 
-public class Appl {
+public class Expertise {
     private String expertise;
     private int years;
 
