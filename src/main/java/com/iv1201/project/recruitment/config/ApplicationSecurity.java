@@ -20,7 +20,6 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)
         throws Exception {
-        System.err.println(passwordEncoder().encode("pass"));
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select email, password, enabled "

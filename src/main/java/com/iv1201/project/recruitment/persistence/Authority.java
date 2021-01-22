@@ -8,6 +8,11 @@ public class Authority {
 
     protected Authority() {}
 
+    public Authority(String authority, User user) {
+        this.user = user;
+        this.authority = authority;
+    }
+
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,7 +20,7 @@ public class Authority {
     @Column(nullable = false, unique = false)
     private String authority;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn
     private User user;
 }
