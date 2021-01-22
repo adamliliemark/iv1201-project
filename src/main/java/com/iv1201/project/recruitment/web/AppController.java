@@ -1,7 +1,9 @@
 package com.iv1201.project.recruitment.web;
-import com.iv1201.project.recruitment.model.Expertise;
 import com.iv1201.project.recruitment.model.LiveUser;
-import com.iv1201.project.recruitment.persistence.*;
+import com.iv1201.project.recruitment.persistence.Authority;
+import com.iv1201.project.recruitment.persistence.AuthorityRepo;
+import com.iv1201.project.recruitment.persistence.User;
+import com.iv1201.project.recruitment.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,8 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.annotation.PostConstruct;
-import java.security.Principal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Optional;
 
 @Controller
 public class AppController {
@@ -82,24 +84,21 @@ public class AppController {
         return "create_account";
     }
 
-    private final Map<String, LiveUser> users = new HashMap<String, LiveUser>();
-
+    HashMap<String, Integer> exp = new HashMap<>();
     @GetMapping("/apply")
-    public String applyForPosition(@ModelAttribute LiveUser user, @ModelAttribute Expertise expertise, Principal puser, Model model) {
-        user.setUser(new User("mail@mail.com", "john", "doe", 192830L, "pass"));
-        user.tempSetComp("hot dogs", 8);
-        model.addAttribute("user", user);
-        users.put(puser.getName(), user);
-        System.out.println(puser.getName());
-        model.addAttribute("expertise", expertise);
+    public String applyForPosition(@ModelAttribute LiveUser user, Model model) {
+        model.addAttribute("application", user);
         return "apply_for_position";
     }
 
     @PostMapping("/apply")
-    public String fetchApplication(@ModelAttribute Expertise expertise, Principal puser, Model model) {
-        LiveUser user = users.get(puser.getName());
-        user.tempSetComp(expertise.getExpertise(), expertise.getYears());
-        model.addAttribute("user", user);
+    public String fetchApplication(@ModelAttribute Appl appl, Model model) {
+        String exps = appl.getExpertise();
+        int years = appl.getYears();
+        System.out.println(exps);
+        exp.put(exps, years);
+        model.addAttribute("experiences", exp);
+        model.addAttribute("application", appl);
         return "apply_for_position";
     }
 }
