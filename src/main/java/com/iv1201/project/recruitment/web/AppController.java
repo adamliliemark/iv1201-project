@@ -1,4 +1,5 @@
 package com.iv1201.project.recruitment.web;
+import com.iv1201.project.recruitment.model.LiveUser;
 import com.iv1201.project.recruitment.persistence.Authority;
 import com.iv1201.project.recruitment.persistence.AuthorityRepo;
 import com.iv1201.project.recruitment.persistence.User;
@@ -85,12 +86,8 @@ public class AppController {
 
     HashMap<String, Integer> exp = new HashMap<>();
     @GetMapping("/apply")
-    public String applyForPosition(@ModelAttribute Appl appl, Model model) {
-        appl.setExpertise("Hot dogs");
-        appl.setYears(39);
-        model.addAttribute("application", appl);
-        System.out.println(appl.getExpertise());
-        System.out.println(appl.getYears());
+    public String applyForPosition(@ModelAttribute LiveUser user, Model model) {
+        model.addAttribute("application", user);
         return "apply_for_position";
     }
 
