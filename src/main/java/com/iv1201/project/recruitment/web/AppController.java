@@ -28,7 +28,7 @@ public class AppController {
                     new BCryptPasswordEncoder().encode("pass"));
             Authority userAuth = new Authority("ROLE_USER", user);
             userRepo.save(user);
-            authorityRepo.save(userAuth);
+            authorityRepository.save(userAuth);
         }
         if(!userRepo.findByEmail("testadmin@example.com").isPresent()) {
             User admin = new User(
@@ -39,7 +39,7 @@ public class AppController {
                     new BCryptPasswordEncoder().encode("pass"));
             Authority adminAuth = new Authority("ROLE_ADMIN", admin);
             userRepo.save(admin);
-            authorityRepo.save(adminAuth);
+            authorityRepository.save(adminAuth);
         }
     }
 
@@ -48,7 +48,7 @@ public class AppController {
     private UserRepository userRepo;
 
     @Autowired
-    private AuthorityRepo authorityRepo;
+    private AuthorityRepository authorityRepository;
 
     @GetMapping("/login")
     public String login(Model model) {
