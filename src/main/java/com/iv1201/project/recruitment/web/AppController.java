@@ -1,4 +1,6 @@
 package com.iv1201.project.recruitment.web;
+import com.iv1201.project.recruitment.persistence.Competence;
+import com.iv1201.project.recruitment.persistence.CompetenceRepository;
 import com.iv1201.project.recruitment.persistence.User;
 import com.iv1201.project.recruitment.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class AppController {
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private CompetenceRepository competenceRepo;
 
     @GetMapping("/test")
     public String test(Model model) {
@@ -32,6 +38,19 @@ public class AppController {
         return "test";
     }
 
+    @GetMapping("/list")
+    public String list(Model model){
+
+        Iterable<Competence> all = competenceRepo.findAll();
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        all.forEach(c -> stringBuilder.append(c.getId()));
+
+        model.addAttribute("competence", stringBuilder.toString());
+
+        return "list";
+    }
 
     @GetMapping("/login")
     public String login(Model model) {
