@@ -8,6 +8,15 @@ public class User {
 
     protected User() {}
 
+    public User(String email, String firstName, String lastName, Long ssn, String password) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ssn = ssn;
+        this.password = password;
+        this.enabled = true;
+    }
+
     @Id
     @Column(nullable = false, unique = true)
     private String email;
@@ -15,11 +24,11 @@ public class User {
     @Column(nullable = false, unique = false)
     private String firstName;
 
-    @Column (nullable = false, unique = true)
-    Long ssn;
-
     @Column(nullable = false, unique = false)
     private String lastName;
+
+    @Column (nullable = false, unique = false)
+    Long ssn;
 
     @Column(nullable = false, unique = false)
     private String password;
