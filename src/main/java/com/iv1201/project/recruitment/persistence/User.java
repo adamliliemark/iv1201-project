@@ -51,5 +51,7 @@ public class User {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    public Long getSsn() { return ssn; }
 }
 
