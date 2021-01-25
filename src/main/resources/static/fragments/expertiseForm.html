@@ -6,31 +6,24 @@
 </head>
 <body>
 
-<div class="create-account-outer" th:fragment="add_expertises" >
-    <div class="title">Apply for a position</div>
+<div class="application-form" th:fragment="expertiseForm">
+    <div class="title">Apply for a job</div>
 
-    <form th:action="@{/apply(action='add_expertise')}" action="#" class="form" method="post" th:object="${expertise}" id="expertiseForm">
+    <div class="subtitle">What's your skills?</div>
+    <form th:action="@{/apply/expertise}" action="#" class="form" method="post" th:object="${expertise}" id="expertiseForm">
         <label for="expertise">Expertise</label>
-        <select name="expertise" id="expertise" th:field="*{expertise}">
+        <select name="expertise" id="expertise" th:field="*{expertise}" required>
             <option th:each="exp : ${availableExpertises}" th:value="${exp}" th:text="${exp}"></option>
         </select>
         <label for="expertise-years">Years of experience</label>
-        <input id="expertise-years" type="number" th:field="*{years}">
+        <input id="expertise-years" type="number" th:field="*{years}" required>
         <p>
             <div th:if="${last}" th:text="'All expertises already added. Please submit your form.'"></div>
             <input type="submit" value="Add" th:unless="${last}">
     </form>
-    <form th:action="@{/apply(action='submit_expertise')}" action="#" class="form" method="post">
+    <form th:action="@{/apply/availability}" action="#" class="form" method="post">
         <input type="submit" value="Submit">
     </form>
-
-    <div class="apply-text">
-        <div th:text="${user.getUser.getFirstName} + ', ' + ${user.getUser.getEmail} + ', here is your application so far: '"></div>
-        <div th:each="comp : ${user.getCompetences}">
-            <div th:text="${comp.key}"></div>
-            <div th:text="${comp.value}"></div>
-        </div>
-    </div>
 </div>
 
 </body>

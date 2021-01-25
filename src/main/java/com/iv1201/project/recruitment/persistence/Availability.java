@@ -1,6 +1,8 @@
 package com.iv1201.project.recruitment.persistence;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -14,13 +16,17 @@ public class Availability {
         this.toDate = to;
     }
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(columnDefinition = "DATE", nullable = false, unique = false)
     private LocalDate fromDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(columnDefinition = "DATE", nullable = false, unique = false)
     private LocalDate toDate;
 
@@ -34,5 +40,13 @@ public class Availability {
 
     public LocalDate getToDate() {
         return toDate;
+    }
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
     }
 }

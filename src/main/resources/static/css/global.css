@@ -17,6 +17,8 @@ body {
     grid-row: 2;
     overflow: auto;
     background-color: lightcyan;
+    display: grid;
+    grid-template-rows: auto 2fr;
 }
 
 .footer {
@@ -31,6 +33,11 @@ body {
     padding: 1em;
 }
 
+.subtitle {
+    font-size: large;
+    padding: 1em;
+}
+
 .form {
     display: flex;
     flex-direction: column;
@@ -40,4 +47,12 @@ body {
 
 .apply-text {
     padding: 1em;
+}
+
+.application-form {
+    grid-row: 1;
+}
+
+.application-review {
+    grid-row: 2;
 }

@@ -6,17 +6,22 @@
 </head>
 <body>
 
-<div class="create-account-outer" th:fragment="add_availability">
-    <div class="title">What's your availability?</div>
 
-    <form th:action="@{apply(action='submit_availability')" action="#" class="form" method="post">
+<div class="application-form" th:fragment="availabilityForm">
+    <div class="title">Apply for a job</div>
+
+    <div class="subtitle">What's your availability?</div>
+    <form th:action="@{/apply/availability}" action="#" class="form" method="post" th:object="${availability}">
         <label for="from">From:</label>
-        <input type="date" id="from">
+        <input type="date" id="from" th:field="*{fromDate}" required>
         <label for="to">To:</label>
-        <input type="date" id="to">
+        <input type="date" id="to" th:field="*{toDate}" required>
         <p>
             <input type="submit" value="Submit">
         </p>
+    </form>
+    <form th:action="@{/apply/review}" action="#" class="form" method="post">
+        <input type="submit" value="Send your application">
     </form>
 </div>
 

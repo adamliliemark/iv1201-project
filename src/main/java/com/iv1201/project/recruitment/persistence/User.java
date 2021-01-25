@@ -53,5 +53,9 @@ public class User {
     }
 
     public Long getSsn() { return ssn; }
+
+    public String getLastName() {
+        return lastName;
+    }
 }
 
