@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="create-account-outer" th:fragment="add_availability">
+    <div class="title">What's your availability?</div>
+
+    <form th:action="@{apply(action='submit_availability')" action="#" class="form" method="post">
+        <label for="from">From:</label>
+        <input type="date" id="from">
+        <label for="to">To:</label>
+        <input type="date" id="to">
+        <p>
+            <input type="submit" value="Submit">
+        </p>
+    </form>
+</div>
+
+</body>
+</html>

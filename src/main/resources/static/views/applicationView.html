@@ -13,8 +13,14 @@
         <div th:replace="../fragments/header :: header"></div>
     </div>
 
-    <div class="content">
-        <div th:replace="../fragments/apply_for_position_fragment"></div>
+    <div class="content" th:if="${form == 'expertise'}">
+        <div th:replace="../fragments/expertiseForm"></div>
+    </div>
+    <div class="content" th:if="${form == 'availability'}">
+        <div th:replace="../fragments/availabilityForm"></div>
+    </div>
+    <div class="content" th:if="${form == 'review'}">
+        <div th:replace="../fragments/reviewApplication"></div>
     </div>
 
     <div class="footer">
