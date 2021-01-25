@@ -14,7 +14,20 @@
     </div>
 
     <div class="content">
-        <div th:replace="../fragments/apply_for_position_fragment"></div>
+        <div class="application-form" th:switch="${form}">
+            <div th:case="${'expertise'}" >
+                <div th:replace="../fragments/expertiseForm"></div>
+            </div>
+            <div th:case="${'availability'}">
+                <div th:replace="../fragments/availabilityForm"></div>
+            </div>
+            <div th:case="${'review'}">
+                <div th:replace="../fragments/reviewApplication"></div>
+            </div>
+        </div>
+        <div class="application-review" th:unless="${form == 'review'}">
+            <div th:replace="../fragments/reviewApplication"></div>
+        </div>
     </div>
 
     <div class="footer">

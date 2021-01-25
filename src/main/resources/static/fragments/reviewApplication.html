@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apply for a Position</title>
+</head>
+<body>
+
+<div class="create-account-outer" th:fragment="reviewApplication">
+    <div th:if="${form == 'review'}">
+        <div class="title">Apply for a job</div>
+        <div class="subtitle">Here is your application. Please review it and submit it when you are done.</div>
+    </div>
+
+    <div class="apply-text">
+        Name: <div th:text="${user.getUser.getFirstName} + ' ' + ${user.getUser.getLastName}"></div>
+        Mail: <div th:text="${user.getUser.getEmail}"></div>
+        <p>
+            Competences:
+            <div th:each="comp : ${user.getCompetences}">
+                <div th:text="${comp.key}"></div>
+                <div th:text="${comp.value}"></div>
+            </div>
+        <p>
+            <div th:if="${user.getAvailability != null}">
+                Availability:
+                <div th:text="${user.getAvailability.getFromDate}"></div>
+                <div th:text="${user.getAvailability.getToDate}"></div>
+            </div>
+    </div>
+</div>
+
+</body>
+</html>

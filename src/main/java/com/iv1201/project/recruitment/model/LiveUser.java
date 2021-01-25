@@ -1,20 +1,32 @@
 package com.iv1201.project.recruitment.model;
 
 import com.iv1201.project.recruitment.persistence.Availability;
-import com.iv1201.project.recruitment.persistence.Competence;
-import com.iv1201.project.recruitment.persistence.CompetenceProfile;
 import com.iv1201.project.recruitment.persistence.User;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
+/**
+ * LiveUser is a data holding class. A logged in user will be
+ * assigned a LiveUser, and data produced during the session
+ * will be stored here.
+ */
 public class LiveUser {
     private User user;
-    private ArrayList<CompetenceProfile> competences;
+    private final HashMap<String, Integer> mapCompetences;
     private Availability availability;
-    private CompetenceProfile temp;
 
     public LiveUser() {
-        this.competences = new ArrayList<>();
+        this.mapCompetences = new HashMap<>();
+    }
+
+    /**
+     * A LiveUser's competences are stored in a hashmap; this means
+     * that duplicates are handled automatically.
+     * @param competence the competence to store
+     * @param years the associated years of experience
+     */
+    public void mapCompetenceYearCombo(String competence, int years) {
+        this.mapCompetences.put(competence, years);
     }
 
     public User getUser() {
@@ -25,12 +37,8 @@ public class LiveUser {
         this.user = user;
     }
 
-    public ArrayList<CompetenceProfile> getCompetences() {
-        return competences;
-    }
-
-    public void setCompetences(ArrayList<CompetenceProfile> competences) {
-        this.competences = competences;
+    public HashMap<String, Integer> getCompetences() {
+        return mapCompetences;
     }
 
     public Availability getAvailability() {
@@ -39,9 +47,5 @@ public class LiveUser {
 
     public void setAvailability(Availability availability) {
         this.availability = availability;
-    }
-
-    public void tempSetComp(String competence, int years) {
-        this.competences.add(new CompetenceProfile(competence, years));
     }
 }
