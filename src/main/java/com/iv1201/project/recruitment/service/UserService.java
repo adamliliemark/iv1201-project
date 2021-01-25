@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 
 @Component
@@ -46,6 +47,10 @@ public class UserService {
             userRepo.save(user);
             authorityRepo.save(userAuth);
         }
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 
     private boolean validateUser(String email, String firstName, String lastName, String clearTextPassword, Long ssn) throws UserServiceError {
