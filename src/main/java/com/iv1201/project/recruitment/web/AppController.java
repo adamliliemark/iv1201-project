@@ -20,10 +20,6 @@ public class AppController {
     @Autowired
     UserService userService;
 
-    private final Map<String, LiveUser> users = new HashMap<String, LiveUser>();
-    private final AvailableExpertises availableExpertises = new AvailableExpertises();
-
-
     @GetMapping("/login")
     public String login(Model model) {
         return "login";
@@ -67,22 +63,5 @@ public class AppController {
         return "create_account";
     }
 
-    @GetMapping("/apply")
-    public String applyForPosition(@ModelAttribute LiveUser user, @ModelAttribute Expertise expertise, Principal principalUser, Model model) {
-        user.setUser(new User("mail@mail.com", "john", "doe", 192830L, "pass"));
-        model.addAttribute("user", user);
-        users.put(principalUser.getName(), user);
-        model.addAttribute("expertise", expertise);
-        model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
-        return "apply_for_position";
-    }
 
-    @PostMapping("/apply")
-    public String fetchApplication(@ModelAttribute Expertise expertise, Principal puser, Model model) {
-        LiveUser user = users.get(puser.getName());
-        user.tempSetComp(expertise.getExpertise(), expertise.getYears());
-        model.addAttribute("user", user);
-        model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
-        return "apply_for_position";
-    }
 }

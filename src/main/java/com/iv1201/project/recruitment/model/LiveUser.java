@@ -1,23 +1,18 @@
 package com.iv1201.project.recruitment.model;
 
-import com.iv1201.project.recruitment.persistence.Availability;
-import com.iv1201.project.recruitment.persistence.Competence;
-import com.iv1201.project.recruitment.persistence.CompetenceProfile;
 import com.iv1201.project.recruitment.persistence.User;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LiveUser {
     private User user;
-    private ArrayList<CompetenceProfile> competences;
-    private Availability availability;
-    private CompetenceProfile temp;
+    private final HashMap<String, Integer> mapCompetences;
 
     public LiveUser() {
-        this.competences = new ArrayList<>();
+        this.mapCompetences = new HashMap<>();
     }
 
-    public User getUser() {
+      public User getUser() {
         return user;
     }
 
@@ -25,23 +20,11 @@ public class LiveUser {
         this.user = user;
     }
 
-    public ArrayList<CompetenceProfile> getCompetences() {
-        return competences;
+    public HashMap<String, Integer> getCompetences() {
+        return mapCompetences;
     }
 
-    public void setCompetences(ArrayList<CompetenceProfile> competences) {
-        this.competences = competences;
-    }
-
-    public Availability getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Availability availability) {
-        this.availability = availability;
-    }
-
-    public void tempSetComp(String competence, int years) {
-        this.competences.add(new CompetenceProfile(competence, years));
+    public void mapCompetenceYearCombo(String competence, int years) {
+        this.mapCompetences.put(competence, years);
     }
 }

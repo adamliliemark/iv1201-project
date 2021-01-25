@@ -9,6 +9,11 @@ public class Availability {
 
     protected Availability() {}
 
+    public Availability(LocalDate from, LocalDate to) {
+        this.fromDate = from;
+        this.toDate = to;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,4 +27,12 @@ public class Availability {
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private User user;
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public LocalDate getToDate() {
+        return toDate;
+    }
 }
