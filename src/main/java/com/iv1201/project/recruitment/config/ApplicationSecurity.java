@@ -45,8 +45,8 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
             //.failureHandler(authenticationFailureHandler())
             .and()
             .logout()
-            .permitAll();
-            //.logoutUrl("/perform_logout")
+            .permitAll()
+            .logoutUrl("/perform_logout");
             //.deleteCookies("JSESSIONID");
             //.logoutSuccessHandler(logoutSuccessHandler());
     }

@@ -1,4 +1,5 @@
 package com.iv1201.project.recruitment.web;
+import com.iv1201.project.recruitment.model.AvailableExpertises;
 import com.iv1201.project.recruitment.model.Expertise;
 import com.iv1201.project.recruitment.model.LiveUser;
 import com.iv1201.project.recruitment.persistence.*;
@@ -19,6 +20,10 @@ public class AppController {
     @Autowired
     UserService userService;
 
+    private final Map<String, LiveUser> users = new HashMap<String, LiveUser>();
+    private final AvailableExpertises availableExpertises = new AvailableExpertises();
+
+
     @GetMapping("/login")
     public String login(Model model) {
         return "login";
@@ -30,16 +35,22 @@ public class AppController {
     }
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Principal user, Model model) {
+        if(!(user.getName().isEmpty()))
+            model.addAttribute("loggedIn", true);
+        else
+            model.addAttribute("loggedIn", false);
         model.addAttribute("msg", "hejsan");
-        model.addAttribute("loggedIn", false);
         return "home";
     }
 
     @PostMapping("/")
-    public String post(Model model) {
+    public String post(Principal user, Model model) {
+        if(!(user.getName().isEmpty()))
+            model.addAttribute("loggedIn", true);
+        else
+            model.addAttribute("loggedIn", false);
         model.addAttribute("msg", "svejsan");
-        model.addAttribute("loggedIn", true);
         return "home";
     }
 
@@ -56,16 +67,13 @@ public class AppController {
         return "create_account";
     }
 
-    private final Map<String, LiveUser> users = new HashMap<String, LiveUser>();
-
     @GetMapping("/apply")
-    public String applyForPosition(@ModelAttribute LiveUser user, @ModelAttribute Expertise expertise, Principal puser, Model model) {
+    public String applyForPosition(@ModelAttribute LiveUser user, @ModelAttribute Expertise expertise, Principal principalUser, Model model) {
         user.setUser(new User("mail@mail.com", "john", "doe", 192830L, "pass"));
-        user.tempSetComp("hot dogs", 8);
         model.addAttribute("user", user);
-        users.put(puser.getName(), user);
-        System.out.println(puser.getName());
+        users.put(principalUser.getName(), user);
         model.addAttribute("expertise", expertise);
+        model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
         return "apply_for_position";
     }
 
@@ -74,6 +82,7 @@ public class AppController {
         LiveUser user = users.get(puser.getName());
         user.tempSetComp(expertise.getExpertise(), expertise.getYears());
         model.addAttribute("user", user);
+        model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
         return "apply_for_position";
     }
 }
