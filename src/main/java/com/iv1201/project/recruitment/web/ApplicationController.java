@@ -28,7 +28,7 @@ public class ApplicationController {
     private final Map<String, User> users = new HashMap<>();
 
     @GetMapping("/apply")
-    public String test(Principal principal, Model model) {
+    public String startApplication(Principal principal, Model model) {
         User user = new User(principal.getName(), "jonny", "doe", 1020291L, "pass");
         users.put(principal.getName(), user);
         model.addAttribute("form", "expertise");
