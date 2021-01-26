@@ -19,7 +19,6 @@ public class Competence {
     @Column(nullable = false, unique = false)
     private String name;
 
-<<<<<<< HEAD
     public Long getId() {
         return id;
     }
@@ -28,8 +27,6 @@ public class Competence {
         this.id = id;
     }
 
-=======
->>>>>>> origin/master
     public String getName() {
         return name;
     }
