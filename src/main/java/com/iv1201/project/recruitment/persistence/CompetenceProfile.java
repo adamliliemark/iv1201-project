@@ -1,13 +1,17 @@
 package com.iv1201.project.recruitment.persistence;
 
+import org.hibernate.annotations.common.reflection.java.generics.CompoundTypeEnvironment;
+
 import javax.persistence.*;
 
 @Entity
 public class CompetenceProfile {
 
-    protected CompetenceProfile(User user) {
+    public CompetenceProfile(User user) {
         this.user = user;
     }
+
+    protected CompetenceProfile(){};
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +28,9 @@ public class CompetenceProfile {
     @JoinColumn(nullable = false)
     private User user;
 
-    protected CompetenceProfile(){};
+    public String getName() {
+        return competence.getName();
+    }
 
     public CompetenceProfile(Competence competence, int years, User user) {
         this.user = user;
