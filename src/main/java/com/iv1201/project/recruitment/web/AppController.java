@@ -1,10 +1,12 @@
 package com.iv1201.project.recruitment.web;
 
 import com.iv1201.project.recruitment.model.AvailableExpertises;
+import com.iv1201.project.recruitment.model.AvailableParameters;
 import com.iv1201.project.recruitment.model.Expertise;
 import com.iv1201.project.recruitment.model.LiveUser;
 import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.UserService;
+import org.apache.maven.plugin.descriptor.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,26 @@ public class AppController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private CompetenceRepository competenceRepo;
+
+    @GetMapping("/list")
+    public String list(Model model){
+
+        Iterable<Competence> all = competenceRepo.findAll();
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        all.forEach(c -> stringBuilder.append(c.getId() + " ").append(c.getName() + "\n")
+        );
+        model.addAttribute("competence", stringBuilder.toString());
+
+        model.addAttribute("availableParameters", new AvailableParameters().getAvailableParameters());
+        model.addAttribute("parameter", new Parameter());
+
+        return "list";
+    }
 
     @GetMapping("/login")
     public String login(Model model) {

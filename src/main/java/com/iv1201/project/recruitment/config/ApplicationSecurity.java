@@ -30,25 +30,24 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     }
 
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/login*").permitAll()
-            .antMatchers("/test").permitAll()
-            .antMatchers("/admin*").hasRole("ADMIN")
-            .anyRequest().authenticated()
-            .and()
-            .formLogin()
-            .loginPage("/login")
-            .permitAll()
-            //.failureHandler(authenticationFailureHandler())
-            .and()
-            .logout()
-            .permitAll()
-            .logoutUrl("/perform_logout");
-            //.deleteCookies("JSESSIONID");
-            //.logoutSuccessHandler(logoutSuccessHandler());
-        http.authorizeRequests().antMatchers("/").permitAll();
+//        http
+//                .csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/login*").permitAll()
+//                .antMatchers("/test").permitAll()
+//                .antMatchers("/admin*").hasRole("ADMIN")
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                //.failureHandler(authenticationFailureHandler())
+//                .and()
+//                .logout()
+//                .permitAll()
+//                .logoutUrl("/perform_logout");
+        //.deleteCookies("JSESSIONID");
+        //.logoutSuccessHandler(logoutSuccessHandler());
     }
 
     @Bean

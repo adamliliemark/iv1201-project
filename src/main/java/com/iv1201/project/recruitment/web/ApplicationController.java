@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.lang.reflect.Parameter;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,4 +88,11 @@ public class ApplicationController {
         model.addAttribute("form", "review");
         return "applicationView";
     }
+
+    @PostMapping("/list/parameters")
+    public String listParameters(@ModelAttribute Parameter parameter, Principal principal, Model model){
+
+        return "list";
+    }
+
 }

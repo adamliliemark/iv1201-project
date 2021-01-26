@@ -6,5 +6,13 @@
 </head>
 <body>
     <div class="title" th:text="${competence}"></div>
+    <div class="title">Enter Parameters of Interest</div>
+    <form  th:action="@{/list/parameters}" class="form" method="post" th:object="${parameter}"  id="parameterForm" >
+        <label for="parameter">Parameters</label>
+        <select name="parameter" id="parameter">
+            <option th:each="par : ${availableParameters}" th:value="${par}" th:text="${par}"></option>
+        </select>
+
+    </form>
 </body>
 </html>
