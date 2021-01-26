@@ -41,7 +41,7 @@ public class User {
     private Availability availability;
 
     @Transient
-    private HashMap<CompetenceProfile, Integer> competences = new HashMap<>();
+    private final HashMap<CompetenceProfile, Integer> competences = new HashMap<>();
 
     public HashMap<CompetenceProfile, Integer> getCompetences() {
         return competences;
