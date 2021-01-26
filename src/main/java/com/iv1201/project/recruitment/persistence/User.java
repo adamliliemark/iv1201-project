@@ -36,6 +36,17 @@ public class User implements UserDTO {
     @Column(nullable = false, unique = false)
     private Boolean enabled;
 
+    @Transient
+    private Availability availability;
+
+    public Availability getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(Availability availability) {
+        this.availability = availability;
+    }
+
     public String getEmail() {
         return this.email;
     }

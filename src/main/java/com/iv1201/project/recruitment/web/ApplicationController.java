@@ -70,7 +70,7 @@ public class ApplicationController {
     @PostMapping("/apply/availability")
     public String fetchAvailability(@ModelAttribute Availability availability, Principal principal, Model model) {
         User user = users.get(principal.getName());
-        user.setAvailability(availability.getFromDate(), availability.getToDate());
+        user.setAvailability(availability);
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
         return "applicationView";
