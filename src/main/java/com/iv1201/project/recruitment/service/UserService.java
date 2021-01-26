@@ -1,9 +1,6 @@
 package com.iv1201.project.recruitment.service;
 
-import com.iv1201.project.recruitment.persistence.Authority;
-import com.iv1201.project.recruitment.persistence.AuthorityRepository;
-import com.iv1201.project.recruitment.persistence.User;
-import com.iv1201.project.recruitment.persistence.UserRepository;
+import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.UserServiceError.ERROR_CODE;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +22,11 @@ public class UserService {
     }
 
     @Autowired
+    CompetenceRepository comptetenseRepo;
+
+    @Autowired
     UserRepository userRepo;
+
     @Autowired
     AuthorityRepository authorityRepo;
 
@@ -69,6 +70,21 @@ public class UserService {
 
     @PostConstruct
     public void addDefaultUsers() {
+        //Save competences
+        Competence Competences[] = {
+                new Competence("Hot Dogs"),
+                new Competence("Sausage"),
+                new Competence("Gurka"),
+                new Competence("Tomat"),
+                new Competence("Dogging")
+        };
+        for (Competence c : Competences) {
+            if(!comptetenseRepo.existsByName(c.getName())) {
+                comptetenseRepo.save(c);
+            }
+            else System.err.println("I FOUND A COMPETENCE");
+        }
+
         try {
             if (!userRepo.findByEmail("testuser@example.com").isPresent()) {
                 System.err.println("Saving test user!");

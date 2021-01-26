@@ -1,10 +1,9 @@
 package com.iv1201.project.recruitment.web;
 
-import com.iv1201.project.recruitment.model.AvailableExpertises;
 import com.iv1201.project.recruitment.model.Expertise;
-import com.iv1201.project.recruitment.persistence.Availability;
-import com.iv1201.project.recruitment.persistence.CompetenceProfile;
-import com.iv1201.project.recruitment.persistence.User;
+import com.iv1201.project.recruitment.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +22,12 @@ import java.util.Map;
  * no return values are explained in the JavaDoc.
  */
 @Controller
+@Scope("session")
 public class ApplicationController {
-    private final AvailableExpertises availableExpertises = new AvailableExpertises();
+
+    @Autowired
+    private CompetenceRepository competenceRepo;
+
     private final Map<String, User> users = new HashMap<>();
 
     @GetMapping("/apply")
@@ -34,7 +37,7 @@ public class ApplicationController {
         model.addAttribute("form", "expertise");
         model.addAttribute("user", user);
         model.addAttribute("expertise", new Expertise());
-        model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
+        model.addAttribute("availableExpertises", competenceRepo.findAll());
         return "applicationView";
     }
 
@@ -53,12 +56,12 @@ public class ApplicationController {
         }
         model.addAttribute("user", user);
         model.addAttribute("form", "expertise");
-        model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
+        model.addAttribute("availableExpertises", competenceRepo.findAll());
         return "applicationView";
     }
 
     private boolean checkForLastFetch(User user) {
-        return user.getCompetences().size() == availableExpertises.getAvailableExpertises().size();
+        return user.getCompetences().size() == competenceRepo.count();
     }
 
     /**
