@@ -51,7 +51,7 @@ public class ApplicationController {
         model.addAttribute("form", "expertise");
         model.addAttribute("user", user);
 
-        model.addAttribute("availableExpertises", competenceRepo.findAll());h
+        model.addAttribute("availableExpertises", competenceRepo.findAll());
         model.addAttribute("competenceFormObject", new CompetenceProfile());
 
         return "applicationView";
