@@ -28,8 +28,6 @@ public class CompetenceProfile {
     @JoinColumn(nullable = false)
     private User user;
 
-    protected CompetenceProfile(){};
-
     public CompetenceProfile(Competence competence, int years, User user) {
         this.user = user;
         this.competence = competence;
