@@ -25,4 +25,55 @@ public class CompetenceProfile {
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private User userEmail;
+
+    public CompetenceProfile(String competence, int years) {
+        this.competence = new Competence();
+        this.competence.setName(competence);
+        this.yearsOfExperience = years;
+    }
+
+    public CompetenceProfile(Competence competence, int years) {
+        this.competence = competence;
+        this.yearsOfExperience = years;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public double getYearsOfExperience() {
+        return yearsOfExperience;
+    }
+
+    public void setYearsOfExperience(double yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
+    }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
+    public Competence getCompetence() {
+        return competence;
+    }
+
+    public void setCompetence(Competence competence) {
+        this.competence = competence;
+    }
+
+    public User getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(User userEmail) {
+        this.userEmail = userEmail;
+    }
 }

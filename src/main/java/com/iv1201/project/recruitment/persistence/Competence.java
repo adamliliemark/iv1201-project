@@ -8,6 +8,10 @@ public class Competence {
 
     protected Competence() {}
 
+    public Competence(String name) {
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,6 +19,7 @@ public class Competence {
     @Column(nullable = false, unique = false)
     private String name;
 
+<<<<<<< HEAD
     public Long getId() {
         return id;
     }
@@ -23,6 +28,8 @@ public class Competence {
         this.id = id;
     }
 
+=======
+>>>>>>> origin/master
     public String getName() {
         return name;
     }

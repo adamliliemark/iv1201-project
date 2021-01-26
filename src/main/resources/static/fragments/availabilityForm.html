@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div class="application-form" th:fragment="availabilityForm">
+    <div class="title">Apply for a job</div>
+
+    <div class="subtitle">What's your availability?</div>
+    <form th:action="@{/apply/availability}" action="#" class="form" method="post" th:object="${availability}">
+        <label for="from">From:</label>
+        <input type="date" id="from" th:field="*{fromDate}" required>
+        <label for="to">To:</label>
+        <input type="date" id="to" th:field="*{toDate}" required>
+        <p>
+            <input type="submit" value="Submit">
+        </p>
+    </form>
+    <form th:action="@{/apply/review}" action="#" class="form" method="post">
+        <input type="submit" value="Send your application">
+    </form>
+</div>
+
+</body>
+</html>
