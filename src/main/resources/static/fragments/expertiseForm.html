@@ -13,7 +13,7 @@
     <form th:action="@{/apply/expertise}" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenseForm">
         <label for="competence">Expertise</label>
         <select name="competence" id="competence" th:field="*{competence.name}" required>
-            <option th:each="exp : ${availableExpertises}" th:value="${exp}" th:text="${exp}"></option>
+            <option th:each="competence : ${availableExpertises}" th:value="${competence.name}" th:text="${competence.name}"></option>
         </select>
         <label for="competence-years">Years of experience</label>
         <input id="competence-years" type="number" th:field="*{yearsOfExperience}" required>

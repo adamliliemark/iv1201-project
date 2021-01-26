@@ -1,12 +1,17 @@
 package com.iv1201.project.recruitment.persistence;
 
+import org.hibernate.annotations.common.reflection.java.generics.CompoundTypeEnvironment;
 
 import javax.persistence.*;
 
 @Entity
 public class CompetenceProfile {
 
-    public CompetenceProfile() {}
+    public CompetenceProfile(User user) {
+        this.user = user;
+    }
+
+    protected CompetenceProfile(){};
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,34 +20,26 @@ public class CompetenceProfile {
     @Column(precision=4, scale=2)
     private double yearsOfExperience;
 
-    @Column(nullable = false, unique = false)
-    private String authority;
-
     @ManyToOne
     @JoinColumn
     private Competence competence;
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn
-    private User userEmail;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private User user;
 
-    public CompetenceProfile(String competence, int years) {
-        this.competence = new Competence();
-        this.competence.setName(competence);
-        this.yearsOfExperience = years;
+    public String getName() {
+        return competence.getName();
     }
 
-    public CompetenceProfile(Competence competence, int years) {
+    public CompetenceProfile(Competence competence, int years, User user) {
+        this.user = user;
         this.competence = competence;
         this.yearsOfExperience = years;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public double getYearsOfExperience() {
@@ -53,27 +50,11 @@ public class CompetenceProfile {
         this.yearsOfExperience = yearsOfExperience;
     }
 
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
     public Competence getCompetence() {
         return competence;
     }
 
     public void setCompetence(Competence competence) {
         this.competence = competence;
-    }
-
-    public User getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(User userEmail) {
-        this.userEmail = userEmail;
     }
 }
