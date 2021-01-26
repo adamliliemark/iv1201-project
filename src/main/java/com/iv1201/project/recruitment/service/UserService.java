@@ -54,11 +54,11 @@ public class UserService {
     }
 
     private boolean validateUser(String email, String firstName, String lastName, String clearTextPassword, Long ssn) throws UserServiceError {
-        if (email == null || email == "")
+        if (email == null || email.equals(""))
             throw new UserServiceError(ERROR_CODE.INVALID_EMAIL);
-        if (firstName == null || firstName == "")
+        if (firstName == null || firstName.equals(""))
             throw new UserServiceError(ERROR_CODE.INVALID_FIRST_NAME);
-        if (lastName == null || lastName == "")
+        if (lastName == null || lastName.equals(""))
             throw new UserServiceError(ERROR_CODE.INVALID_LAST_NAME);
         if (clearTextPassword == null || clearTextPassword.length() < 3)
             throw new UserServiceError(ERROR_CODE.INVALID_PASSWORD);
