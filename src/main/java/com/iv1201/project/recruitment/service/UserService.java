@@ -16,6 +16,7 @@ import java.util.Optional;
 @Component
 @Service
 public class UserService {
+
     public enum Role {
         ROLE_USER,
         ROLE_ADMIN
@@ -49,6 +50,11 @@ public class UserService {
             authorityRepo.save(userAuth);
         }
     }
+
+    public void saveUser(User user) {
+        userRepo.save(user);
+    }
+
 
     public Optional<User> findByEmail(String email) {
         return userRepo.findByEmail(email);

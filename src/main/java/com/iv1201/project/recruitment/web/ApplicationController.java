@@ -30,13 +30,16 @@ public class ApplicationController {
 
     @Autowired
     private CompetenceRepository competenceRepo;
+
     private User user;
 
     @GetMapping("/apply")
     public String startApplication(Principal principal, Model model) {
         Optional<User> userMaybe = userService.findByEmail(principal.getName());
+
         if(!userMaybe.isPresent())
             throw new RuntimeException("Expected a user to exist on protected endpoint");
+
         user = userMaybe.get();
         model.addAttribute("form", "expertise");
         model.addAttribute("user", user);
@@ -53,10 +56,19 @@ public class ApplicationController {
      */
     @PostMapping("/apply/expertise")
     public String fetchExpertise(@ModelAttribute Expertise expertise, Principal principal, Model model) {
-        user.addCompetence(expertise.getExpertise(), expertise.getYears());
+        Optional<Competence> addedCompetence = competenceRepo.findByName(expertise.getExpertise());
+        if(!addedCompetence.isPresent())
+            throw new RuntimeException("Nonexistant competence added");
+        user.addCompetence(addedCompetence.get(), expertise.getYears());
+
+        //This saves the user and commits the competences.
+        //This should be moved to a later stage, but here for testing
+        //userService.saveUser(user);
+
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
         }
+
         model.addAttribute("user", user);
         model.addAttribute("form", "expertise");
         model.addAttribute("availableExpertises", competenceRepo.findAll());
