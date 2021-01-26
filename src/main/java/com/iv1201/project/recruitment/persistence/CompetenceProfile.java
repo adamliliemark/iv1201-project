@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Entity
 public class CompetenceProfile {
 
-    protected CompetenceProfile() {}
+    public CompetenceProfile() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

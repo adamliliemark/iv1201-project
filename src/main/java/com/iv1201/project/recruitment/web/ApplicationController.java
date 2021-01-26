@@ -1,7 +1,6 @@
 package com.iv1201.project.recruitment.web;
 
 import com.iv1201.project.recruitment.model.AvailableExpertises;
-import com.iv1201.project.recruitment.model.Expertise;
 import com.iv1201.project.recruitment.persistence.Availability;
 import com.iv1201.project.recruitment.persistence.CompetenceProfile;
 import com.iv1201.project.recruitment.persistence.User;
@@ -33,24 +32,20 @@ public class ApplicationController {
         users.put(principal.getName(), user);
         model.addAttribute("form", "expertise");
         model.addAttribute("user", user);
-        model.addAttribute("expertise", new Expertise());
+        model.addAttribute("competenceFormObject", new CompetenceProfile());
         model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
         return "applicationView";
     }
 
-    /**
-     * A mapping to fetch the data from the expertiseForm fragment.
-     * @param expertise the expertise to fetch
-     * @param principal the logged in user
-     * @param model for Thymeleaf
-     */
     @PostMapping("/apply/expertise")
-    public String fetchExpertise(@ModelAttribute Expertise expertise, Principal principal, Model model) {
+    public String fetchExpertise(@ModelAttribute CompetenceProfile competenceFormObject, Principal principal, Model model) {
         User user = users.get(principal.getName());
-        user.addCompetence(expertise.getExpertise(), expertise.getYears());
+        // this could be changed to user.addCompetence(comp)
+        user.addCompetence(competenceFormObject.getCompetence().getName(), (int) competenceFormObject.getYearsOfExperience());
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
         }
+        model.addAttribute("competenceFormObject", new CompetenceProfile());
         model.addAttribute("user", user);
         model.addAttribute("form", "expertise");
         model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
