@@ -1,9 +1,13 @@
 package com.iv1201.project.recruitment.web;
 
+
 import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import com.iv1201.project.recruitment.persistence.Availability;
+import com.iv1201.project.recruitment.persistence.CompetenceProfile;
+import com.iv1201.project.recruitment.persistence.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,8 +59,8 @@ public class ApplicationController {
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
         }
-        //This saves the user for testing, should be don later
-        userService.saveUser(user);
+        //This saves the user for testing, should be done later
+        user = userService.saveUser(user);
         model.addAttribute("competenceFormObject", new CompetenceProfile(user));
 
         model.addAttribute("user", user);
