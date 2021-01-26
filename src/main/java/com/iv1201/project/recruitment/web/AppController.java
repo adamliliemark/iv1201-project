@@ -1,18 +1,12 @@
 package com.iv1201.project.recruitment.web;
-import com.iv1201.project.recruitment.model.AvailableExpertises;
-import com.iv1201.project.recruitment.model.Expertise;
-import com.iv1201.project.recruitment.model.LiveUser;
-import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
-import java.util.*;
 
 @Controller
 public class AppController {
