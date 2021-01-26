@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 
 @Entity(name = "users")
-public class User {
+public class User implements UserDTO {
 
     protected User() {}
 

@@ -32,6 +32,11 @@ public class CompetenceProfile {
         this.yearsOfExperience = years;
     }
 
+    public CompetenceProfile(Competence competence, int years) {
+        this.competence = competence;
+        this.yearsOfExperience = years;
+    }
+
     public Long getId() {
         return id;
     }

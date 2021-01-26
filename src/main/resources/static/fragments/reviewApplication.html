@@ -13,20 +13,19 @@
     </div>
 
     <div class="apply-text">
-        Name: <div th:text="${user.getUser.getFirstName} + ' ' + ${user.getUser.getLastName}"></div>
-        Mail: <div th:text="${user.getUser.getEmail}"></div>
+        Name: <div th:text="${user.getFirstName} + ' ' + ${user.getLastName}"></div>
+        Mail: <div th:text="${user.getEmail}"></div>
         <p>
             Competences:
             <div th:each="comp : ${user.getCompetences}">
-                <div th:text="${comp.key}"></div>
-                <div th:text="${comp.value}"></div>
-            </div>
+        <div th:text="${comp.key.getCompetence.getName}"></div>
+        <div th:text="${comp.value}"></div>
+    </div>
         <p>
-            <div th:if="${user.getAvailability != null}">
-                Availability:
-                <div th:text="${user.getAvailability.getFromDate}"></div>
-                <div th:text="${user.getAvailability.getToDate}"></div>
-            </div>
+        <div>
+            Availability:
+            <div th:each="date : ${user.getAvailability}" th:text="${date.getFromDate} + ' to ' + ${date.getToDate}"></div>
+        </div>
     </div>
 </div>
 

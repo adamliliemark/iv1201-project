@@ -2,8 +2,8 @@ package com.iv1201.project.recruitment.web;
 
 import com.iv1201.project.recruitment.model.AvailableExpertises;
 import com.iv1201.project.recruitment.model.Expertise;
-import com.iv1201.project.recruitment.model.LiveUser;
 import com.iv1201.project.recruitment.persistence.Availability;
+import com.iv1201.project.recruitment.persistence.CompetenceProfile;
 import com.iv1201.project.recruitment.persistence.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,24 +24,16 @@ import java.util.Map;
  */
 @Controller
 public class ApplicationController {
-    private final Map<String, LiveUser> users = new HashMap<>();
     private final AvailableExpertises availableExpertises = new AvailableExpertises();
+    private final Map<String, User> users = new HashMap<>();
 
-    /**
-     * The starting point of a user's application.
-     * @param liveUser the local user kept in cache
-     * @param expertise a data holder for the expertise form
-     * @param availability a data holder for the availability form
-     * @param principalUser the logged in user
-     * @param model the model that Thymeleaf uses
-     */
     @GetMapping("/apply")
-    public String applyForPosition(@ModelAttribute LiveUser liveUser, @ModelAttribute Expertise expertise, @ModelAttribute Availability availability, Principal principalUser, Model model) {
-        liveUser.setUser(new User(principalUser.getName(), "john", "doe", 192830L, "pass"));
-        users.put(principalUser.getName(), liveUser);
+    public String test(Principal principal, Model model) {
+        User user = new User(principal.getName(), "jonny", "doe", 1020291L, "pass");
+        users.put(principal.getName(), user);
         model.addAttribute("form", "expertise");
-        model.addAttribute("user", liveUser);
-        model.addAttribute("expertise", expertise);
+        model.addAttribute("user", user);
+        model.addAttribute("expertise", new Expertise());
         model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
         return "applicationView";
     }
@@ -49,48 +41,49 @@ public class ApplicationController {
     /**
      * A mapping to fetch the data from the expertiseForm fragment.
      * @param expertise the expertise to fetch
-     * @param principalUser the logged in user
+     * @param principal the logged in user
      * @param model for Thymeleaf
      */
     @PostMapping("/apply/expertise")
-    public String fetchExpertise(@ModelAttribute Expertise expertise, Principal principalUser, Model model) {
-        LiveUser liveUser = users.get(principalUser.getName());
-        liveUser.mapCompetenceYearCombo(expertise.getExpertise(), expertise.getYears());
-        if(liveUser.getCompetences().size() == availableExpertises.getAvailableExpertises().size()) {
+    public String fetchExpertise(@ModelAttribute Expertise expertise, Principal principal, Model model) {
+        User user = users.get(principal.getName());
+        user.addCompetence(expertise.getExpertise(), expertise.getYears());
+        if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
         }
-        model.addAttribute("user", liveUser);
+        model.addAttribute("user", user);
         model.addAttribute("form", "expertise");
         model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
         return "applicationView";
     }
 
+    private boolean checkForLastFetch(User user) {
+        return user.getCompetences().size() == availableExpertises.getAvailableExpertises().size();
+    }
+
     /**
      * A mapping to fetch the data from the availabilityForm fragment.
      * @param availability the availability (dates) to fetch
-     * @param principalUser the logged in user
+     * @param principal the logged in user
      * @param model for Thymeleaf
      */
     @PostMapping("/apply/availability")
-    public String fetchAvailability(@ModelAttribute Availability availability, Principal principalUser, Model model) {
-        LiveUser liveUser = users.get(principalUser.getName());
-        liveUser.setAvailability(new Availability(availability.getFromDate(), availability.getToDate()));
-        users.get(principalUser
-                .getName())
-                .setAvailability(availability);
-        model.addAttribute("user", liveUser);
+    public String fetchAvailability(@ModelAttribute Availability availability, Principal principal, Model model) {
+        User user = users.get(principal.getName());
+        user.setAvailability(availability.getFromDate(), availability.getToDate());
+        model.addAttribute("user", user);
         model.addAttribute("form", "availability");
         return "applicationView";
     }
 
     /**
      * Final page of an application. Reviews the user's application.
-     * @param principalUser the logged in user
+     * @param principal the logged in user
      * @param model for Thymeleaf
      */
     @PostMapping("/apply/review")
-    public String reviewApplication(Principal principalUser, Model model) {
-        model.addAttribute("user", users.get(principalUser.getName()));
+    public String reviewApplication(Principal principal, Model model) {
+        model.addAttribute("user", users.get(principal.getName()));
         model.addAttribute("form", "review");
         return "applicationView";
     }
