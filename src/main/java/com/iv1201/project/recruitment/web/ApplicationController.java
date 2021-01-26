@@ -1,10 +1,17 @@
 package com.iv1201.project.recruitment.web;
 
+
 import com.iv1201.project.recruitment.model.Expertise;
 import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+
+import com.iv1201.project.recruitment.model.AvailableExpertises;
+import com.iv1201.project.recruitment.persistence.Availability;
+import com.iv1201.project.recruitment.persistence.CompetenceProfile;
+import com.iv1201.project.recruitment.persistence.User;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,23 +50,20 @@ public class ApplicationController {
         user = userMaybe.get();
         model.addAttribute("form", "expertise");
         model.addAttribute("user", user);
-        model.addAttribute("expertise", new Expertise());
-        model.addAttribute("availableExpertises", competenceRepo.findAll());
+
+        model.addAttribute("availableExpertises", competenceRepo.findAll());h
+        model.addAttribute("competenceFormObject", new CompetenceProfile());
+
         return "applicationView";
     }
 
-    /**
-     * A mapping to fetch the data from the expertiseForm fragment.
-     * @param expertise the expertise to fetch
-     * @param principal the logged in user
-     * @param model for Thymeleaf
-     */
     @PostMapping("/apply/expertise")
-    public String fetchExpertise(@ModelAttribute Expertise expertise, Principal principal, Model model) {
-        Optional<Competence> addedCompetence = competenceRepo.findByName(expertise.getExpertise());
+
+    public String fetchExpertise(@ModelAttribute CompetenceProfile competenceFormObject, Principal principal, Model model) {
+        Optional<Competence> addedCompetence = competenceRepo.findByName(competenceFormObject.getCompetence());
         if(!addedCompetence.isPresent())
             throw new RuntimeException("Nonexistant competence added");
-        user.addCompetence(addedCompetence.get(), expertise.getYears());
+        //user.addCompetence(addedCompetence.get(), expertise.getYears());
 
         //This saves the user and commits the competences.
         //This should be moved to a later stage, but here for testing
@@ -69,6 +73,10 @@ public class ApplicationController {
             model.addAttribute("last", true);
         }
 
+
+        // this could be changed to user.addCompetence(comp)
+        user.addCompetence(competenceFormObject.getCompetence().getName(), (int) competenceFormObject.getYearsOfExperience());
+        model.addAttribute("competenceFormObject", new CompetenceProfile());
         model.addAttribute("user", user);
         model.addAttribute("form", "expertise");
         model.addAttribute("availableExpertises", competenceRepo.findAll());

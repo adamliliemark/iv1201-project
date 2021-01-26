@@ -5,9 +5,13 @@ import javax.persistence.*;
 @Entity
 public class CompetenceProfile {
 
+
     protected CompetenceProfile(User user) {
         this.user = user;
     }
+
+    public CompetenceProfile() {}
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
