@@ -7,5 +7,5 @@ then
 Should output
 migrated_database_pop.sql
 
-running this file in MySQL will populate the new database with the migrated data.
+running this file in MySQL on the new database will populate the new database with the migrated data.
 unmigrateable users (users that have missing essential info) are stored in unmigrated_person table.
