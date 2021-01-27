@@ -23,25 +23,6 @@ public class AppController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    private CompetenceRepository competenceRepo;
-
-    @GetMapping("/list")
-    public String list(Model model){
-
-        Iterable<Competence> all = competenceRepo.findAll();
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        all.forEach(c -> stringBuilder.append(c.getId() + " ").append(c.getName() + "\n")
-        );
-        model.addAttribute("competence", stringBuilder.toString());
-
-        model.addAttribute("availableParameters", new AvailableParameters().getAvailableParameters());
-        model.addAttribute("parameter", new Parameter());
-
-        return "list";
-    }
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -54,7 +35,7 @@ public class AppController {
     }
 
     @GetMapping("/")
-    public String home(Principal user, Model model) {
+    public String home(Principal user, Modegithub fetch from masl model) {
         if(!(user.getName().isEmpty()))
             model.addAttribute("loggedIn", true);
         else
