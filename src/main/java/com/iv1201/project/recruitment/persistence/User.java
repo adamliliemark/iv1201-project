@@ -49,7 +49,7 @@ public class User {
         return competences;
     }
 
-    public void addCompetence(Competence competence, int years) {
+    public void addCompetence(Competence competence, double years) {
         if(competences == null)
             throw new RuntimeException();
 

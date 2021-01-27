@@ -11,11 +11,11 @@
     <div class="title">Apply for a job</div>
 
     <div class="subtitle">What's your availability?</div>
-    <form th:action="@{/apply/availability}" action="#" class="form" method="post" th:object="${availability}">
+    <form th:action="@{/apply/availability}" action="#" class="form" method="post" th:object="${availabilityFormObject}">
         <label for="from">From:</label>
-        <input type="date" id="from" th:field="*{fromDate}" required>
+        <input type="date" id="from" th:field="*{from}" required>
         <label for="to">To:</label>
-        <input type="date" id="to" th:field="*{toDate}" required>
+        <input type="date" id="to" th:field="*{to}" required>
         <p>
             <input type="submit" value="Submit">
         </p>

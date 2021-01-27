@@ -32,7 +32,7 @@ public class CompetenceProfile {
         return competence.getName();
     }
 
-    public CompetenceProfile(Competence competence, int years, User user) {
+    public CompetenceProfile(Competence competence, double years, User user) {
         this.user = user;
         this.competence = competence;
         this.yearsOfExperience = years;
