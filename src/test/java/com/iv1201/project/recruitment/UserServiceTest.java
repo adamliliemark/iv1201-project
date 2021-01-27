@@ -39,23 +39,23 @@ public class UserServiceTest {
 
     @BeforeEach
     public void init() {
-        User existantUser = new User(existentUserEmail, "testName", "testLastName", 123L, encoder().encode("pass"));
+        User existantUser = new User(existentUserEmail, "testName", "testLastName", "123", encoder().encode("pass"));
         userRepo.save(existantUser);
     }
 
     @Test
     public void create_user_invalid_email_throws() {
-        UserServiceError e = assertThrows(UserServiceError.class, () -> userService.addNewUser(null, "a", "b", "pass", Role.ROLE_USER, 123L));
+        UserServiceError e = assertThrows(UserServiceError.class, () -> userService.addNewUser(null, "a", "b", "pass", Role.ROLE_USER, "123"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.INVALID_EMAIL);
-        e = assertThrows(UserServiceError.class, () -> userService.addNewUser("", "a", "b", "pass", Role.ROLE_USER, 123L));
+        e = assertThrows(UserServiceError.class, () -> userService.addNewUser("", "a", "b", "pass", Role.ROLE_USER, "123"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.INVALID_EMAIL);
     }
 
     @Test
     public void create_user_invalid_password_throws() {
-        UserServiceError e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", "b", "", Role.ROLE_USER, 123L));
+        UserServiceError e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", "b", "", Role.ROLE_USER, "123"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.INVALID_PASSWORD);
-        e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", "b", null, Role.ROLE_USER, 123L));
+        e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", "b", null, Role.ROLE_USER, "123"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.INVALID_PASSWORD);
     }
 
@@ -67,24 +67,24 @@ public class UserServiceTest {
 
     @Test
     public void create_user_invalid_names_throws() {
-        UserServiceError e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "", "b", "pass", Role.ROLE_USER, 123L));
+        UserServiceError e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "", "b", "pass", Role.ROLE_USER, "123"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.INVALID_FIRST_NAME);
-        e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, null, "b", "pass", Role.ROLE_USER, 123L));
+        e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, null, "b", "pass", Role.ROLE_USER, "123"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.INVALID_FIRST_NAME);
-        e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", "", "pass", Role.ROLE_USER, 123L));
+        e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", "", "pass", Role.ROLE_USER, "123"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.INVALID_LAST_NAME);
-        e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", null, "pass", Role.ROLE_USER, 123L));
+        e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", null, "pass", Role.ROLE_USER, "123L"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.INVALID_LAST_NAME);
     }
 
     @Test
     public void create_conflicting_user_throws() {
-        UserServiceError e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", "b", "pass", Role.ROLE_USER, 123L));
+        UserServiceError e = assertThrows(UserServiceError.class, () -> userService.addNewUser(existentUserEmail, "a", "b", "pass", Role.ROLE_USER, "123"));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.CONFLICTING_USER);
     }
 
     @Test
     public void create_nonexistent_valid_user() throws Exception {
-        assertDoesNotThrow(() ->userService.addNewUser(nonexistentUserEmail, "a", "b", "pass", Role.ROLE_USER, 123L));
+        assertDoesNotThrow(() ->userService.addNewUser(nonexistentUserEmail, "a", "b", "pass", Role.ROLE_USER, "123"));
     }
 }
