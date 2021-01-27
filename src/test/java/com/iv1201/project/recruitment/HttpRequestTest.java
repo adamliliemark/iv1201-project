@@ -19,7 +19,7 @@ public class HttpRequestTest {
     private TestRestTemplate webClient;
 
     @Test
-    public void simpleTest() throws Exception {
+    public void simpleTest() {
         assertThat(this.webClient.getForObject("http://localhost:" + port + "/login",
                 String.class)).contains("Login");
     }

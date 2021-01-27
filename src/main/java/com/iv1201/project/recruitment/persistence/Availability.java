@@ -16,8 +16,6 @@ public class Availability {
         this.toDate = to;
     }
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

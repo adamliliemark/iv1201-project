@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.lang.reflect.Parameter;
 import java.security.Principal;
 
@@ -28,24 +29,23 @@ public class ListController {
     @GetMapping("/list")
     public String list(Model model){
 
-        Iterable<Competence> all = competenceRepo.findAll();
+//        Iterable<Competence> all = competenceRepo.findAll();
+//
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        all.forEach(c -> stringBuilder.append(c.getId() + " ").append(c.getName() + "\n")
+//        );
+//        model.addAttribute("competence", stringBuilder.toString());
 
-        StringBuilder stringBuilder = new StringBuilder();
-
-        all.forEach(c -> stringBuilder.append(c.getId() + " ").append(c.getName() + "\n")
-        );
-        model.addAttribute("competence", stringBuilder.toString());
-
-        model.addAttribute("parameter", );
+        model.addAttribute("listFormObject", new ListForm());
 
         return "list";
     }
 
-    @PostMapping("/list/parameters")
-    public String listParameters(Principal principal, Model model){
+    @PostMapping("/list/applications")
+    public String listParameters(@Valid @ModelAttribute ListForm listForm ,Principal principal, Model model){
 
-        System.out.println("inne i list paramters");
-
+        model.addAttribute("listFormObject", new ListForm());
         return "list";
     }
 

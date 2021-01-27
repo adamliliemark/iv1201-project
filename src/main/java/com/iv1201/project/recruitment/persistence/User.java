@@ -10,7 +10,7 @@ public class User {
 
     protected User() {}
 
-    public User(String email, String firstName, String lastName, Long ssn, String password) {
+    public User(String email, String firstName, String lastName, String ssn, String password) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,9 +30,9 @@ public class User {
     private String lastName;
 
     @Column (nullable = false, unique = false)
-    Long ssn;
+    String ssn;
 
-    @Column(nullable = false, unique = false)
+    @Column(nullable = true, unique = false)
     private String password;
 
     @Column(nullable = false, unique = false)
@@ -49,7 +49,7 @@ public class User {
         return competences;
     }
 
-    public void addCompetence(Competence competence, int years) {
+    public void addCompetence(Competence competence, double years) {
         if(competences == null)
             throw new RuntimeException();
 
@@ -88,7 +88,7 @@ public class User {
         this.firstName = firstName;
     }
 
-    public Long getSsn() { return ssn; }
+    public String getSsn() { return ssn; }
 
     public String getLastName() {
         return lastName;
