@@ -6,14 +6,15 @@ import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import com.iv1201.project.recruitment.persistence.Availability;
-import com.iv1201.project.recruitment.persistence.CompetenceProfile;
 import com.iv1201.project.recruitment.persistence.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -39,7 +40,6 @@ public class ApplicationController {
     @GetMapping("/apply")
     public String startApplication(Principal principal, Model model) {
         Optional<User> userMaybe = userService.findByEmail(principal.getName());
-
         if(!userMaybe.isPresent())
             throw new RuntimeException("Expected a user to exist on protected endpoint");
 
@@ -47,22 +47,23 @@ public class ApplicationController {
         model.addAttribute("form", "expertise");
         model.addAttribute("user", user);
         model.addAttribute("availableExpertises", competenceRepo.findAll());
-        model.addAttribute("competenceFormObject", new CompetenceProfile(user));
+        model.addAttribute("competenceFormObject", new CompetenceForm());
         return "applicationView";
     }
 
     @PostMapping("/apply/expertise")
-    public String fetchExpertise(@ModelAttribute CompetenceProfile formCompetence, Principal principal, Model model) {
-
-        // this could be changed to user.addCompetence(comp)
-        user.addCompetence(competenceRepo.findByName(formCompetence.getName()).get(), (int)formCompetence.getYearsOfExperience());
+    public String fetchCompetenceForm(@Valid @ModelAttribute CompetenceForm competenceForm, BindingResult bindingResult, Model model) {
+        if(!bindingResult.hasErrors()) {
+            if(!competenceRepo.findByName(competenceForm.getName()).isPresent())
+                throw new RuntimeException("Expected the supplied competence to exist in the database.");
+            user.addCompetence(competenceRepo.findByName(competenceForm.getName()).get(), competenceForm.getYears());
+        }
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
         }
         //This saves the user for testing, should be done later
-        user = userService.saveUser(user);
-        model.addAttribute("competenceFormObject", new CompetenceProfile(user));
-
+        //user = userService.saveUser(user);
+        model.addAttribute("competenceFormObject", new CompetenceForm());
         model.addAttribute("user", user);
         model.addAttribute("form", "expertise");
         model.addAttribute("availableExpertises", competenceRepo.findAll());
@@ -73,15 +74,12 @@ public class ApplicationController {
         return user.getCompetences().size() == competenceRepo.count();
     }
 
-    /**
-     * A mapping to fetch the data from the availabilityForm fragment.
-     * @param availability the availability (dates) to fetch
-     * @param principal the logged in user
-     * @param model for Thymeleaf
-     */
     @PostMapping("/apply/availability")
-    public String fetchAvailability(@ModelAttribute Availability availability, Principal principal, Model model) {
-        user.setAvailability(availability);
+    public String fetchAvailabilityForm(@Valid @ModelAttribute AvailabilityForm availabilityForm, BindingResult bindingResult, Model model) {
+        model.addAttribute("availabilityFormObject", new AvailabilityForm());
+        if(!bindingResult.hasErrors()) {
+            user.setAvailability(new Availability(availabilityForm.getFrom(), availabilityForm.getTo()));
+        }
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
         return "applicationView";
@@ -89,11 +87,10 @@ public class ApplicationController {
 
     /**
      * Final page of an application. Reviews the user's application.
-     * @param principal the logged in user
      * @param model for Thymeleaf
      */
     @PostMapping("/apply/review")
-    public String reviewApplication(Principal principal, Model model) {
+    public String reviewApplication(Model model) {
         model.addAttribute("user", user);
         model.addAttribute("form", "review");
         return "applicationView";
