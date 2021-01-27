@@ -1,7 +1,8 @@
 package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity(name = "users")
@@ -40,23 +41,27 @@ public class User {
     @Transient
     private Availability availability;
 
-    @Transient
-    private final HashMap<CompetenceProfile, Integer> competences = new HashMap<>();
 
-    public HashMap<CompetenceProfile, Integer> getCompetences() {
+    @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    private List<CompetenceProfile> competences;
+
+    public List<CompetenceProfile> getCompetences() {
         return competences;
     }
 
-    public void addCompetence(String competence, Integer years) {
-        for(CompetenceProfile cmp : competences.keySet()) {
-            if(cmp.getCompetence().getName().equals(competence)) {
-                competences.put(cmp, years);
-                return;
-            }
+    public void addCompetence(Competence competence, int years) {
+        if(competences == null)
+            throw new RuntimeException();
+
+        CompetenceProfile comp = competences.stream()
+                .filter(c -> c.getCompetence().getName().equals(competence.getName()))
+                .findAny()
+                .orElse(null);
+        if(comp != null) {
+            comp.setYearsOfExperience(years);
+        } else {
+            this.competences.add(new CompetenceProfile(competence, years, this));
         }
-        Competence comp = new Competence(competence);
-        CompetenceProfile compProf = new CompetenceProfile(comp, years);
-        competences.put(compProf, years);
     }
 
     public Availability getAvailability() {

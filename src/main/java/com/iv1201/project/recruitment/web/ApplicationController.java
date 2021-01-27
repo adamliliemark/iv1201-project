@@ -1,7 +1,10 @@
 package com.iv1201.project.recruitment.web;
 
-import com.iv1201.project.recruitment.model.AvailableExpertises;
-import com.iv1201.project.recruitment.model.Expertise;
+
+import com.iv1201.project.recruitment.persistence.*;
+import com.iv1201.project.recruitment.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import com.iv1201.project.recruitment.persistence.Availability;
 import com.iv1201.project.recruitment.persistence.CompetenceProfile;
 import com.iv1201.project.recruitment.persistence.User;
@@ -13,8 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.lang.reflect.Parameter;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -24,42 +26,52 @@ import java.util.Map;
  * no return values are explained in the JavaDoc.
  */
 @Controller
+@Scope("session")
 public class ApplicationController {
-    private final AvailableExpertises availableExpertises = new AvailableExpertises();
-    private final Map<String, User> users = new HashMap<>();
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    private CompetenceRepository competenceRepo;
+
+    private User user;
 
     @GetMapping("/apply")
     public String startApplication(Principal principal, Model model) {
-        User user = new User(principal.getName(), "jonny", "doe", 1020291L, "pass");
-        users.put(principal.getName(), user);
+        Optional<User> userMaybe = userService.findByEmail(principal.getName());
+
+        if(!userMaybe.isPresent())
+            throw new RuntimeException("Expected a user to exist on protected endpoint");
+
+        user = userMaybe.get();
         model.addAttribute("form", "expertise");
         model.addAttribute("user", user);
-        model.addAttribute("expertise", new Expertise());
-        model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
+        model.addAttribute("availableExpertises", competenceRepo.findAll());
+        model.addAttribute("competenceFormObject", new CompetenceProfile(user));
         return "applicationView";
     }
 
-    /**
-     * A mapping to fetch the data from the expertiseForm fragment.
-     * @param expertise the expertise to fetch
-     * @param principal the logged in user
-     * @param model for Thymeleaf
-     */
     @PostMapping("/apply/expertise")
-    public String fetchExpertise(@ModelAttribute Expertise expertise, Principal principal, Model model) {
-        User user = users.get(principal.getName());
-        user.addCompetence(expertise.getExpertise(), expertise.getYears());
+    public String fetchExpertise(@ModelAttribute CompetenceProfile formCompetence, Principal principal, Model model) {
+
+        // this could be changed to user.addCompetence(comp)
+        user.addCompetence(competenceRepo.findByName(formCompetence.getName()).get(), (int)formCompetence.getYearsOfExperience());
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
         }
+        //This saves the user for testing, should be done later
+        user = userService.saveUser(user);
+        model.addAttribute("competenceFormObject", new CompetenceProfile(user));
+
         model.addAttribute("user", user);
         model.addAttribute("form", "expertise");
-        model.addAttribute("availableExpertises", availableExpertises.getAvailableExpertises());
+        model.addAttribute("availableExpertises", competenceRepo.findAll());
         return "applicationView";
     }
 
     private boolean checkForLastFetch(User user) {
-        return user.getCompetences().size() == availableExpertises.getAvailableExpertises().size();
+        return user.getCompetences().size() == competenceRepo.count();
     }
 
     /**
@@ -70,7 +82,6 @@ public class ApplicationController {
      */
     @PostMapping("/apply/availability")
     public String fetchAvailability(@ModelAttribute Availability availability, Principal principal, Model model) {
-        User user = users.get(principal.getName());
         user.setAvailability(availability);
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
@@ -84,15 +95,8 @@ public class ApplicationController {
      */
     @PostMapping("/apply/review")
     public String reviewApplication(Principal principal, Model model) {
-        model.addAttribute("user", users.get(principal.getName()));
+        model.addAttribute("user", user);
         model.addAttribute("form", "review");
         return "applicationView";
     }
-
-    @PostMapping("/list/parameters")
-    public String listParameters(@ModelAttribute Parameter parameter, Principal principal, Model model){
-
-        return "list";
-    }
-
 }

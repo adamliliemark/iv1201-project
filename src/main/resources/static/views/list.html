@@ -7,11 +7,18 @@
 <body>
     <div class="title" th:text="${competence}"></div>
     <div class="title">Enter Parameters of Interest</div>
-    <form  th:action="@{/list/parameters}" class="form" method="post" th:object="${parameter}"  id="parameterForm" >
-        <label for="parameter">Parameters</label>
-        <select name="parameter" id="parameter">
-            <option th:each="par : ${availableParameters}" th:value="${par}" th:text="${par}"></option>
-        </select>
+    <p>
+    <form  th:action="@{/list/parameters}" class="form" method="post" th:object="${parameters}"  id="parameterForm" >
+            <div>Time Period</div>
+            <input id="period" type="text" />
+            <div>Date of Application</div>
+            <input id="date" type="text"/>
+            <div>Competence</div>
+            <input id="competence" type="text"/>
+            <div>Name</div>
+            <input id="name" type="text" />
+        <p>
+            <input id="listbutton" type="submit" value="List Applications"/>
 
     </form>
 </body>

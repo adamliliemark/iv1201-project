@@ -18,8 +18,8 @@
         <p>
             Competences:
             <div th:each="comp : ${user.getCompetences}">
-        <div th:text="${comp.key.getCompetence.getName}"></div>
-        <div th:text="${comp.value}"></div>
+        <div th:text="${comp.getCompetence.getName}"></div>
+        <div th:text="${comp.getYearsOfExperience}"></div>
     </div>
         <p>
         <div>
