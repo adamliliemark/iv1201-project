@@ -49,7 +49,7 @@ insert into unmigrated_person
 select * from person where email is null;
 
 insert into authorities (user_email, authority)
-select email, "ROLE_USER" from person where role_id = 2 and email is not null;
+select email, "ROLE_USER" from person where role_id = 1 and email is not null;
 
 insert into authorities (user_email, authority) 
 select email as user_email, "ROLE_ADMIN" from person where role_id = 2 and email is not null;
