@@ -38,6 +38,8 @@ public class ListController {
 //        model.addAttribute("competence", stringBuilder.toString());
 
         model.addAttribute("listFormObject", new ListForm());
+        model.addAttribute("months", new ListForm().getMonths());
+        model.addAttribute("years", new ListForm().getYears());
 
         return "list";
     }
@@ -46,6 +48,8 @@ public class ListController {
     public String listParameters(@Valid @ModelAttribute ListForm listForm ,Principal principal, Model model){
 
         model.addAttribute("listFormObject", new ListForm());
+        model.addAttribute("months", new ListForm().getMonths());
+        model.addAttribute("years", new ListForm().getYears());
         return "list";
     }
 

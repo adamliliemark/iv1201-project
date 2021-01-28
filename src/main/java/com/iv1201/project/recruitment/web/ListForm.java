@@ -1,22 +1,48 @@
 package com.iv1201.project.recruitment.web;
 
-import javax.validation.constraints.NotEmpty;
+
+import java.text.DateFormatSymbols;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 
 
 public class ListForm {
 
-
-    private String period;
+    private ArrayList<String> months;
+    private ArrayList<String> years;
     private String date;
     private String competence;
     private String name;
 
-    public String getPeriod() {
-        return period;
+    ListForm(){
+        setMonths();
+        setYears();
     }
 
-    public void setPeriod(String period) {
-        this.period = period;
+    private void setMonths(){
+        months = new ArrayList<>();
+        months.addAll(Arrays.asList(new DateFormatSymbols().getMonths()));
+    }
+
+    public ArrayList<String> getMonths() {
+        return months;
+    }
+
+    public ArrayList<String> getYears() {
+        return years;
+    }
+
+    private void setYears() {
+
+        int lowYear = 1980;
+        int highYear = Calendar.getInstance().get(Calendar.YEAR);
+        years = new ArrayList<>();
+
+        for (int i = lowYear; i <= highYear; i++)
+          years.add(Integer.toString(i));
+
+        years.add("");
     }
 
     public String getDate() {

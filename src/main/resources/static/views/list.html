@@ -5,20 +5,29 @@
     <title>Recruitment Application</title>
 </head>
 <body>
-    <div class="title">Enter Parameters of Interest</div>
+<div class="title">Enter Parameters of Interest</div>
+<p>
+<form th:action="@{/list/applications}" action="#" class="form" method="post" th:object="${listFormObject}"
+      id="parameterForm">
+    <div>Period</div>
+    <label for="years">Year</label>
+    <select name="years" id="years" th:field="*{years}" required>
+        <option id="year" th:each="year : ${years}" th:value="${year}" th:text="${year}"></option>
+    </select>
+    <label for="months">Month</label>
+    <select name="months" id="months" th:field="*{months}" required>
+        <option id="month" th:each="month : ${months}" th:value="${month}" th:text="${month}"></option>
+    </select>
+<!--    <input id="period" type="text" th:field="*{period}">-->
+<!--    <div>Date of Application</div>-->
+<!--    <input id="date" type="text" th:field="*{date}">-->
+<!--    <div>Competence</div>-->
+<!--    <input id="competence" type="text" th:field="*{competence}">-->
+<!--    <div>Name</div>-->
+<!--    <input id="name" type="text" th:field="*{name}">-->
     <p>
-    <form  th:action="@{/list/applications}" action="#" class="form" method="post" th:object="${listFormObject}"  id="parameterForm" >
-            <label for="period">Period</label>
-            <input id="period" type="text" th:field="*{period}">
-            <div>Date of Application</div>
-            <input id="date" type="text" th:field="*{date}">
-            <div>Competence</div>
-            <input id="competence" type="text" th:field="*{competence}">
-            <div>Name</div>
-            <input id="name" type="text" th:field="*{name}">
-        <p>
-            <input id="listbutton" type="submit" value="List Applications">
+        <input id="listbutton" type="submit" value="List Applications">
 
-    </form>
+</form>
 </body>
 </html>
