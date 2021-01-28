@@ -36,7 +36,7 @@ public class UserService {
      * This is example functionality that a service provides.
      * Validating business logic and interacting with the data store.
      */
-    public void addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, Long ssn) throws UserServiceError {
+    public void addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -60,7 +60,7 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
-    private boolean validateUser(String email, String firstName, String lastName, String clearTextPassword, Long ssn) throws UserServiceError {
+    private boolean validateUser(String email, String firstName, String lastName, String clearTextPassword, String ssn) throws UserServiceError {
         if (email == null || email.equals(""))
             throw new UserServiceError(ERROR_CODE.INVALID_EMAIL);
         if (firstName == null || firstName.equals(""))
@@ -84,6 +84,7 @@ public class UserService {
                 new Competence("Tomat"),
                 new Competence("Dogging")
         };
+
         for (Competence c : Competences) {
             if(!comptetenseRepo.existsByName(c.getName())) {
                 comptetenseRepo.save(c);
@@ -99,8 +100,9 @@ public class UserService {
                         "userLastName",
                         "pass",
                         Role.ROLE_USER,
-                        1000L);
+                        "19880101");
             }
+
             if (!userRepo.findByEmail("testadmin@example.com").isPresent()) {
                 System.err.println("Saving test admin!");
                 addNewUser("testadmin@example.com",
@@ -108,8 +110,9 @@ public class UserService {
                         "adminLastName",
                         "pass",
                         Role.ROLE_ADMIN,
-                        1000L);
+                        "19890103");
             }
+
         } catch(UserServiceError e) {
             System.err.println("Error creating test users " + e.errorCode);
         }

@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
-
-    @Cacheable("users")
     Optional<User> findByEmail(String email);
 }
