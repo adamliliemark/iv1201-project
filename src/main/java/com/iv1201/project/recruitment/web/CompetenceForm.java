@@ -1,14 +1,15 @@
 package com.iv1201.project.recruitment.web;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 public class CompetenceForm {
 
-    @NotEmpty
+    @NotNull
     private String name;
 
-    @NotEmpty
+    @NotNull
     @PositiveOrZero
     private double years;
 

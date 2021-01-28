@@ -77,12 +77,7 @@ public class ApplicationController {
 
     @PostMapping("/apply/availability")
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityForm, BindingResult bindingResult, Model model) {
-        System.out.println(bindingResult.toString());
-        //LocalDate from = dateToLocalDate(availabilityForm.getFrom());
-        //LocalDate to = dateToLocalDate(availabilityForm.getTo());
-
         if(!bindingResult.hasErrors()) {
-            //user.setAvailability(new Availability(from, to));
             user.setAvailability(new Availability(availabilityForm.getFrom(), availabilityForm.getTo()));
         }
         model.addAttribute("user", user);

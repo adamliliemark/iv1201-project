@@ -3,6 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script th:inline="javascript">
+        let validateDates = () => {
+            let from = document.forms.availabilityForm.from.valueAsDate;
+            let to = document.forms.availabilityForm.to.valueAsDate;
+            if(from > to) {
+                alert("From date can not be after to date. When you close this dialog, the inputs will be switched.");
+                document.forms.availabilityForm.from.valueAsDate = to;
+                document.forms.availabilityForm.to.valueAsDate = from;
+                return false;
+            }
+            if((from || to) == null) {
+                alert("Dates must be supplied.");
+                return false;
+            }
+            if((from || to) < 0){
+                alert("A date can not have a negative value.");
+                return false;
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -11,11 +31,11 @@
     <div class="title">Apply for a job</div>
 
     <div class="subtitle">What's your availability?</div>
-    <form th:action="@{/apply/availability}" action="#" class="form" method="post" th:object="${availabilityFormObject}">
+    <form th:action="@{/apply/availability}" name="availabilityForm" onsubmit="validateDates()" action="#" class="form" method="post" th:object="${availabilityFormObject}">
         <label for="from">From:</label>
-        <input type="date" id="from" th:field="*{from}" required>
+        <input type="date" name="from" id="from" th:field="*{from}" required>
         <label for="to">To:</label>
-        <input type="date" id="to" th:field="*{to}" required>
+        <input type="date" name="to" id="to" th:field="*{to}" required>
         <p>
             <input type="submit" value="Submit">
         </p>
