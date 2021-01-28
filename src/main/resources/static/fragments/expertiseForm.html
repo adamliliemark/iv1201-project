@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Apply for a Position</title>
+    <script th:inline="javascript">
+        let validateForm = () => {
+            let competence = document.competenceForm.competence.value;
+            let competenceYears = document.competenceForm.years.value;
+            if(((competence || competenceYears) == null) || competenceYears === "") {
+                alert("You must provide values to submit.");
+                return false;
+            }
+            if(competenceYears < 0) {
+                alert("Negative values not allowed.");
+                return false;
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -10,13 +24,13 @@
     <div class="title">Apply for a job</div>
 
     <div class="subtitle">What's your skills?</div>
-    <form th:action="@{/apply/expertise}" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
+    <form th:action="@{/apply/expertise}" name="competenceForm" onsubmit="validateForm()" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
         <label for="competence">Expertise</label>
         <select name="competence" id="competence" th:field="*{name}" required>
             <option th:each="competence : ${availableExpertises}" th:value="${competence.name}" th:text="${competence.name}"></option>
         </select>
-        <label for="competence-years">Years of experience</label>
-        <input id="competence-years" type="number" step="any" th:field="*{years}">
+        <label for="competenceYears">Years of experience</label>
+        <input id="competenceYears" name="competenceYears" type="number" step="any" th:field="*{years}">
         <p>
             <div th:if="${last}" th:text="'All expertises already added. Please submit your form.'"></div>
             <input type="submit" value="Add" th:unless="${last}">

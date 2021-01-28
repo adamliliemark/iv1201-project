@@ -1,15 +1,20 @@
 package com.iv1201.project.recruitment.web;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import javax.validation.constraints.NotEmpty;
+
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class AvailabilityForm {
-    @NotEmpty
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
+    @FutureOrPresent
     private LocalDate from;
 
-    @NotEmpty
+    @NotNull
+    @FutureOrPresent
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate to;
 
