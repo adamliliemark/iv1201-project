@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Optional;
 
 
@@ -38,7 +41,7 @@ public class ApplicationController {
     private User user;
 
     @GetMapping("/apply")
-    public String startApplication(Principal principal, Model model) {
+    public String startApplication(@ModelAttribute("competenceFormObject") CompetenceForm competenceForm, Principal principal, Model model) {
         Optional<User> userMaybe = userService.findByEmail(principal.getName());
         if(!userMaybe.isPresent())
             throw new RuntimeException("Expected a user to exist on protected endpoint");
@@ -47,12 +50,11 @@ public class ApplicationController {
         model.addAttribute("form", "expertise");
         model.addAttribute("user", user);
         model.addAttribute("availableExpertises", competenceRepo.findAll());
-        model.addAttribute("competenceFormObject", new CompetenceForm());
         return "applicationView";
     }
 
     @PostMapping("/apply/expertise")
-    public String fetchCompetenceForm(@Valid @ModelAttribute CompetenceForm competenceForm, BindingResult bindingResult, Model model) {
+    public String fetchCompetenceForm(@Valid @ModelAttribute("competenceFormObject") CompetenceForm competenceForm, BindingResult bindingResult, Model model) {
         if(!bindingResult.hasErrors()) {
             if(!competenceRepo.findByName(competenceForm.getName()).isPresent())
                 throw new RuntimeException("Expected the supplied competence to exist in the database.");
@@ -63,7 +65,6 @@ public class ApplicationController {
         }
         //This saves the user for testing, should be done later
         //user = userService.saveUser(user);
-        model.addAttribute("competenceFormObject", new CompetenceForm());
         model.addAttribute("user", user);
         model.addAttribute("form", "expertise");
         model.addAttribute("availableExpertises", competenceRepo.findAll());
@@ -75,8 +76,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/apply/availability")
-    public String fetchAvailabilityForm(@Valid @ModelAttribute AvailabilityForm availabilityForm, BindingResult bindingResult, Model model) {
-        model.addAttribute("availabilityFormObject", new AvailabilityForm());
+    public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityForm, BindingResult bindingResult, Model model) {
         if(!bindingResult.hasErrors()) {
             user.setAvailability(new Availability(availabilityForm.getFrom(), availabilityForm.getTo()));
         }
@@ -94,5 +94,13 @@ public class ApplicationController {
         model.addAttribute("user", user);
         model.addAttribute("form", "review");
         return "applicationView";
+    }
+
+    private LocalDate dateToLocalDate(Date date) {
+        if(date != null) {
+            ZoneId zoneId = ZoneId.systemDefault();
+            return date.toInstant().atZone(zoneId).toLocalDate();
+        } else
+            return null;
     }
 }
