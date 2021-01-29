@@ -15,8 +15,8 @@
 
     <div class="content">
         <div class="application-form" th:switch="${form}">
-            <div th:case="${'expertise'}" >
-                <div th:replace="../fragments/expertiseForm"></div>
+            <div th:case="${'competence'}" >
+                <div th:replace="../fragments/competenceForm"></div>
             </div>
             <div th:case="${'availability'}">
                 <div th:replace="../fragments/availabilityForm"></div>
