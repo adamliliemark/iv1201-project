@@ -36,21 +36,18 @@ public class ApplicationController {
 
     private User user;
     private Map<String, Competence> competences;
-    private List<String> localCompetenceNames;
 
     @GetMapping("/apply")
     public String startApplication(@ModelAttribute("competenceFormObject") CompetenceForm competenceForm, Principal principal, Model model) {
         Optional<User> userMaybe = userService.findByEmail(principal.getName());
         if(!userMaybe.isPresent())
             throw new RuntimeException("Expected a user to exist on protected endpoint");
-        localCompetenceNames = new ArrayList<>();
         competences = competenceService.getAllWithLocalNames("lang_se");
-        localCompetenceNames.addAll(competences.keySet());
 
         user = userMaybe.get();
         model.addAttribute("form", "competence");
         model.addAttribute("user", user);
-        model.addAttribute("availableExpertises", localCompetenceNames);
+        model.addAttribute("availableExpertises", competences.keySet());
         return "applicationView";
     }
 
@@ -68,7 +65,7 @@ public class ApplicationController {
         //user = userService.saveUser(user);
         model.addAttribute("user", user);
         model.addAttribute("form", "competence");
-        model.addAttribute("availableExpertises", localCompetenceNames);
+        model.addAttribute("availableExpertises", competences.keySet());
         return "applicationView";
     }
 
