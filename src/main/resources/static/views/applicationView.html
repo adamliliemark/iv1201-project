@@ -24,8 +24,11 @@
             <div th:case="${'review'}">
                 <div th:replace="../fragments/reviewApplication"></div>
             </div>
+            <div th:case="${'submitted'}">
+                <div class="subtitle">Your application was successfully submitted.</div>
+            </div>
         </div>
-        <div class="application-review" th:unless="${form == 'review'}">
+        <div class="application-review" th:unless="${form == 'review' || form == 'submitted'}">
             <div th:replace="../fragments/reviewApplication"></div>
         </div>
     </div>
