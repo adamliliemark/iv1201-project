@@ -10,6 +10,10 @@
     <div th:if="${form == 'review'}">
         <div class="title">Apply for a job</div>
         <div class="subtitle">Here is your application. Please review it and submit it when you are done.</div>
+        <p>
+            <form th:if="${form == 'review'}" th:action="@{/apply/submit}" name="submitForm" action="#" class="form" method="post">
+                <input type="submit" value="Submit">
+            </form>
     </div>
 
     <div class="apply-text">

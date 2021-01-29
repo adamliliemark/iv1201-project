@@ -24,31 +24,30 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select email, password, enabled "
                 + "from users "
-                + "where email = ?")
+                + "where email = ? and password is not null")
                 .authoritiesByUsernameQuery("select user_email, authority "
                 + "from authorities "
                 + "where user_email = ?");
     }
 
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//            //.csrf().disable()
-//            .authorizeRequests()
-//            .antMatchers("/login*").permitAll()
-//            .antMatchers("/test").permitAll()
-//            .antMatchers("/admin*").hasRole("ADMIN")
-//            .anyRequest().authenticated()
-//            .and()
-//            .formLogin()
-//            .loginPage("/login")
-//            .permitAll()
-//            //.failureHandler(authenticationFailureHandler())
-//            .and()
-//            .logout()
-//            .permitAll()
-//            .logoutUrl("/perform_logout");
-//            //.deleteCookies("JSESSIONID");
-//            //.logoutSuccessHandler(logoutSuccessHandler());
+        http
+            .authorizeRequests()
+            .antMatchers("/login*").permitAll()
+            .antMatchers("/test").permitAll()
+            .antMatchers("/admin*").hasRole("ADMIN")
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .loginPage("/login")
+            .permitAll()
+            //.failureHandler(authenticationFailureHandler())
+            .and()
+            .logout()
+            .permitAll()
+            .logoutUrl("/logout");
+            //.deleteCookies("JSESSIONID");
+            //.logoutSuccessHandler(logoutSuccessHandler());
     }
 
     @Bean
