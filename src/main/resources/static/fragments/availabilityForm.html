@@ -35,20 +35,20 @@
 
 
 <div class="application-form" th:fragment="availabilityForm">
-    <div class="title">Apply for a job</div>
+    <div class="title" th:text="#{apply.title}"></div>
 
-    <div class="subtitle">What's your availability?</div>
+    <div class="subtitle" th:text="#{apply.subtitle.availability}"></div>
     <form th:action="@{/apply/availability}" name="availabilityForm" onsubmit="validateDates()" action="#" class="form" method="post" th:object="${availabilityFormObject}">
-        <label for="from">From:</label>
+        <label for="from" th:text="#{label.from} + ':'"></label>
         <input type="date" name="from" id="from" th:field="*{from}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
-        <label for="to">To:</label>
+        <label for="to" th:text="#{label.to} + ':'"></label>
         <input type="date" name="to" id="to" th:field="*{to}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <p>
-            <input type="submit" value="Submit">
+            <input type="submit" th:value="#{submit}">
         </p>
     </form>
     <form th:action="@{/apply/review}" th:if="${user.availability != null}" action="#" class="form" method="post">
-        <input type="submit" value="Review your application">
+        <input type="submit" th:value="#{apply.review.submit}">
     </form>
 </div>
 

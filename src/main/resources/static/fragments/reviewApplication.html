@@ -8,27 +8,27 @@
 
 <div class="create-account-outer" th:fragment="reviewApplication">
     <div th:if="${form == 'review'}">
-        <div class="title">Apply for a job</div>
-        <div class="subtitle">Here is your application. Please review it and submit it when you are done.</div>
+        <div class="title" th:text="#{apply.title}"></div>
+        <div class="subtitle" th:text="#{apply.subtitle.review}"></div>
         <p>
             <form th:if="${form == 'review'}" th:action="@{/apply/submit}" name="submitForm" action="#" class="form" method="post">
-                <input type="submit" value="Submit">
+                <input type="submit" th:value="#{submit}">
             </form>
     </div>
 
     <div class="apply-text">
-        Name: <div th:text="${user.getFirstName} + ' ' + ${user.getLastName}"></div>
-        Mail: <div th:text="${user.getEmail}"></div>
+        <span th:text="#{Name} + ':'"></span><div th:text="${user.getFirstName} + ' ' + ${user.getLastName}"></div>
+        <span th:text="#{Mail} + ':'"></span><div th:text="${user.getEmail}"></div>
         <p>
-            Competences:
+            <span th:text="#{Competences} + ':'"></span>
             <div th:each="comp : ${user.getCompetences}">
         <div th:text="${comp.getCompetence.getName}"></div>
         <div th:text="${comp.getYearsOfExperience}"></div>
     </div>
         <p>
         <div>
-            Availability:
-            <div th:if="${user.availability != null}" th:text="${user.availability.getFromDate} + ' to ' + ${user.availability.getToDate}"></div>
+            <span th:text="#{Availability} + ':'"></span>
+            <div th:if="${user.availability != null}" th:text="${user.availability.getFromDate} + ' ' + #{to} + ' ' + ${user.availability.getToDate}"></div>
         </div>
     </div>
 </div>
