@@ -3,6 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <script th:inline="javascript">
+        const dateInput=document.createElement("input")
+        dateInput.setAttribute("type", "date")
+        if (dateInput.type!=="date"){ //if browser doesn't support input type="date", load files for jQuery UI Date Picker
+            document.write('<link th:href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />\n')
+            document.write('<script th:src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"><\/script>\n')
+            document.write('<script th:src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"><\/script>\n')
+        }
+    </script>
+    <script th:inline="javascript">
+        if (dateInput.type!=="date"){ //if browser doesn't support input type="date", initialize date picker widget:
+            jQuery(function($){ //on document.ready
+                $('#from').datepicker();
+                $('#to').datepicker();
+            })
+        }
+    </script>
     <script th:inline="javascript">
         let validateDates = () => {
             let from = document.forms.availabilityForm.from.valueAsDate;
@@ -45,8 +63,8 @@
             <input type="submit" value="Submit">
         </p>
     </form>
-    <form th:action="@{/apply/review}" action="#" class="form" method="post">
-        <input type="submit" value="Send your application">
+    <form th:action="@{/apply/review}" th:if="${user.availability != null}" action="#" class="form" method="post">
+        <input type="submit" value="Review your application">
     </form>
 </div>
 
