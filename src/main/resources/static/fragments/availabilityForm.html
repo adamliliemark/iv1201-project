@@ -3,22 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
     <script th:inline="javascript">
-        const dateInput=document.createElement("input")
-        dateInput.setAttribute("type", "date")
-        if (dateInput.type!=="date"){ //if browser doesn't support input type="date", load files for jQuery UI Date Picker
-            document.write('<link th:href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />\n')
-            document.write('<script th:src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"><\/script>\n')
-            document.write('<script th:src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"><\/script>\n')
-        }
-    </script>
-    <script th:inline="javascript">
-        if (dateInput.type!=="date"){ //if browser doesn't support input type="date", initialize date picker widget:
-            jQuery(function($){ //on document.ready
-                $('#from').datepicker();
-                $('#to').datepicker();
-            })
+        if(navigator.userAgent.includes("Safari")) {
+            document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>\n');
+            document.write('<script src="http://cdn.jsdelivr.net/webshim/1.12.4/extras/modernizr-custom.js"/>\n');
+            document.write('<script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"/>\n');
+            webshims.setOptions('waitReady', false);
+            webshims.setOptions('forms-ext', {type: 'date'});
+            webshims.polyfill('forms forms-ext');
         }
     </script>
     <script th:inline="javascript">
