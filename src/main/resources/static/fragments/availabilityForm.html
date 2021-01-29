@@ -4,16 +4,6 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script th:inline="javascript">
-        if(navigator.userAgent.includes("Safari")) {
-            document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"/>\n');
-            document.write('<script src="http://cdn.jsdelivr.net/webshim/1.12.4/extras/modernizr-custom.js"/>\n');
-            document.write('<script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"/>\n');
-            webshims.setOptions('waitReady', false);
-            webshims.setOptions('forms-ext', {type: 'date'});
-            webshims.polyfill('forms forms-ext');
-        }
-    </script>
-    <script th:inline="javascript">
         let validateDates = () => {
             let from = document.forms.availabilityForm.from.valueAsDate;
             let to = document.forms.availabilityForm.to.valueAsDate;
@@ -48,9 +38,9 @@
     <div class="subtitle">What's your availability?</div>
     <form th:action="@{/apply/availability}" name="availabilityForm" onsubmit="validateDates()" action="#" class="form" method="post" th:object="${availabilityFormObject}">
         <label for="from">From:</label>
-        <input type="date" name="from" id="from" th:field="*{from}" required>
+        <input type="date" name="from" id="from" th:field="*{from}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <label for="to">To:</label>
-        <input type="date" name="to" id="to" th:field="*{to}" required>
+        <input type="date" name="to" id="to" th:field="*{to}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <p>
             <input type="submit" value="Submit">
         </p>
