@@ -7,10 +7,6 @@ import javax.persistence.*;
 @Entity
 public class CompetenceProfile {
 
-    public CompetenceProfile(User user) {
-        this.user = user;
-    }
-
     protected CompetenceProfile(){};
 
     @Id
