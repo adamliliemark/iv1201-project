@@ -1,6 +1,7 @@
 package com.iv1201.project.recruitment.web;
 
 import com.iv1201.project.recruitment.persistence.*;
+import com.iv1201.project.recruitment.service.CompetenceService;
 import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * ApplicationController is the controller for when an
@@ -31,29 +32,31 @@ public class ApplicationController {
     UserService userService;
 
     @Autowired
-    private CompetenceRepository competenceRepo;
+    private CompetenceService competenceService;
 
     private User user;
+    private Map<String, Competence> competences;
 
     @GetMapping("/apply")
     public String startApplication(@ModelAttribute("competenceFormObject") CompetenceForm competenceForm, Principal principal, Model model) {
         Optional<User> userMaybe = userService.findByEmail(principal.getName());
         if(!userMaybe.isPresent())
             throw new RuntimeException("Expected a user to exist on protected endpoint");
+        competences = competenceService.getAllWithLocalNames("en_US");
 
         user = userMaybe.get();
         model.addAttribute("form", "competence");
         model.addAttribute("user", user);
-        model.addAttribute("availableExpertises", competenceRepo.findAll());
+        model.addAttribute("availableExpertises", competences.keySet());
         return "applicationView";
     }
 
     @PostMapping("/apply/expertise")
     public String fetchCompetenceForm(@Valid @ModelAttribute("competenceFormObject") CompetenceForm competenceForm, BindingResult bindingResult, Model model) {
         if(!bindingResult.hasErrors()) {
-            if(!competenceRepo.findByName(competenceForm.getName()).isPresent())
+            if(!competences.containsKey(competenceForm.getName()))
                 throw new RuntimeException("Expected the supplied competence to exist in the database.");
-            user.addCompetence(competenceRepo.findByName(competenceForm.getName()).get(), competenceForm.getYears());
+            user.addCompetence(competences.get(competenceForm.getName()), competenceForm.getYears());
         }
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
@@ -61,12 +64,12 @@ public class ApplicationController {
 
         model.addAttribute("user", user);
         model.addAttribute("form", "competence");
-        model.addAttribute("availableExpertises", competenceRepo.findAll());
+        model.addAttribute("availableExpertises", competences.keySet());
         return "applicationView";
     }
 
     private boolean checkForLastFetch(User user) {
-        return user.getCompetences().size() == competenceRepo.count();
+        return user.getCompetences().size() == competences.size();
     }
 
     @PostMapping("/apply/availability")

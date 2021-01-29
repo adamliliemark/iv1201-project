@@ -27,7 +27,7 @@
     <form th:action="@{/apply/expertise}" name="competenceForm" onsubmit="validateForm()" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
         <label for="competence">Expertise</label>
         <select name="competence" id="competence" th:field="*{name}" required>
-            <option th:each="competence : ${availableExpertises}" th:value="${competence.name}" th:text="${competence.name}"></option>
+            <option th:each="competence : ${availableExpertises}" th:value="${competence}" th:text="${competence}"></option>
         </select>
         <label for="competenceYears">Years of experience</label>
         <input id="competenceYears" name="competenceYears" type="number" step="any" th:field="*{years}">

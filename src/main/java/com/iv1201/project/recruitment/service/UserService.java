@@ -23,13 +23,17 @@ public class UserService {
     }
 
     @Autowired
-    CompetenceRepository comptetenseRepo;
+    CompetenceRepository competenceRepo;
 
     @Autowired
     UserRepository userRepo;
 
     @Autowired
     AuthorityRepository authorityRepo;
+
+
+    @Autowired
+    LanguageRepository languageRepo;
 
     /**
      * Adds a new user into the system, if it is valid.
@@ -76,22 +80,9 @@ public class UserService {
 
     @PostConstruct
     public void addDefaultUsers() {
-        //Save competences
-        Competence Competences[] = {
-                new Competence("Hot Dogs"),
-                new Competence("Sausage"),
-                new Competence("Gurka"),
-                new Competence("Tomat"),
-                new Competence("Dogging")
-        };
-
-        for (Competence c : Competences) {
-            if(!comptetenseRepo.existsByName(c.getName())) {
-                comptetenseRepo.save(c);
-            }
-            else System.err.println("I FOUND A COMPETENCE");
-        }
-
+        //Proxy for "is first run"
+        if(userRepo.count() != 0)
+            return;
         try {
             if (!userRepo.findByEmail("testuser@example.com").isPresent()) {
                 System.err.println("Saving test user!");
@@ -115,6 +106,31 @@ public class UserService {
 
         } catch(UserServiceError e) {
             System.err.println("Error creating test users " + e.errorCode);
+        }
+        addDefaultCompetences();
+    }
+    private void addDefaultCompetences() {
+        Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
+        Language english = languageRepo.save(new Language("en_US", "english"));
+        Competence dogging = new Competence();
+        Competence fishing = new Competence();
+        competenceRepo.save(dogging);
+        competenceRepo.save(fishing);
+        fishing = competenceRepo.findById(fishing.getId()).get();
+        dogging = competenceRepo.findById(dogging.getId()).get();
+        dogging.addTranslation(swedish, "hundning");
+        dogging.addTranslation(english, "dogging");
+        fishing.addTranslation(swedish, "fiske");
+        fishing.addTranslation(english, "fishing");
+
+        //Save them
+        Competence competences[] = {
+                dogging,
+                fishing
+        };
+
+        for (Competence c : competences) {
+            competenceRepo.save(c);
         }
     }
 }
