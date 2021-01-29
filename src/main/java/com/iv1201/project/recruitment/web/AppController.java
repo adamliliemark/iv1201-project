@@ -44,18 +44,6 @@ public class AppController {
         return "home";
     }
 
-    @GetMapping("/create")
-    public String createAccount(Model model) {
-        model.addAttribute("logegdIn", false);
-        return "create_account";
-    }
-
-    @PostMapping("/create")
-    public String accountCreation(Model model) {
-        // this is where we deal with account creation
-        model.addAttribute("loggedIn", true);
-        return "create_account";
-    }
 
 
 }
