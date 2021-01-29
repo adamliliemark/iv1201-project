@@ -1,4 +1,4 @@
-package com.iv1201.project.recruitment.persistence;
+package com.iv1201.project.recruitment.persistence.unmigratedData;
 
 import javax.persistence.*;
 
