@@ -1,6 +1,5 @@
 package com.iv1201.project.recruitment.web;
 
-
 import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Optional;
-
 
 /**
  * ApplicationController is the controller for when an
@@ -47,7 +42,7 @@ public class ApplicationController {
             throw new RuntimeException("Expected a user to exist on protected endpoint");
 
         user = userMaybe.get();
-        model.addAttribute("form", "expertise");
+        model.addAttribute("form", "competence");
         model.addAttribute("user", user);
         model.addAttribute("availableExpertises", competenceRepo.findAll());
         return "applicationView";
@@ -66,7 +61,7 @@ public class ApplicationController {
         //This saves the user for testing, should be done later
         //user = userService.saveUser(user);
         model.addAttribute("user", user);
-        model.addAttribute("form", "expertise");
+        model.addAttribute("form", "competence");
         model.addAttribute("availableExpertises", competenceRepo.findAll());
         return "applicationView";
     }
@@ -94,13 +89,5 @@ public class ApplicationController {
         model.addAttribute("user", user);
         model.addAttribute("form", "review");
         return "applicationView";
-    }
-
-    private LocalDate dateToLocalDate(Date date) {
-        if(date != null) {
-            ZoneId zoneId = ZoneId.systemDefault();
-            return date.toInstant().atZone(zoneId).toLocalDate();
-        } else
-            return null;
     }
 }
