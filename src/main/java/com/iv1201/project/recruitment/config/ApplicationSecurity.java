@@ -24,7 +24,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select email, password, enabled "
                 + "from users "
-                + "where email = ?")
+                + "where email = ? and password is not null")
                 .authoritiesByUsernameQuery("select user_email, authority "
                 + "from authorities "
                 + "where user_email = ?");
@@ -32,7 +32,6 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http
-            //.csrf().disable()
             .authorizeRequests()
             .antMatchers("/login*").permitAll()
             .antMatchers("/test").permitAll()
@@ -46,7 +45,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
             .and()
             .logout()
             .permitAll()
-            .logoutUrl("/perform_logout");
+            .logoutUrl("/logout");
             //.deleteCookies("JSESSIONID");
             //.logoutSuccessHandler(logoutSuccessHandler());
     }
