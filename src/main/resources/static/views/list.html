@@ -3,28 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Recruitment Application</title>
+    <script th:inline="javascript">
+        let validate = () => {
+            let from = document.forms.listForm.from.valueAsDate;
+            let to = document.forms.listForm.to.valueAsDate;
+
+            if ((from != null && to == null) || (from == null && to != null)) {
+                alert("You have only entered one date in period");
+                return false;
+            }
+
+            if (from != null && to != null) {
+
+                if (from > to) {
+                    alert("From date can not be after to date.");
+                    return false;
+                }
+
+                if ((from || to) < 0) {
+                    alert("A date can not have a negative value.");
+                    return false;
+                }
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="title">Enter Parameters of Interest</div>
 <p>
-<form th:action="@{/list/applications}" action="#" class="form" method="post" th:object="${listFormObject}"
-      id="parameterForm">
+<form th:action="@{/list/applications}" name="listForm" id="listForm" onsubmit="validate()" action="#" class="form"
+      method="post" th:object="${listFormObject}">
+    <p>
     <div>Period</div>
-    <label for="years">Year</label>
-    <select name="years" id="years" th:field="*{years}" required>
-        <option id="year" th:each="year : ${years}" th:value="${year}" th:text="${year}"></option>
+    <p>
+        <label for="from">From:</label>
+        <input type="date" name="from" id="from" th:field="*{availabilityForm.from}">
+    <p>
+        <label for="to">To:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <input type="date" name="to" id="to" th:field="*{availabilityForm.to}">
+    <p>
+    <div>Application Date</div>
+    <input type="date" name="date" id="date" th:field="*{date}">
+    <p>
+    <div>Competence</div>
+    <select name="competence" id="competence" th:field="*{competence}">
+        <option selected value=""> -- select --</option>
+        <option th:each="e : ${expertise}" th:value="${e.name}" th:text="${e.name}"></option>
     </select>
-    <label for="months">Month</label>
-    <select name="months" id="months" th:field="*{months}" required>
-        <option id="month" th:each="month : ${months}" th:value="${month}" th:text="${month}"></option>
-    </select>
-<!--    <input id="period" type="text" th:field="*{period}">-->
-<!--    <div>Date of Application</div>-->
-<!--    <input id="date" type="text" th:field="*{date}">-->
-<!--    <div>Competence</div>-->
-<!--    <input id="competence" type="text" th:field="*{competence}">-->
-<!--    <div>Name</div>-->
-<!--    <input id="name" type="text" th:field="*{name}">-->
+    <p>
+    <div>Name</div>
+    <input id="name" type="text" th:field="*{name}">
     <p>
         <input id="listbutton" type="submit" value="List Applications">
 
