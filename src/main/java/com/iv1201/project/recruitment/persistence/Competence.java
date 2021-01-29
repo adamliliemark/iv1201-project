@@ -29,7 +29,7 @@ public class Competence {
     }
 
     public String getName() {
-        return this.getName("lang_se");
+        return this.getName("en_US");
     }
 
     public Long getId() {

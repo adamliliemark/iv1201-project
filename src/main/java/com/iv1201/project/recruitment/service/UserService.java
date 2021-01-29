@@ -110,8 +110,8 @@ public class UserService {
         addDefaultCompetences();
     }
     private void addDefaultCompetences() {
-        Language swedish = languageRepo.save(new Language("lang_se", "svenska"));
-        Language english = languageRepo.save(new Language("lang_en", "english"));
+        Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
+        Language english = languageRepo.save(new Language("en_US", "english"));
         Competence dogging = new Competence();
         Competence fishing = new Competence();
         competenceRepo.save(dogging);

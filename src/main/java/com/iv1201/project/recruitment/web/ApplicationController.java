@@ -42,7 +42,7 @@ public class ApplicationController {
         Optional<User> userMaybe = userService.findByEmail(principal.getName());
         if(!userMaybe.isPresent())
             throw new RuntimeException("Expected a user to exist on protected endpoint");
-        competences = competenceService.getAllWithLocalNames("lang_se");
+        competences = competenceService.getAllWithLocalNames("en_US");
 
         user = userMaybe.get();
         model.addAttribute("form", "competence");
