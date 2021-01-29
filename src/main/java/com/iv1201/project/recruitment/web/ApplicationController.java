@@ -3,6 +3,7 @@ package com.iv1201.project.recruitment.web;
 import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import com.iv1201.project.recruitment.persistence.Availability;
 import com.iv1201.project.recruitment.persistence.User;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -28,6 +30,9 @@ import java.util.Optional;
 public class ApplicationController {
 
     @Autowired
+    MessageSource messageSource;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -36,7 +41,9 @@ public class ApplicationController {
     private User user;
 
     @GetMapping("/apply")
-    public String startApplication(@ModelAttribute("competenceFormObject") CompetenceForm competenceForm, Principal principal, Model model) {
+    public String startApplication(Locale locale, @ModelAttribute("competenceFormObject") CompetenceForm competenceForm, Principal principal, Model model) {
+        System.out.println(locale);
+
         Optional<User> userMaybe = userService.findByEmail(principal.getName());
         if(!userMaybe.isPresent())
             throw new RuntimeException("Expected a user to exist on protected endpoint");

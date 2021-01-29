@@ -21,22 +21,22 @@
 <body>
 
 <div class="application-form" th:fragment="expertiseForm">
-    <div class="title">Apply for a job</div>
+    <div class="title" th:text="#{apply.title}"></div>
 
-    <div class="subtitle">What's your skills?</div>
+    <div class="subtitle" th:text="#{apply.subtitle.skills}"></div>
     <form th:action="@{/apply/expertise}" name="competenceForm" onsubmit="validateForm()" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
-        <label for="competence">Expertise</label>
+        <label for="competence" th:text="#{apply.label.competence}"></label>
         <select name="competence" id="competence" th:field="*{name}" required>
             <option th:each="competence : ${availableExpertises}" th:value="${competence.name}" th:text="${competence.name}"></option>
         </select>
-        <label for="competenceYears">Years of experience</label>
+        <label for="competenceYears" th:text="#{apply.label.years}"></label>
         <input id="competenceYears" name="competenceYears" type="number" step="any" th:field="*{years}">
         <p>
-            <div th:if="${last}" th:text="'All expertises already added. Please submit your form.'"></div>
-            <input type="submit" value="Add" th:unless="${last}">
+            <div th:if="${last}" th:text="#{apply.message.last}"></div>
+            <input type="submit" th:value="#{add}" th:unless="${last}">
     </form>
     <form th:action="@{/apply/availability}" action="#" class="form" method="post">
-        <input type="submit" value="Submit">
+        <input type="submit" th:value="#{submit}">
     </form>
 
 </div>
