@@ -7,6 +7,11 @@
         let validateDates = () => {
             let from = document.forms.availabilityForm.from.valueAsDate;
             let to = document.forms.availabilityForm.to.valueAsDate;
+            let now = new Date().setHours(0,0,0,0);
+            if((from || to) < now) {
+                alert("Dates in the past is not valid.");
+                return false;
+            }
             if(from > to) {
                 alert("From date can not be after to date. When you close this dialog, the inputs will be switched.");
                 document.forms.availabilityForm.from.valueAsDate = to;
