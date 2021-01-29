@@ -3,46 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
-    <script th:inline="javascript">
-        const dateInput=document.createElement("input")
-        dateInput.setAttribute("type", "date")
-        if (dateInput.type!=="date"){ //if browser doesn't support input type="date", load files for jQuery UI Date Picker
-            document.write('<link th:href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />\n')
-            document.write('<script th:src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"><\/script>\n')
-            document.write('<script th:src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"><\/script>\n')
-        }
-    </script>
-    <script th:inline="javascript">
-        if (dateInput.type!=="date"){ //if browser doesn't support input type="date", initialize date picker widget:
-            jQuery(function($){ //on document.ready
-                $('#from').datepicker();
-                $('#to').datepicker();
-            })
-        }
-    </script>
     <script th:inline="javascript">
         let validateDates = () => {
-            let from = document.forms.availabilityForm.from.valueAsDate;
-            let to = document.forms.availabilityForm.to.valueAsDate;
-            let now = new Date().setHours(0,0,0,0);
-            if((from || to) < now) {
-                alert("Dates in the past is not valid.");
-                return false;
-            }
-            if(from > to) {
-                alert("From date can not be after to date. When you close this dialog, the inputs will be switched.");
-                document.forms.availabilityForm.from.valueAsDate = to;
-                document.forms.availabilityForm.to.valueAsDate = from;
-                return false;
-            }
-            if((from || to) == null) {
-                alert("Dates must be supplied.");
-                return false;
-            }
-            if((from || to) < 0){
-                alert("A date can not have a negative value.");
-                return false;
+            if(!navigator.userAgent.includes("Safari")) {
+                let from = document.forms.availabilityForm.from.valueAsDate;
+                let to = document.forms.availabilityForm.to.valueAsDate;
+                let now = new Date().setHours(0,0,0,0);
+                if((from || to) < now) {
+                    alert("Dates in the past is not valid.");
+                    return false;
+                }
+                if(from > to) {
+                    alert("From date can not be after to date. When you close this dialog, the inputs will be switched.");
+                    document.forms.availabilityForm.from.valueAsDate = to;
+                    document.forms.availabilityForm.to.valueAsDate = from;
+                    return false;
+                }
+                if((from || to) == null) {
+                    alert("Dates must be supplied.");
+                    return false;
+                }
+                if((from || to) < 0){
+                    alert("A date can not have a negative value.");
+                    return false;
+                }
             }
         }
     </script>
@@ -56,9 +40,9 @@
     <div class="subtitle">What's your availability?</div>
     <form th:action="@{/apply/availability}" name="availabilityForm" onsubmit="validateDates()" action="#" class="form" method="post" th:object="${availabilityFormObject}">
         <label for="from">From:</label>
-        <input type="date" name="from" id="from" th:field="*{from}" required>
+        <input type="date" name="from" id="from" th:field="*{from}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <label for="to">To:</label>
-        <input type="date" name="to" id="to" th:field="*{to}" required>
+        <input type="date" name="to" id="to" th:field="*{to}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <p>
             <input type="submit" value="Submit">
         </p>

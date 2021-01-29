@@ -61,8 +61,7 @@ public class ApplicationController {
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
         }
-        //This saves the user for testing, should be done later
-        //user = userService.saveUser(user);
+
         model.addAttribute("user", user);
         model.addAttribute("form", "competence");
         model.addAttribute("availableExpertises", competences.keySet());
@@ -91,6 +90,14 @@ public class ApplicationController {
     public String reviewApplication(Model model) {
         model.addAttribute("user", user);
         model.addAttribute("form", "review");
+        return "applicationView";
+    }
+
+    @PostMapping("/apply/submit")
+    public String submittedApplication(Model model) {
+        user = userService.saveUser(user);
+        model.addAttribute("user", user);
+        model.addAttribute("form", "submitted");
         return "applicationView";
     }
 }
