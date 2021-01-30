@@ -4,6 +4,7 @@ import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.CompetenceService;
 import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import com.iv1201.project.recruitment.persistence.Availability;
 import com.iv1201.project.recruitment.persistence.User;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
 
+
 /**
  * ApplicationController is the controller for when an
  * applicant makes an application. All mappings return the
@@ -29,6 +31,9 @@ import java.util.*;
 public class ApplicationController {
 
     @Autowired
+    MessageSource messageSource;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -38,7 +43,9 @@ public class ApplicationController {
     private Map<String, Competence> competences;
 
     @GetMapping("/apply")
-    public String startApplication(@ModelAttribute("competenceFormObject") CompetenceForm competenceForm, Principal principal, Model model) {
+    public String startApplication(Locale locale, @ModelAttribute("competenceFormObject") CompetenceForm competenceForm, Principal principal, Model model) {
+        System.out.println(locale);
+
         Optional<User> userMaybe = userService.findByEmail(principal.getName());
         if(!userMaybe.isPresent())
             throw new RuntimeException("Expected a user to exist on protected endpoint");
