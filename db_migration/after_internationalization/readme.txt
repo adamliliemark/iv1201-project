@@ -6,7 +6,7 @@ usage: migrate.py [-h] -u U -p P -oldschema OLDSCHEMA [-test] [-debug]
 to test pass -test argument
 The script will then validate the output against an example database structure
 
->chmod +x migrate_db.sh
+>chmod +x migrate.py
 >./migrate.py -u SOMEUSER -p SOMEPASS -oldschema SOMESCHEMA
 Outputs into:
 migrated_database_pop.sql
