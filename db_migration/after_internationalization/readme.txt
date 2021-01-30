@@ -1,4 +1,5 @@
 This script creates sql queries that can be used to populate a database of the new format with the data from the legacy database
+You can chose to optionally translate the competence names as the script runs.
 
 usage: migrate.py [-h] -u U -p P -oldschema OLDSCHEMA [-test] [-debug]
 
