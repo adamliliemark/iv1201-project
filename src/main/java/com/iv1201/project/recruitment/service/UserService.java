@@ -7,11 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-
 import javax.annotation.PostConstruct;
 import java.util.Optional;
-
 
 @Component
 @Service
@@ -30,7 +27,6 @@ public class UserService {
 
     @Autowired
     AuthorityRepository authorityRepo;
-
 
     @Autowired
     LanguageRepository languageRepo;
@@ -58,7 +54,6 @@ public class UserService {
     public User saveUser(User user) {
         return userRepo.save(user);
     }
-
 
     public Optional<User> findByEmail(String email) {
         return userRepo.findByEmail(email);
@@ -112,21 +107,19 @@ public class UserService {
     private void addDefaultCompetences() {
         Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
         Language english = languageRepo.save(new Language("en_US", "english"));
-        Competence dogging = new Competence();
-        Competence fishing = new Competence();
-        competenceRepo.save(dogging);
-        competenceRepo.save(fishing);
-        fishing = competenceRepo.findById(fishing.getId()).get();
-        dogging = competenceRepo.findById(dogging.getId()).get();
-        dogging.addTranslation(swedish, "hundning");
-        dogging.addTranslation(english, "dogging");
-        fishing.addTranslation(swedish, "fiske");
-        fishing.addTranslation(english, "fishing");
+        Competence grilling = competenceRepo.save(new Competence());
+        Competence carousel = competenceRepo.save(new Competence());
+        carousel = competenceRepo.findById(carousel.getId()).get();
+        grilling = competenceRepo.findById(grilling.getId()).get();
+        grilling.addTranslation(swedish, "Korvgrillning");
+        grilling.addTranslation(english, "Grilling sausage");
+        carousel.addTranslation(swedish, "Karuselldrift");
+        carousel.addTranslation(english, "Carousel operation");
 
         //Save them
         Competence competences[] = {
-                dogging,
-                fishing
+                grilling,
+                carousel
         };
 
         for (Competence c : competences) {
