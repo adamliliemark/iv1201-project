@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class HttpRequestTest {
@@ -16,11 +16,12 @@ public class HttpRequestTest {
     private int port;
 
     @Autowired
-    private TestRestTemplate webClient;
+    private TestRestTemplate testRestTemplate;
 
     @Test
-    public void simpleTest() {
-        assertThat(this.webClient.getForObject("http://localhost:" + port + "/login",
-                String.class)).contains("Login");
+    public void responseCodeTest() {
+        TestRestTemplate testRestTemplate = new TestRestTemplate();
+        ResponseEntity<String> response = testRestTemplate.getForEntity("http://localhost:" + port + "/login", String.class);
+        assert(response.getStatusCode().equals(HttpStatus.OK));
     }
 }

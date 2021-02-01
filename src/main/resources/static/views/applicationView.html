@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Recruitment Application</title>
+    <title th:text="#{title}"></title>
     <link th:href="@{../css/global.css}" rel="stylesheet">
     <link th:href="@{../css/footer.css}" rel="stylesheet">
     <link th:href="@{../css/header.css}" rel="stylesheet">
@@ -25,7 +25,7 @@
                 <div th:replace="../fragments/reviewApplication"></div>
             </div>
             <div th:case="${'submitted'}">
-                <div class="subtitle">Your application was successfully submitted.</div>
+                <div class="subtitle" th:text="#{apply.submitted}"></div>
             </div>
         </div>
         <div class="application-review" th:unless="${form == 'review' || form == 'submitted'}">

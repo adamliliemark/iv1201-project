@@ -2,22 +2,31 @@ package com.iv1201.project.recruitment.persistence;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Competence {
-
-    protected Competence() {}
-
-    public Competence(String name) {
-        this.name = name;
-    }
+    public Competence() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = false)
-    private String name;
+    @OneToMany(mappedBy="competence", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    private List<CompetenceTranslation> translations;
+
+    public Competence addTranslation(Language l, String text) {
+        this.translations.add(new CompetenceTranslation(this, l, text));
+        return this;
+    }
+
+    public String getName(String code) {
+        CompetenceTranslation ct = translations.stream()
+                .filter(c -> c.getLanguage().getLanguageCode().equals(code))
+                .findAny()
+                .orElse(null);
+        return ct != null ? ct.getText() : "MISSING TRANSLATION";
+    }
 
     public Long getId() {
         return id;
@@ -28,10 +37,10 @@ public class Competence {
     }
 
     public String getName() {
-        return name;
+        return this.getName("en_US");
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Long getId() {
+        return this.id;
     }
 }
