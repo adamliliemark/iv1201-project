@@ -40,7 +40,4 @@ public class Competence {
         return this.getName("en_US");
     }
 
-    public Long getId() {
-        return this.id;
-    }
 }
