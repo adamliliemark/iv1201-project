@@ -1,0 +1,17 @@
+.login-form {
+    display: flex;
+    justify-content: space-around;
+    min-width: 200px;
+}
+
+.login-form-input {
+    max-width: 20em;
+    margin-bottom: 1em;
+}
+
+.login-form-input-container {
+    margin-right: 5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

@@ -14,11 +14,6 @@ public class AppController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        return "login";
-    }
-
     @GetMapping("/admin")
     public String admin(Model model) {
         return "admin";
