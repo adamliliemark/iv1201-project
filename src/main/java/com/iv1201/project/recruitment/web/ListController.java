@@ -37,7 +37,7 @@ public class ListController {
 //        all.forEach(c -> stringBuilder.append(c.getId() + " ").append(c.getName() + "\n")
 //        );
 
-        model.addAttribute("listFormObject", new ListForm());
+        List<ApplicationDTO> a = userRepository.getUserApplications(null, null, 0);
         model.addAttribute("expertise", competenceRepo.findAll());
 
 
@@ -46,9 +46,6 @@ public class ListController {
 
     @PostMapping("/list/applications")
     public String listParameters(@Valid @ModelAttribute("listFormObject") ListForm listForm , BindingResult bindingResult, Model model){
-
-        Collection<ApplicationDTO> a = userRepository.getUserApplications("adminFirstName", null,2);
-        model.addAttribute("listFormObject", new ListForm());
         model.addAttribute("expertise", competenceRepo.findAll());
         return "list";
     }
