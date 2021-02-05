@@ -59,6 +59,8 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
+
+
     private boolean validateUser(String email, String firstName, String lastName, String clearTextPassword, String ssn) throws UserServiceError {
         if (email == null || email.equals(""))
             throw new UserServiceError(ERROR_CODE.INVALID_EMAIL);
