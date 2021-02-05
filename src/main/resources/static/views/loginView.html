@@ -1,0 +1,44 @@
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <title>Green Garden Recruitment Portal</title>
+    <link th:href="@{../css/login.css}" rel="stylesheet">
+    <link th:href="@{../css/global.css}" rel="stylesheet">
+    <link th:href="@{../css/home.css}" rel="stylesheet">
+    <link th:href="@{../css/footer.css}" rel="stylesheet">
+    <link th:href="@{../css/header.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div th:replace="../fragments/header"></div>
+    </div>
+
+    <div class="content">
+        <div class="login-form">
+            <form name="f" th:action="@{/login}" method="post">
+                <fieldset>
+                    <legend th:text="#{login.login}">Please login</legend>
+                    <div th:if="${param.error}" class="alert alert-error" th:text="#{login.invalid}"></div>
+                    <div th:if="${param.logout}" class="alert alert-success" th:text="#{login.loggedOut}"></div>
+                    <div class="login-form-input-container">
+                        <label for="username" th:text="#{label.username}"></label>
+                        <input class="login-form-input" type="text" id="username" name="username"/>
+                        <label for="password" th:text="#{label.password}"></label>
+                        <input class="login-form-input" type="password" id="password" name="password"/>
+                        <div th:replace="../fragments/formCSRFToken"></div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn" th:text="#{login.btn}"></button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div th:replace="../fragments/footer :: ${loggedIn} ? footer_logged_in : footer"></div>
+    </div>
+</div>
+
+</body>
+</html>

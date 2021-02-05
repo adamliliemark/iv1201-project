@@ -10,7 +10,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <div th:replace="../fragments/header :: header"></div>
+        <div th:replace="../fragments/header"></div>
     </div>
 
     <div class="content">
@@ -34,7 +34,7 @@
     </div>
 
     <div class="footer">
-        <div th:replace="../fragments/footer :: ${loggedIn} ? footer_logged_in : footer"></div>
+        <div th:replace="../fragments/footer :: footer_logged_in"></div>
     </div>
 </div>
 </body>
