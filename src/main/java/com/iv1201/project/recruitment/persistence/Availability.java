@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name="Availability",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"FROM_DATE", "TO_DATE"})})
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"FROM_DATE", "TO_DATE", "USER_EMAIL"})})
 public class Availability {
 
     protected Availability() {}
