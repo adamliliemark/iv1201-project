@@ -35,6 +35,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/login*").permitAll()
             .antMatchers("/test").permitAll()
+            .antMatchers("/css/*").permitAll()
             .antMatchers("/admin*").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and()
@@ -45,8 +46,8 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
             .and()
             .logout()
             .permitAll()
-            .logoutUrl("/logout");
-            //.deleteCookies("JSESSIONID");
+            .logoutUrl("/logout")
+            .deleteCookies("JSESSIONID");
             //.logoutSuccessHandler(logoutSuccessHandler());
     }
 
