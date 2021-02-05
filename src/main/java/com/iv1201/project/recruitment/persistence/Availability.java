@@ -6,6 +6,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Represents a stored Availability
+ * Maps a user to a specific availability interval
+ */
 @Entity
 public class Availability {
 

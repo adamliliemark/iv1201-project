@@ -4,6 +4,11 @@ import org.hibernate.annotations.common.reflection.java.generics.CompoundTypeEnv
 
 import javax.persistence.*;
 
+
+/**
+ * Maps a User to a specific Competence
+ * One User may have many Competences
+ */
 @Entity
 public class CompetenceProfile {
 

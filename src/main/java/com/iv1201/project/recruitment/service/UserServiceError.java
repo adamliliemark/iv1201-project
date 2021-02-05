@@ -1,8 +1,8 @@
 package com.iv1201.project.recruitment.service;
 
 /**
- * ValidationError instances represent an error in a requested action
- * See <code>ERROR_CODE</code> enum.
+ * ValidationError instances represent an business level error in a requested action
+ * @see ERROR_CODE enum.
  */
 public class UserServiceError extends Exception {
     public enum ERROR_CODE {
@@ -14,10 +14,14 @@ public class UserServiceError extends Exception {
         INVALID_FIRST_NAME,
         INVALID_LAST_NAME,
         INVALID_SSN;
-
     }
 
     public ERROR_CODE errorCode;
+
+    /**
+     * Creates a UserServiceError
+     * @param err the ERROR_CODE matching the error that occurred
+     */
     public UserServiceError(ERROR_CODE err) {
         super();
         this.errorCode = err;

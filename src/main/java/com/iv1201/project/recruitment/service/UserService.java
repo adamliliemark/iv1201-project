@@ -14,8 +14,15 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+
+    /**
+     * User role
+     * the role of the user determines access levels
+     */
     public enum Role {
+        /** ROLE_USER denotes user level access*/
         ROLE_USER,
+        /** ROLE_ADMIN denotes recruiter level access */
         ROLE_ADMIN
     }
 
@@ -31,10 +38,17 @@ public class UserService {
     @Autowired
     LanguageRepository languageRepo;
 
+
     /**
-     * Adds a new user into the system, if it is valid.
-     * This is example functionality that a service provides.
-     * Validating business logic and interacting with the data store.
+     * Adds a new user to the system if valid
+     * @param email a unique valid email
+     * @param firstName users first name
+     * @param lastName users last name
+     * @param clearTextPassword users password as cleartext
+     * @param role
+     * @see Role
+     * @param ssn users social security number as String
+     * @throws UserServiceError if user is not valid, or conflicting with an existing user.
      */
     public void addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
 
@@ -51,6 +65,15 @@ public class UserService {
         }
     }
 
+    /**
+     * Saves the user to the store
+     * If the user has new competences, they will be stored as well
+     * and the retrurned user will contain the saved competences,
+     * including generated ID's
+     * If the user already exists, it will be updated in the store
+     * @param user the user to save
+     * @return the saved user.
+     */
     public User saveUser(User user) {
         return userRepo.save(user);
     }
@@ -59,6 +82,17 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
+    /**
+     * Validates a new user. A user with the same email may not exist
+     * @param email a valid email
+     * @param firstName a valid first name
+     * @param lastName a valid last name
+     * @param clearTextPassword a cleartext password
+     * @param ssn social security number as String
+     * @return True if user is valid, else false
+     * @throws UserServiceError with the first error as ERROR_CODE
+     * @see ERROR_CODE
+     */
     private boolean validateUser(String email, String firstName, String lastName, String clearTextPassword, String ssn) throws UserServiceError {
         if (email == null || email.equals(""))
             throw new UserServiceError(ERROR_CODE.INVALID_EMAIL);
@@ -73,8 +107,12 @@ public class UserService {
         return true;
     }
 
+    /**
+     * Adds some default users and competences for testing.
+     * @exclude
+     */
     @PostConstruct
-    public void addDefaultUsers() {
+    public void addDefaultData() {
         //Proxy for "is first run"
         if(userRepo.count() != 0)
             return;
@@ -104,6 +142,11 @@ public class UserService {
         }
         addDefaultCompetences();
     }
+
+    /**
+     * Adds default competences for testing
+     * @exclude
+     */
     private void addDefaultCompetences() {
         Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
         Language english = languageRepo.save(new Language("en_US", "english"));
