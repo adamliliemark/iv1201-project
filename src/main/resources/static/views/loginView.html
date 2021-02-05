@@ -1,6 +1,7 @@
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <link th:href="@{../css/login.css}" rel="stylesheet">
+    <title>Green Garden Recruitment Portal</title>
 </head>
 <body>
     <div class="login-form" th:fragment="content">
@@ -14,7 +15,7 @@
                 <input class="login-form-input" type="text" id="username" name="username"/>
                 <label for="password" th:text="#{label.password}"></label>
                 <input class="login-form-input" type="password" id="password" name="password"/>
-                    <div th:replace="../fragments/formCSRFToken"/>
+                    <div th:replace="../fragments/formCSRFToken"></div>
                     <div class="form-actions">
                     <button type="submit" class="btn" th:text="#{login.btn}"></button>
                 </div>
