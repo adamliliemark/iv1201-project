@@ -10,8 +10,8 @@ import java.util.Date;
 
 /**
  * When the database is migrated, some users are not valid (not uniquely identifiable, missing email etc.)
- * Since we dop not want to lose that information
- * we ask hibernate to create a table for this data so the migration script has somewhere to put it.
+ * Later iterations of the product could include "rescue my account" functionality, then this data must be present
+ * This class specifies structure for this data.
  */
 @Entity
 public class UnmigratedAvailability {

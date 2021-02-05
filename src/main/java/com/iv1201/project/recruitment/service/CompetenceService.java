@@ -13,6 +13,11 @@ public class CompetenceService {
     @Autowired
     CompetenceRepository competenceRepo;
 
+    /**
+     * Fetch all competences mapped to their local names
+     * @param languageCode the languageCode to match
+     * @return A Map, where keys are names in locale language and values are the matching Competences
+     */
     public Map<String, Competence> getAllWithLocalNames(String languageCode) {
         Iterable<Competence> competences = competenceRepo.findAll();
         Map<String, Competence> result = new HashMap<>();
