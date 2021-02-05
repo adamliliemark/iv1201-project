@@ -57,7 +57,7 @@ public class ApplicationController {
         user.setLocale(locale);
         model.addAttribute("form", "competence");
         model.addAttribute("user", user);
-        model.addAttribute("availableExpertises", competences.keySet());
+        model.addAttribute("availableCompetences", competences.keySet());
         return "applicationView";
     }
 
@@ -81,6 +81,8 @@ public class ApplicationController {
         }
         model.addAttribute("user", user);
         model.addAttribute("form", "competence");
+        for(String  comp : competences.keySet())
+            System.out.println(comp);
         model.addAttribute("availableCompetences", competences.keySet());
         return "applicationView";
     }

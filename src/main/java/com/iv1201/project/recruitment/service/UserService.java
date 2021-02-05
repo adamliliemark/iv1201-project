@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Component
@@ -37,6 +38,9 @@ public class UserService {
 
     @Autowired
     LanguageRepository languageRepo;
+
+    @Autowired
+    AvailabilityRepository availabilityRepository;
 
 
     /**
@@ -124,6 +128,15 @@ public class UserService {
                         "pass",
                         Role.ROLE_USER,
                         "19880101");
+                Optional<User> user = userRepo.findByEmail("testuser@example.com");
+                if(user.isPresent()) {
+                    System.out.println("hallo");
+                    User newUser = user.get();
+                    LocalDate from = LocalDate.of(2022, 2, 2);
+                    LocalDate to = LocalDate.of(2022, 3,3);
+                    newUser.setAvailability(new Availability(from, to));
+                    userRepo.save(newUser);
+                }
             }
 
             if (!userRepo.findByEmail("testadmin@example.com").isPresent()) {
@@ -139,6 +152,7 @@ public class UserService {
         } catch(UserServiceError e) {
             System.err.println("Error creating test users " + e.errorCode);
         }
+        System.out.println("fiffilur");
         addDefaultCompetences();
     }
 
@@ -147,6 +161,7 @@ public class UserService {
      * @exclude
      */
     private void addDefaultCompetences() {
+        System.out.println("tjenixen");
         Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
         Language english = languageRepo.save(new Language("en_US", "english"));
         Competence grilling = competenceRepo.save(new Competence());
