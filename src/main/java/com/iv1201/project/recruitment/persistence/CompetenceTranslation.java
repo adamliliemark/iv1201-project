@@ -3,6 +3,11 @@ package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
 
+/**
+ * Represents a stored translation of one specific Competence to one specific Language
+ * @see Competence
+ * @see Language
+ */
 @Entity
 public class CompetenceTranslation {
 
