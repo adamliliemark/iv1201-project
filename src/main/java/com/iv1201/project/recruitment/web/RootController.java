@@ -19,38 +19,14 @@ import java.util.Optional;
 @Controller
 public class RootController {
 
-    // this controller needs to be implemented as stated above.
-
-    @Autowired
-    private UserService userService;
-
     @GetMapping("/admin")
-    public String admin(Model model) {
+    public String admin() {
         return "adminView";
     }
 
     @GetMapping("/")
-    public String home(Principal principal, Model model) {
-        Optional<User> userMaybe = userService.findByEmail(principal.getName());
-        if(!userMaybe.isPresent()) {
-            model.addAttribute("loggedIn", false);
-        } else {
-            model.addAttribute("loggedIn", true);
-        }
+    public String home() {
         return "homeView";
     }
-
-    @PostMapping("/")
-    public String post(Principal principal, Model model) {
-        Optional<User> userMaybe = userService.findByEmail(principal.getName());
-        if(!userMaybe.isPresent()) {
-            model.addAttribute("loggedIn", false);
-        } else {
-            model.addAttribute("loggedIn", true);
-        }
-        return "homeView";
-    }
-
-
 
 }

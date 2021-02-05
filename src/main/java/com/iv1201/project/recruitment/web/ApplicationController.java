@@ -54,6 +54,7 @@ public class ApplicationController {
         }
         competences = competenceService.getAllWithLocalNames(locale.toString());
         user = userMaybe.get();
+        user.setLocale(locale);
         model.addAttribute("form", "competence");
         model.addAttribute("user", user);
         model.addAttribute("availableExpertises", competences.keySet());

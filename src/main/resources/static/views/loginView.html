@@ -1,4 +1,4 @@
-<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <title>Green Garden Recruitment Portal</title>
     <link th:href="@{../css/login.css}" rel="stylesheet">
@@ -36,7 +36,7 @@
     </div>
 
     <div class="footer">
-        <div th:replace="../fragments/footer :: ${loggedIn} ? footer_logged_in : footer"></div>
+        <div th:replace="../fragments/footer :: footer"></div>
     </div>
 </div>
 
