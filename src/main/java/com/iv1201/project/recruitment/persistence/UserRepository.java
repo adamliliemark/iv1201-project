@@ -14,6 +14,5 @@ public interface UserRepository extends CrudRepository<User, String> {
      * @param email to find by
      * @return User with matching email
      */
-    @Cacheable
     Optional<User> findByEmail(String email);
 }
