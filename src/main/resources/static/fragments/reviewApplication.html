@@ -22,7 +22,7 @@
         <p>
             <span th:text="#{Competences} + ':'"></span>
             <div th:each="comp : ${user.getCompetences}">
-        <div th:text="${comp.getCompetence.getName}"></div>
+        <div th:text="${comp.getCompetence.getName(user.getLocale)}"></div>
         <div th:text="${comp.getYearsOfExperience}"></div>
     </div>
         <p>

@@ -2,6 +2,7 @@ package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 
@@ -17,6 +18,16 @@ public class User {
         this.ssn = ssn;
         this.password = password;
         this.enabled = true;
+    }
+    @Transient
+    Locale locale;
+
+    public Locale getLocale() {
+        return this.locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     @Id
