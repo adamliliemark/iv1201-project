@@ -10,6 +10,12 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
+
+    /**
+     * Fetch a User from storage
+     * @param email to find by
+     * @return User with matching email
+     */
     Optional<User> findByEmail(String email);
 
     @Query("SELECT new com.iv1201.project.recruitment.persistence.ApplicationDTO(u.firstName, u.lastName) FROM users u join u.competences c " +

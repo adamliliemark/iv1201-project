@@ -3,6 +3,12 @@ package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
 
+
+/**
+ * Represents a stored authority
+ * An authority denotes the access levels of a User
+ * @see com.iv1201.project.recruitment.service.UserService.Role
+ */
 @Entity(name = "authorities")
 public class Authority {
 

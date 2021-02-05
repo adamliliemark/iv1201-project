@@ -13,7 +13,9 @@
 
 <div class="footer-outer" th:fragment="footer_logged_in">
     <div>Legal | About | Contact | Your Account</div>
-    <div><a th:href="@{/perform_logout}">Logout</a></div>
+    <form id="logout-form" method="POST" th:action="@{/logout}">
+        <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+    </form>
 </div>
 
 </body>

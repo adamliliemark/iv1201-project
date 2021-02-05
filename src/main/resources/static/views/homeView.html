@@ -10,15 +10,20 @@
 </head>
 <body>
 <div class="container">
+    <div class="header">
+        <div th:replace="../fragments/header"></div>
+    </div>
+
     <div class="content">
-        <div class="title" th:text="Placeholder + ' ' + ${msg}"></div>
+        <div class="title" th:text="Placeholder"></div>
 
         <div class="home-middle">
-            Middle section placeholder text.
-            <form method="post">
-                <input type="submit" value="tjabba">
-            </form>
+            <div th:replace="../fragments/formCSRFToken"></div>
         </div>
+    </div>
+
+    <div class="footer">
+        <div th:replace="../fragments/footer :: footer_logged_in"></div>
     </div>
 </div>
 </body>

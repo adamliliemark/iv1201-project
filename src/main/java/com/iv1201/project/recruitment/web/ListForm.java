@@ -7,8 +7,18 @@ public class ListForm {
 
     private LocalDate date;
     private String competence;
-    private String name;
+    private String firstName;
+    private String lastName;
     private AvailabilityForm availabilityForm;
+
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     ListForm(){
         this.availabilityForm = new AvailabilityForm();
@@ -30,12 +40,12 @@ public class ListForm {
         this.competence = competence;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public AvailabilityForm getAvailabilityForm() {

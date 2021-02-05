@@ -2,14 +2,25 @@ package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
+import java.util.Locale;
 
-
+/**
+ * Represents a stored User
+ */
 @Entity(name = "users")
 public class User {
 
     protected User() {}
 
+    /**
+     * Creates an instance of a user
+     * The user can be stored
+     * @param email the email
+     * @param firstName the first name
+     * @param lastName the last name
+     * @param ssn the social securty number as a string
+     * @param password the cleartext password
+     */
     public User(String email, String firstName, String lastName, String ssn, String password) {
         this.email = email;
         this.firstName = firstName;
@@ -17,6 +28,17 @@ public class User {
         this.ssn = ssn;
         this.password = password;
         this.enabled = true;
+    }
+
+    @Transient
+    Locale locale;
+
+    public Locale getLocale() {
+        return this.locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     @Id

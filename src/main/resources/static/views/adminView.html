@@ -11,11 +11,11 @@
 <body>
 <div class="container">
     <div class="header">
-        <div th:replace="../fragments/header :: header"></div>
+        <div th:replace="../fragments/header"></div>
     </div>
 
     <div class="content">
-        <div class="title" th:text="Placeholder + ' ' + ${msg}"></div>
+        <div class="title" th:text="Placeholder"></div>
 
         <div class="home-middle">
             YOU ARE AN ADMIN!!!!
@@ -23,7 +23,7 @@
     </div>
 
     <div class="footer">
-        <div th:replace="../fragments/footer :: ${loggedIn} ? footer_logged_in : footer"></div>
+        <div th:replace="../fragments/footer :: footer_logged_in"></div>
     </div>
 </div>
 </body>

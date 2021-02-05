@@ -51,8 +51,10 @@
         <option th:each="e : ${expertise}" th:value="${e.name}" th:text="${e.name}"></option>
     </select>
     <p>
-    <div>Name</div>
-    <input id="name" type="text" th:field="*{name}">
+    <div>First Name</div>
+    <input id="firstname" type="text" th:field="*{firstName}">
+    <div>Last Name</div>
+    <input id="lastname" type="text" th:field="*{lastName}">
     <p>
         <input id="listbutton" type="submit" value="List Applications">
 

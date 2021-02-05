@@ -4,6 +4,9 @@ package com.iv1201.project.recruitment.persistence;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Represents a stored Competence
+ */
 @Entity
 public class Competence {
     public Competence() {}
@@ -15,29 +18,47 @@ public class Competence {
     @OneToMany(mappedBy="competence", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
     private List<CompetenceTranslation> translations;
 
-    public Competence addTranslation(Language l, String text) {
-        this.translations.add(new CompetenceTranslation(this, l, text));
+    /**
+     * Add a new translation for a specified competence
+     * @param languageCode the Language of the translation
+     * @param localName the local name of the Competence
+     * @return the updated competence
+     * @see Language
+     * @see CompetenceTranslation
+     */
+    public Competence addTranslation(Language languageCode, String localName) {
+        this.translations.add(new CompetenceTranslation(this, languageCode, localName));
         return this;
     }
 
-    public String getName(String code) {
+    /**
+     * Fetch the name of a Competence in a specified language, by language_code
+     * @param languageCode the code matching the translation to find
+     * @return the localized name of the Competence
+     * @see Language
+     * @see CompetenceTranslation
+     */
+    public String getName(String languageCode) {
         CompetenceTranslation ct = translations.stream()
-                .filter(c -> c.getLanguage().getLanguageCode().equals(code))
+                .filter(c -> c.getLanguage().getLanguageCode().equals(languageCode))
                 .findAny()
                 .orElse(null);
         return ct != null ? ct.getText() : "MISSING TRANSLATION";
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * Get default translation (en_US)
+     * @return the en_US localized translation
+     */
     public String getName() {
         return this.getName("en_US");
     }
 
+    public Long getId() {
+        return this.id;
+    }
 }
