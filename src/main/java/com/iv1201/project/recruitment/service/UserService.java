@@ -82,6 +82,7 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
+
     /**
      * Validates a new user. A user with the same email may not exist
      * @param email a valid email

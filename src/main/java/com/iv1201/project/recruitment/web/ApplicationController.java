@@ -81,7 +81,7 @@ public class ApplicationController {
         }
         model.addAttribute("user", user);
         model.addAttribute("form", "competence");
-        model.addAttribute("availableExpertises", competences.keySet());
+        model.addAttribute("availableCompetences", competences.keySet());
         return "applicationView";
     }
 
