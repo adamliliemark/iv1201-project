@@ -5,6 +5,7 @@ package com.iv1201.project.recruitment.service;
  * @see ERROR_CODE enum.
  */
 public class UserServiceError extends Exception {
+    /**Denotes a specific error type*/
     public enum ERROR_CODE {
         NONE,
         INVALID_EMAIL,

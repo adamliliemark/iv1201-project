@@ -1,10 +1,12 @@
 package com.iv1201.project.recruitment.persistence.unmigratedData;
 
-import com.iv1201.project.recruitment.persistence.Competence;
-import com.iv1201.project.recruitment.persistence.User;
-
 import javax.persistence.*;
 
+/**
+ * When the database is migrated, some users are not valid (not uniquely identifiable, missing email etc.)
+ * Later iterations of the product could include "rescue my account" functionality, then this data must be present
+ * This class specifies structure for this data.
+ */
 @Entity
 public class UnmigratedCompetenceProfile {
     protected UnmigratedCompetenceProfile(){};

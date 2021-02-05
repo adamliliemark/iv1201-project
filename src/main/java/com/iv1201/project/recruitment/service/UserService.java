@@ -45,7 +45,7 @@ public class UserService {
      * @param firstName users first name
      * @param lastName users last name
      * @param clearTextPassword users password as cleartext
-     * @param role
+     * @param role the role of the user
      * @see Role
      * @param ssn users social security number as String
      * @throws UserServiceError if user is not valid, or conflicting with an existing user.
@@ -107,10 +107,8 @@ public class UserService {
         return true;
     }
 
-    /**
-     * Adds some default users and competences for testing.
-     * @exclude
-     */
+
+    //Adds some default users and competences for testing.
     @PostConstruct
     public void addDefaultData() {
         //Proxy for "is first run"
