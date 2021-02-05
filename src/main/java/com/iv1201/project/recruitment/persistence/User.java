@@ -1,8 +1,12 @@
 package com.iv1201.project.recruitment.persistence;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Represents a stored User
@@ -63,6 +67,16 @@ public class User {
     @Transient
     private Availability availability;
 
+    @OneToMany(mappedBy = "user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Availability> availabilityList;
+
+    public void addAvailability(LocalDate from, LocalDate to) {
+        if(availabilityList == null)
+            throw new RuntimeException();
+        this.availabilityList.add(new Availability(from, to, this));
+    }
+
+    public Set<Availability> getAvailabilityList() { return availabilityList; }
 
     @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
     private List<CompetenceProfile> competences;

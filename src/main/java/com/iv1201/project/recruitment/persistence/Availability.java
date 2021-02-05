@@ -15,9 +15,10 @@ public class Availability {
 
     protected Availability() {}
 
-    public Availability(LocalDate from, LocalDate to) {
+    public Availability(LocalDate from, LocalDate to, User user) {
         this.fromDate = from;
         this.toDate = to;
+        this.user = user;
     }
 
     @Id

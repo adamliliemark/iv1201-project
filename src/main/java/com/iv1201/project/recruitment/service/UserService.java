@@ -61,7 +61,6 @@ public class UserService {
         if(validateUser(email, firstName, lastName, clearTextPassword, ssn)) {
             if(userRepo.findByEmail(email).isPresent())
                 throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
-
             User user = new User(email, firstName, lastName, ssn, encoder.encode(clearTextPassword));
             Authority userAuth = new Authority(role.toString(), user);
             userRepo.save(user);
@@ -128,15 +127,10 @@ public class UserService {
                         "pass",
                         Role.ROLE_USER,
                         "19880101");
-                Optional<User> user = userRepo.findByEmail("testuser@example.com");
-                if(user.isPresent()) {
-                    System.out.println("hallo");
-                    User newUser = user.get();
-                    LocalDate from = LocalDate.of(2022, 2, 2);
-                    LocalDate to = LocalDate.of(2022, 3,3);
-                    newUser.setAvailability(new Availability(from, to));
-                    userRepo.save(newUser);
-                }
+                Optional<User> userMaybe = userRepo.findByEmail("testuser@example.com");
+                User user = userMaybe.get();
+                user.addAvailability(LocalDate.of(2022, 2, 2), LocalDate.of(2028, 2, 2));
+                userRepo.save(user);
             }
 
             if (!userRepo.findByEmail("testadmin@example.com").isPresent()) {
@@ -152,7 +146,7 @@ public class UserService {
         } catch(UserServiceError e) {
             System.err.println("Error creating test users " + e.errorCode);
         }
-        System.out.println("fiffilur");
+
         addDefaultCompetences();
     }
 
@@ -161,7 +155,6 @@ public class UserService {
      * @exclude
      */
     private void addDefaultCompetences() {
-        System.out.println("tjenixen");
         Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
         Language english = languageRepo.save(new Language("en_US", "english"));
         Competence grilling = competenceRepo.save(new Competence());

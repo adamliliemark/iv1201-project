@@ -81,8 +81,6 @@ public class ApplicationController {
         }
         model.addAttribute("user", user);
         model.addAttribute("form", "competence");
-        for(String  comp : competences.keySet())
-            System.out.println(comp);
         model.addAttribute("availableCompetences", competences.keySet());
         return "applicationView";
     }
@@ -101,7 +99,7 @@ public class ApplicationController {
     @PostMapping("/apply/availability")
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, BindingResult bindingResult, Model model) {
         if(!bindingResult.hasErrors()) {
-            user.setAvailability(new Availability(availabilityFormObject.getFrom(), availabilityFormObject.getTo()));
+            user.addAvailability(availabilityFormObject.getFrom(), availabilityFormObject.getTo());
         }
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
