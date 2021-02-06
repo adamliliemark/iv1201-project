@@ -11,6 +11,7 @@ import java.time.LocalDate;
  * Maps a user to a specific availability interval
  */
 @Entity
+@Cacheable
 @Table(name="Availability",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"FROM_DATE", "TO_DATE", "USER_EMAIL"})})
 public class Availability {

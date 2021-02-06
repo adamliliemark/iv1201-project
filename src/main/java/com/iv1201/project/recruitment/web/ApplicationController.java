@@ -35,6 +35,9 @@ public class ApplicationController {
     @Autowired
     private CompetenceService competenceService;
 
+    @Autowired
+    private AvailabilityRepository availabilityRepository;
+
     private User user;
     private Map<String, Competence> competences;
 

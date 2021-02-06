@@ -43,6 +43,7 @@
         <input type="date" name="from" id="from" th:field="*{from}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <label for="to" th:text="#{label.to} + ':'"></label>
         <input type="date" name="to" id="to" th:field="*{to}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
+        <input type="hidden" th:value="${user.email}" th:name="user">
         <p>
             <input type="submit" th:value="#{submit}">
         </p>
