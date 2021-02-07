@@ -26,7 +26,8 @@ public class AvailabilityFormValidator implements ConstraintValidator<Availabili
      * Check if the form is valid.
      *
      * Checks:
-     * For null-values
+     * For null-values, which is already a constraint in the AvailabilityForm class,
+     * but breaks the following checks; hence a double check.
      * For toDate before fromDate
      * For duplicates in database
      *

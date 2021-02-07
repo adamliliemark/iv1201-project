@@ -29,7 +29,7 @@
         <div>
             <span th:text="#{Availability} + ':'"></span>
             <div th:each="availability : ${user.getAvailabilityList}">
-                <div th:text="${availability.getFromDate} + ' ' + #{to} + ' ' + ${availability.getToDate}"></div>
+                <div class="userAvailabilities" th:text="${availability.getFromDate} + ' ' + #{to} + ' ' + ${availability.getToDate}"></div>
             </div>
         </div>
     </div>

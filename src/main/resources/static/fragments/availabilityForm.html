@@ -27,6 +27,12 @@
                     alert("A date can not have a negative value.");
                     return false;
                 }
+                for(const availability of document.getElementsByClassName("userAvailabilities")) {
+                    if(availability.innerText === document.forms.availabilityForm.from.value + " " + [[#{to}]] + " " + document.forms.availabilityForm.to.value) {
+                        alert("Date already added.");
+                        return false;
+                    }
+                }
             }
         }
     </script>
