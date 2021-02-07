@@ -1,7 +1,5 @@
 package com.iv1201.project.recruitment.persistence;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -64,9 +62,6 @@ public class User {
     @Column(nullable = false, unique = false)
     private Boolean enabled;
 
-    @Transient
-    private Availability availability;
-
     @OneToMany(mappedBy = "user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Availability> availabilityList;
 
@@ -98,14 +93,6 @@ public class User {
         } else {
             this.competences.add(new CompetenceProfile(competence, years, this));
         }
-    }
-
-    public Availability getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Availability availability) {
-        this.availability = availability;
     }
 
     public String getEmail() {
