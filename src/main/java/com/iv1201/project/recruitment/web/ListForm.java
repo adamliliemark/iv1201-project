@@ -15,14 +15,18 @@ public class ListForm {
     private int size = max - min;
 
 
-    void increase(){
+    void next(){
         setMin(getMin() + getSize());
         setMax(getMax() + getSize());
     }
 
-    void decrease(){
+    void prev(){
         setMin(getMin() - getSize());
         setMax(getMax() - getSize());
+    }
+
+    boolean isEmpty(){
+        return date == null && competence.isEmpty() && firstName.isEmpty() && lastName.isEmpty() && availabilityForm.getFrom() == null;
     }
 
     public int getSize() {

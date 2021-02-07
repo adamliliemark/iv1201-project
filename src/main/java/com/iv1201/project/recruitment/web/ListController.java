@@ -24,6 +24,7 @@ public class ListController {
     private Iterable<Competence> competences;
     private List<ApplicationDTO> applications;
     private ListForm listForm;
+    private boolean searched;
 
     @Autowired
     private CompetenceRepository competenceRepo;
@@ -37,10 +38,9 @@ public class ListController {
         if(competences == null)
             competences = competenceRepo.findAll();
 
-        listForm = new ListForm();
-
-        model.addAttribute("listFormObject", listForm);
-        model.addAttribute("searched", false);
+        searched = false;
+        model.addAttribute("listFormObject", new ListForm());
+        model.addAttribute("searched", searched);
         model.addAttribute("expertise", competences);
         return "list";
     }
@@ -51,27 +51,32 @@ public class ListController {
         if(searcher == null)
             searcher = new Search();
 
-        try {
-            applications = searcher.getApplications(listForm, userRepo, competences);
-        }catch (SearchError e){
-            e.printStackTrace();
+        searched = false;
+
+        if (!listForm.isEmpty()) {
+            try {
+                applications = searcher.getApplications(listForm, userRepo, competences);
+                model.addAttribute("applicationsObject", applications);
+                searched = true;
+            } catch (SearchError e) {
+                e.printStackTrace();
+            }
         }
 
-        model.addAttribute("searched", true);
-        model.addAttribute("applicationsObject", applications);
+        this.listForm = listForm;
+        model.addAttribute("searched", searched);
         model.addAttribute("expertise", competences);
         return "list";
     }
 
     @PostMapping("/list/next")
-    public String listNextParameters( Model model){
+    public String listNextParameters(Model model){
 
-        this.listForm.setMax(this.listForm.getMax() + this.listForm.getSize());
-        this.listForm.setMin(this.listForm.getMin() + this.listForm.getSize());
+        listForm.next();
 
         model.addAttribute("listFormObject", listForm);
-        model.addAttribute("searched", true);
-        model.addAttribute("applicationsObject", applications);
+        model.addAttribute("searched", searched);
+        model.addAttribute("applicationsObject",applications);
         model.addAttribute("expertise", competences);
         return "list";
     }
@@ -79,11 +84,10 @@ public class ListController {
     @PostMapping("/list/prev")
     public String listPrevParameters( Model model){
 
-        this.listForm.setMax(this.listForm.getMax() - this.listForm.getSize());
-        this.listForm.setMin(this.listForm.getMin() - this.listForm.getSize());
+        listForm.prev();
 
         model.addAttribute("listFormObject", listForm);
-        model.addAttribute("searched", true);
+        model.addAttribute("searched", searched);
         model.addAttribute("applicationsObject", applications);
         model.addAttribute("expertise", competences);
         return "list";
