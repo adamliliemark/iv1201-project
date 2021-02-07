@@ -1,8 +1,6 @@
 package com.iv1201.project.recruitment.service;
 
-import com.iv1201.project.recruitment.persistence.ApplicationDTO;
-import com.iv1201.project.recruitment.persistence.Competence;
-import com.iv1201.project.recruitment.persistence.UserRepository;
+import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.web.ListForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,15 +13,14 @@ public class Search {
 
 
 
-    public List<ApplicationDTO> getApplications(ListForm input,UserRepository userRepo, Iterable<Competence> competences) throws SearchError {
+    public List<ApplicationDTO> getApplications(ListForm input, UserRepository userRepo, AvailabilityRepository availabilityRepo, Iterable<Competence> competences) throws SearchError {
 
             int competenceId = setCompetenceId(input.getCompetence(), competences);
             String[] names = setNames(input.getFirstName(), input.getLastName());
             List<ApplicationDTO> searchResult = new ArrayList<>();
-
             switch (handleInput(input)) {
                 case "Availability":
-                    System.err.println("Availability");
+                    searchResult = availabilityRepo.getAvailabilityApplications(input.getAvailabilityForm().getFrom(), input.getAvailabilityForm().getTo(),names[0], names[1], competenceId);
                     break;
                 case "User":
                     searchResult = userRepo.getUserApplications(names[0], names[1], competenceId);

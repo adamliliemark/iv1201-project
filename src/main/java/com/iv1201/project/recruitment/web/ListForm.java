@@ -26,7 +26,7 @@ public class ListForm {
     }
 
     boolean isEmpty(){
-        return date == null && competence.isEmpty() && firstName.isEmpty() && lastName.isEmpty() && availabilityForm.getFrom() == null;
+        return date == null && competence.isEmpty() && firstName.isEmpty() && lastName.isEmpty() && (availabilityForm.getFrom() == null || availabilityForm.getTo() == null);
     }
 
     public int getSize() {

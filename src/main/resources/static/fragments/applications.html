@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="applications" th:fragment="applications" th:object="${listFormObject}">
-    <div th:if="${applicationsObject.empty && searched}"> Den är tom</div>
+    <div th:if="${applicationsObject.empty && searched}"> No applications matched your search</div>
     <div th:each="a, iter : ${applicationsObject}">
         <div th:if="${listFormObject.min <= iter.index && listFormObject.max > iter.index}"><span
                 th:text="${iter.index+1 + ': ' + a.firstName + ' ' + a.lastName}"></span></div>
