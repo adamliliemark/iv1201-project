@@ -11,13 +11,17 @@ import java.time.LocalDate;
  * Maps a user to a specific availability interval
  */
 @Entity
+@Cacheable
+@Table(name="Availability",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"FROM_DATE", "TO_DATE", "USER_EMAIL"})})
 public class Availability {
 
     protected Availability() {}
 
-    public Availability(LocalDate from, LocalDate to) {
+    public Availability(LocalDate from, LocalDate to, User user) {
         this.fromDate = from;
         this.toDate = to;
+        this.user = user;
     }
 
     @Id
@@ -25,15 +29,15 @@ public class Availability {
     private Long id;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(columnDefinition = "DATE", nullable = false, unique = false)
+    @Column(name="FROM_DATE", columnDefinition = "DATE", nullable = false, unique = false)
     private LocalDate fromDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(columnDefinition = "DATE", nullable = false, unique = false)
+    @Column(name="TO_DATE", columnDefinition = "DATE", nullable = false, unique = false)
     private LocalDate toDate;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn
+    @JoinColumn(name = "USER_EMAIL")
     private User user;
 
     public LocalDate getFromDate() {

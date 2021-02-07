@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Component
@@ -38,6 +39,9 @@ public class UserService {
     @Autowired
     LanguageRepository languageRepo;
 
+    @Autowired
+    AvailabilityRepository availabilityRepository;
+
 
     /**
      * Adds a new user to the system if valid
@@ -57,7 +61,6 @@ public class UserService {
         if(validateUser(email, firstName, lastName, clearTextPassword, ssn)) {
             if(userRepo.findByEmail(email).isPresent())
                 throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
-
             User user = new User(email, firstName, lastName, ssn, encoder.encode(clearTextPassword));
             Authority userAuth = new Authority(role.toString(), user);
             userRepo.save(user);
@@ -124,6 +127,10 @@ public class UserService {
                         "pass",
                         Role.ROLE_USER,
                         "19880101");
+                Optional<User> userMaybe = userRepo.findByEmail("testuser@example.com");
+                User user = userMaybe.get();
+                user.addAvailability(LocalDate.of(2022, 2, 2), LocalDate.of(2028, 2, 2));
+                userRepo.save(user);
             }
 
             if (!userRepo.findByEmail("testadmin@example.com").isPresent()) {
@@ -139,6 +146,7 @@ public class UserService {
         } catch(UserServiceError e) {
             System.err.println("Error creating test users " + e.errorCode);
         }
+
         addDefaultCompetences();
     }
 

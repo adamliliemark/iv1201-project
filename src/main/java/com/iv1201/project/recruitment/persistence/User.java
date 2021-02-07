@@ -1,8 +1,10 @@
 package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Represents a stored User
@@ -60,9 +62,16 @@ public class User {
     @Column(nullable = false, unique = false)
     private Boolean enabled;
 
-    @Transient
-    private Availability availability;
+    @OneToMany(mappedBy = "user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Availability> availabilityList;
 
+    public void addAvailability(LocalDate from, LocalDate to) {
+        if(availabilityList == null)
+            throw new RuntimeException();
+        this.availabilityList.add(new Availability(from, to, this));
+    }
+
+    public Set<Availability> getAvailabilityList() { return availabilityList; }
 
     @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
     private List<CompetenceProfile> competences;
@@ -84,14 +93,6 @@ public class User {
         } else {
             this.competences.add(new CompetenceProfile(competence, years, this));
         }
-    }
-
-    public Availability getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Availability availability) {
-        this.availability = availability;
     }
 
     public String getEmail() {

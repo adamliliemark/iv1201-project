@@ -28,7 +28,9 @@
         <p>
         <div>
             <span th:text="#{Availability} + ':'"></span>
-            <div th:if="${user.availability != null}" th:text="${user.availability.getFromDate} + ' ' + #{to} + ' ' + ${user.availability.getToDate}"></div>
+            <div th:each="availability : ${user.getAvailabilityList}">
+                <div class="userAvailabilities" th:text="${availability.getFromDate} + ' ' + #{to} + ' ' + ${availability.getToDate}"></div>
+            </div>
         </div>
     </div>
 </div>
