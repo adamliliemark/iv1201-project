@@ -21,28 +21,71 @@ import java.util.List;
 public class ListController {
 
     private Search searcher;
+    private Iterable<Competence> competences;
+    private List<ApplicationDTO> applications;
+    private ListForm listForm;
 
     @Autowired
     private CompetenceRepository competenceRepo;
 
+    @Autowired
+    private UserRepository userRepo;
+
     @GetMapping("/list")
-    public String list(@Valid @ModelAttribute("listFormObject") ListForm listForm, Model model){
-        model.addAttribute("expertise", competenceRepo.findAll());
+    public String list(Model model){
+
+        if(competences == null)
+            competences = competenceRepo.findAll();
+
+        listForm = new ListForm();
+
+        model.addAttribute("listFormObject", listForm);
+        model.addAttribute("searched", false);
+        model.addAttribute("expertise", competences);
         return "list";
     }
 
     @PostMapping("/list/applications")
-    public String listParameters(@Valid @ModelAttribute("listFormObject") ListForm listForm , BindingResult bindingResult, Model model){
+    public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm, Model model){
 
         if(searcher == null)
             searcher = new Search();
 
         try {
-            searcher.getApplications(listForm);
+            applications = searcher.getApplications(listForm, userRepo, competences);
         }catch (SearchError e){
             e.printStackTrace();
         }
-        model.addAttribute("expertise", competenceRepo.findAll());
+
+        model.addAttribute("searched", true);
+        model.addAttribute("applicationsObject", applications);
+        model.addAttribute("expertise", competences);
+        return "list";
+    }
+
+    @PostMapping("/list/next")
+    public String listNextParameters( Model model){
+
+        this.listForm.setMax(this.listForm.getMax() + this.listForm.getSize());
+        this.listForm.setMin(this.listForm.getMin() + this.listForm.getSize());
+
+        model.addAttribute("listFormObject", listForm);
+        model.addAttribute("searched", true);
+        model.addAttribute("applicationsObject", applications);
+        model.addAttribute("expertise", competences);
+        return "list";
+    }
+
+    @PostMapping("/list/prev")
+    public String listPrevParameters( Model model){
+
+        this.listForm.setMax(this.listForm.getMax() - this.listForm.getSize());
+        this.listForm.setMin(this.listForm.getMin() - this.listForm.getSize());
+
+        model.addAttribute("listFormObject", listForm);
+        model.addAttribute("searched", true);
+        model.addAttribute("applicationsObject", applications);
+        model.addAttribute("expertise", competences);
         return "list";
     }
 

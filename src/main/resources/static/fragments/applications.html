@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recruitment Application</title>
+</head>
+<body>
+<div class="applications" th:fragment="applications" th:object="${listFormObject}">
+    <div th:if="${applicationsObject.empty}"> Den är tom</div>
+    <div th:each="a, iter : ${applicationsObject}">
+        <div th:if="${listFormObject.min <= iter.index && listFormObject.max > iter.index}"><span
+                th:text="${iter.index+1 + ': ' + a.firstName + ' ' + a.lastName}"></span></div>
+        <p>
+    </div>
+
+
+        <div th:if="${3 <= listFormObject.min}">
+            <form th:action="@{/list/prev}" action="#" class="form" method="post">
+                <input id="prevButton" type="submit" value="Previous">
+            </form>
+        </div>
+
+
+        <div th:if="${applicationsObject.size > listFormObject.max}">
+            <form th:action="@{/list/next}" action="#" class="form" method="post">
+                <input id="nextButton" type="submit" value="Next">
+            </form>
+        </div>
+
+
+</div>
+
+<div class="nosearch" th:fragment="nosearch"></div>
+</body>
+</html>

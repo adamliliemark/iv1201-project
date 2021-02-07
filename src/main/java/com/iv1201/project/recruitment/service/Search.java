@@ -1,9 +1,11 @@
 package com.iv1201.project.recruitment.service;
 
 import com.iv1201.project.recruitment.persistence.ApplicationDTO;
+import com.iv1201.project.recruitment.persistence.Competence;
 import com.iv1201.project.recruitment.persistence.UserRepository;
 import com.iv1201.project.recruitment.web.ListForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,45 +13,66 @@ import java.util.List;
 
 public class Search {
 
-    @Autowired
-    private UserRepository userRepo;
 
 
-    public List<ApplicationDTO> getApplications(ListForm input) throws SearchError {
+    public List<ApplicationDTO> getApplications(ListForm input,UserRepository userRepo, Iterable<Competence> competences) throws SearchError {
 
-        try {
+            int competenceId = setCompetenceId(input.getCompetence(), competences);
+            String[] names = setNames(input.getFirstName(), input.getLastName());
+            List<ApplicationDTO> searchResult = new ArrayList<>();
+
             switch (handleInput(input)) {
-                case "Period":
-                    System.err.println("Period");
+                case "Availability":
+                    System.err.println("Availability");
                     break;
-                case "Name":
-                    System.err.println("Name");
+                case "User":
+                    searchResult = userRepo.getUserApplications(names[0], names[1], competenceId);
                     break;
-                case "Competence":
-                    System.err.println("Competence");
+                case "Empty":
+                    System.err.println("Empty");
                     break;
                 default:
-                    throw new SearchError("No Search Fields were entered!");
+                    throw new SearchError("Invalid applications search!");
             }
 
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
-        }
-        return new ArrayList<ApplicationDTO>();
+
+        return searchResult;
     }
 
-    private String handleInput(ListForm input) throws IllegalArgumentException {
+    private String handleInput(ListForm input) {
 
         if(input.getAvailabilityForm().getFrom() != null)
-            return "Period";
+            return "Availability";
+        else if(!input.getCompetence().isEmpty() || !(input.getFirstName().isEmpty() && input.getLastName().isEmpty()))
+            return "User";
+        else
+            return "Empty";
+    }
 
-        if(!input.getCompetence().isEmpty())
-            return "Competence";
+    private String[] setNames(String firstName, String lastName){
 
-        if(!(input.getFirstName().isEmpty() && input.getLastName().isEmpty()))
-            return "Name";
+        String[] names = new String[2];
 
-       throw new IllegalArgumentException();
+        if (!firstName.isEmpty())
+            names[0] = firstName;
+
+        if(!lastName.isEmpty())
+            names[1] = lastName;
+
+        return names;
+    }
+
+    private int setCompetenceId(String competence, Iterable<Competence> competences){
+
+        int id = 1;
+
+        for (Competence c: competences) {
+            if (c.getName().equals(competence))
+                return id;
+            id++;
+        }
+
+        return 0;
     }
 
 }

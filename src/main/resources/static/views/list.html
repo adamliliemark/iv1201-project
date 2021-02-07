@@ -3,10 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Recruitment Application</title>
+    <link th:href="@{../css/global.css}" rel="stylesheet">
+    <link th:href="@{../css/footer.css}" rel="stylesheet">
+    <link th:href="@{../css/header.css}" rel="stylesheet">
     <script th:inline="javascript">
         let validate = () => {
             let from = document.forms.listForm.from.valueAsDate;
             let to = document.forms.listForm.to.valueAsDate;
+            let competence = document.forms.listForm.competence.value;
+            let firstName = document.forms.listForm.firstname.value;
+            let lastName = document.forms.listForm.lastname.value;
+            let date = document.forms.listForm.date.valueAsDate;
+
+            if (from == null && to == null && competence === "" && firstName === "" && lastName === "" && date == null) {
+                alert("You need to enter at least one search criteria");
+                return false;
+            }
 
             if ((from != null && to == null) || (from == null && to != null)) {
                 alert("You have only entered one date in period");
@@ -29,35 +41,56 @@
     </script>
 </head>
 <body>
-<div class="title">Enter Parameters of Interest</div>
-<p>
-<form th:action="@{/list/applications}" name="listForm" id="listForm" onsubmit="validate()" action="#" class="form"
-      method="post" th:object="${listFormObject}">
-    <p>
-    <div>Period</div>
-    <p>
-        <label for="from">From:</label>
-        <input type="date" name="from" id="from" th:field="*{availabilityForm.from}">
-    <p>
-        <label for="to">To:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-        <input type="date" name="to" id="to" th:field="*{availabilityForm.to}">
-    <p>
-    <div>Application Date</div>
-    <input type="date" name="date" id="date" th:field="*{date}">
-    <p>
-    <div>Competence</div>
-    <select name="competence" id="competence" th:field="*{competence}">
-        <option selected value=""> -- select --</option>
-        <option th:each="e : ${expertise}" th:value="${e.name}" th:text="${e.name}"></option>
-    </select>
-    <p>
-    <div>First Name</div>
-    <input id="firstname" type="text" th:field="*{firstName}">
-    <div>Last Name</div>
-    <input id="lastname" type="text" th:field="*{lastName}">
-    <p>
-        <input id="listbutton" type="submit" value="List Applications">
+<div class="container">
+    <div class="header">
+        <div th:replace="../fragments/header"></div>
+    </div>
 
-</form>
+    <div class="content">
+
+
+
+        <div class="title">Enter Parameters of Interest</div>
+        <p>
+        <form th:action="@{/list/applications}" name="listForm" id="listForm" onsubmit="validate()" action="#"
+              class="form"
+              method="post" th:object="${listFormObject}">
+            <p>
+            <div>Period</div>
+            <p>
+                <label for="from">From:</label>
+                <input type="date" name="from" id="from" th:field="*{availabilityForm.from}">
+            <p>
+                <label for="to">To:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="date" name="to" id="to" th:field="*{availabilityForm.to}">
+            <p>
+            <div>Application Date</div>
+            <input type="date" name="date" id="date" th:field="*{date}">
+            <p>
+            <div>Competence</div>
+            <select name="competence" id="competence" th:field="*{competence}">
+                <option selected value=""> -- select --</option>
+                <option th:each="e : ${expertise}" th:value="${e.name}" th:text="${e.name}"></option>
+            </select>
+            <p>
+            <div>First Name</div>
+            <input name="firstname" id="firstname" type="text" th:field="*{firstName}">
+            <div>Last Name</div>
+            <input name="lastname" id="lastname" type="text" th:field="*{lastName}">
+            <p>
+                <input id="listbutton" type="submit" value="List Applications">
+
+        </form>
+
+        <div th:replace="../fragments/applications :: ${searched} ? applications : nosearch ">
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        <div th:replace="../fragments/footer :: footer_logged_in"></div>
+    </div>
+</div>
 </body>
 </html>
