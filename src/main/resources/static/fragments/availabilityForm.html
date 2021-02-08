@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+</head>
+<body>
+
+<div class="application-form" th:fragment="availabilityForm">
     <script th:inline="javascript">
         let validateDates = (event) => {
             if(!navigator.userAgent.includes("Safari")) {
@@ -38,11 +42,6 @@
             return true;
         }
     </script>
-</head>
-<body>
-
-
-<div class="application-form" th:fragment="availabilityForm">
     <div class="title" th:text="#{apply.title}"></div>
 
     <div class="subtitle" th:text="#{apply.subtitle.availability}"></div>

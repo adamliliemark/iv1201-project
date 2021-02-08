@@ -19,7 +19,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <div th:replace="../fragments/header"></div>
+        <div th:replace="../fragments/header :: header"></div>
     </div>
 
     <div class="content">
@@ -28,20 +28,20 @@
         </div>
         <div class="application-form" th:switch="${form}">
             <div th:case="${'competence'}" >
-                <div th:replace="../fragments/competenceForm"></div>
+                <div th:replace="../fragments/competenceForm :: competenceForm"></div>
             </div>
             <div th:case="${'availability'}">
-                <div th:replace="../fragments/availabilityForm"></div>
+                <div th:replace="../fragments/availabilityForm :: availabilityForm"></div>
             </div>
             <div th:case="${'review'}">
-                <div th:replace="../fragments/reviewApplication"></div>
+                <div th:replace="../fragments/reviewApplication :: reviewApplication"></div>
             </div>
             <div th:case="${'submitted'}">
                 <div class="subtitle" th:text="#{apply.submitted}"></div>
             </div>
         </div>
         <div class="application-review" th:unless="${form == 'review' || form == 'submitted'}">
-            <div th:replace="../fragments/reviewApplication"></div>
+            <div th:replace="../fragments/reviewApplication :: reviewApplication"></div>
         </div>
     </div>
 

@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Apply for a Position</title>
+</head>
+<body>
+
+<div class="application-form" th:fragment="competenceForm">
     <script th:inline="javascript">
         let validateForm = (event) => {
             let competence = document.competenceForm.competence.value;
@@ -21,10 +25,6 @@
             }
         }
     </script>
-</head>
-<body>
-
-<div class="application-form" th:fragment="expertiseForm">
     <div class="title" th:text="#{apply.title}"></div>
 
     <div class="subtitle" th:text="#{apply.subtitle.skills}"></div>
