@@ -6,6 +6,15 @@
     <link th:href="@{../css/global.css}" rel="stylesheet">
     <link th:href="@{../css/footer.css}" rel="stylesheet">
     <link th:href="@{../css/header.css}" rel="stylesheet">
+    <script th:inline="javascript">
+        let errorOverlayOn = (text) => {
+            document.getElementById("error-overlay").style.display = "block";
+            document.getElementById("error-text").innerHTML = text;
+        }
+        let errorOverlayOff = () => {
+            document.getElementById("error-overlay").style.display = "none";
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -14,6 +23,9 @@
     </div>
 
     <div class="content">
+        <div id="error-overlay" onclick="errorOverlayOff()">
+            <div id="error-text"></div>
+        </div>
         <div class="application-form" th:switch="${form}">
             <div th:case="${'competence'}" >
                 <div th:replace="../fragments/competenceForm"></div>

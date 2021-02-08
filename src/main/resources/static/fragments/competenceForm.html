@@ -4,16 +4,20 @@
     <meta charset="UTF-8">
     <title>Apply for a Position</title>
     <script th:inline="javascript">
-        let validateForm = () => {
+        let validateForm = (event) => {
             let competence = document.competenceForm.competence.value;
             let competenceYears = document.competenceForm.years.value;
-            if(((competence || competenceYears) == null) || competenceYears === "") {
-                alert("You must provide values to submit.");
-                return false;
+            if(competence === null) {
+                errorOverlayOn([[#{error.competenceMissing}]] + "<p>" + [[#{error.closeMessage}]]);
+                event.preventDefault();
+            }
+            if(competenceYears === "" || competenceYears === null) {
+                errorOverlayOn([[#{error.competenceYearsMissing}]] + "<p>" + [[#{error.closeMessage}]]);
+                event.preventDefault();
             }
             if(competenceYears < 0) {
-                alert("Negative values not allowed.");
-                return false;
+                errorOverlayOn([[#{error.competenceYearsNegative}]] + "<p>" + [[#{error.closeMessage}]]);
+                event.preventDefault();
             }
         }
     </script>
@@ -24,7 +28,7 @@
     <div class="title" th:text="#{apply.title}"></div>
 
     <div class="subtitle" th:text="#{apply.subtitle.skills}"></div>
-    <form th:action="@{/apply/expertise}" name="competenceForm" onsubmit="validateForm()" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
+    <form th:action="@{/apply/expertise}" name="competenceForm" onsubmit="validateForm(event)" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
         <label for="competence" th:text="#{apply.label.competence}"></label>
         <select name="competence" id="competence" th:field="*{name}" required>
             <option th:each="competence : ${availableCompetences}" th:value="${competence}" th:text="${competence}"></option>
