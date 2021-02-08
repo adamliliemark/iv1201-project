@@ -46,6 +46,10 @@ public class Competence {
         return ct != null ? ct.getText() : "MISSING TRANSLATION";
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     /**
      * Get default translation (en_US)
      * @return the en_US localized translation
