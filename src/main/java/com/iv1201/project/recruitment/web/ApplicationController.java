@@ -55,7 +55,7 @@ public class ApplicationController {
         model.addAttribute("form", "competence");
         model.addAttribute("user", user);
         model.addAttribute("availableCompetences", competences.keySet());
-        return "applicationView.html";
+        return "applicationView";
     }
 
     /**
@@ -124,7 +124,6 @@ public class ApplicationController {
     public String submittedApplication(Model model) {
         user = userService.saveUser(user);
         model.addAttribute("user", user);
-        model.addAttribute("form", "submitted");
         return "redirect:/";
     }
 }

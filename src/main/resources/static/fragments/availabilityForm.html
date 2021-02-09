@@ -7,43 +7,7 @@
 <body>
 
 <div class="application-form" th:fragment="availabilityForm">
-    <script th:inline="javascript">
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById("availabilityForm").addEventListener("submit", (event) => {
-                if(!navigator.userAgent.includes("Safari")) {
-                    let from = document.forms.availabilityForm.from.valueAsDate;
-                    let to = document.forms.availabilityForm.to.valueAsDate;
-                    let now = new Date().setHours(0,0,0,0);
-                    if((from || to) < now) {
-                        errorOverlayOn([[#{error.dateInPast}]] + "<p>" + [[#{error.closeMessage}]]);
-                        event.preventDefault();
-                    }
-                    if(from > to) {
-                        errorOverlayOn([[#{error.dateWrongOrder}]] + "<p>" + [[#{error.closeMessage}]]);
-                        event.preventDefault();
-                        document.forms.availabilityForm.from.valueAsDate = to;
-                        document.forms.availabilityForm.to.valueAsDate = from;
-                    }
-                    if((from || to) == null) {
-                        errorOverlayOn([[#{error.dateMissing}]] + "<p>" + [[#{error.closeMessage}]]);
-                        event.preventDefault();
-                    }
-                    if((from || to) < 0){
-                        errorOverlayOn([[#{error.dateNegativeValue}]] + "<p>" + [[#{error.closeMessage}]]);
-                        event.preventDefault();
-                    }
-                    for(const availability of document.getElementsByClassName("userAvailabilities")) {
-                        if(availability.innerText === document.forms.availabilityForm.from.value + " " + [[#{to}]] + " " + document.forms.availabilityForm.to.value) {
-                            errorOverlayOn([[#{error.dateDuplicate}]] + "<p>" + [[#{error.closeMessage}]]);
-                            event.preventDefault();
-                        }
-                    }
-                    return true;
-                }
-                return true;
-            });
-        });
-    </script>
+    <script th:replace="../formValidation/availabilityFormValidation :: validator"></script>
     <div class="title" th:text="#{apply.title}"></div>
     <div class="subtitle" th:text="#{apply.subtitle.availability}"></div>
     <form th:action="@{/apply/availability}" name="availabilityForm" id="availabilityForm" action="#" class="form" method="post" th:object="${availabilityFormObject}">
@@ -53,7 +17,7 @@
         <input type="date" name="to" id="to" th:field="*{to}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <input type="hidden" th:value="${user.email}" th:name="user">
         <p>
-            <input type="submit" id="btn" th:value="#{submit}">
+            <input type="submit" th:value="#{submit}">
         </p>
     </form>
     <form th:action="@{/apply/review}" action="#" class="form" method="post">

@@ -17,16 +17,16 @@
     </script>
 </head>
 <body>
-<div class="container">
-    <div class="header">
+<main class="container">
+    <header class="header">
         <div th:replace="../fragments/header :: header"></div>
-    </div>
+    </header>
 
     <div class="content">
         <div id="error-overlay" onclick="errorOverlayOff()">
             <div id="error-text"></div>
         </div>
-        <div class="application-form" th:switch="${form}">
+        <article th:switch="${form}">
             <div th:case="${'competence'}" >
                 <div th:replace="../fragments/competenceForm :: competenceForm"></div>
             </div>
@@ -39,15 +39,15 @@
             <div th:case="${'submitted'}">
                 <div class="subtitle" th:text="#{apply.submitted}"></div>
             </div>
-        </div>
+        </article>
         <div class="application-review" th:unless="${form == 'review' || form == 'submitted'}">
             <div th:replace="../fragments/reviewApplication :: reviewApplication"></div>
         </div>
     </div>
 
-    <div class="footer">
+    <footer class="footer">
         <div th:replace="../fragments/footer :: footer_logged_in"></div>
-    </div>
-</div>
+    </footer>
+</main>
 </body>
 </html>
