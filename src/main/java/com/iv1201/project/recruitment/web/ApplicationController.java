@@ -5,16 +5,12 @@ import com.iv1201.project.recruitment.service.CompetenceService;
 import com.iv1201.project.recruitment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import com.iv1201.project.recruitment.persistence.Availability;
 import com.iv1201.project.recruitment.persistence.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Parameter;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
@@ -35,9 +31,6 @@ public class ApplicationController {
 
     @Autowired
     private CompetenceService competenceService;
-
-    @Autowired
-    private AvailabilityRepository availabilityRepository;
 
     private User user;
     private Map<String, Competence> competences;
@@ -62,7 +55,7 @@ public class ApplicationController {
         model.addAttribute("form", "competence");
         model.addAttribute("user", user);
         model.addAttribute("availableCompetences", competences.keySet());
-        return "applicationView";
+        return "applicationView.html";
     }
 
     /**
