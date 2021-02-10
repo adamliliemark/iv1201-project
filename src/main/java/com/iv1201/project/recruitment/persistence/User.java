@@ -81,8 +81,6 @@ public class User {
     }
 
     public void addCompetence(Competence competence, double years) {
-        if(competences == null)
-            throw new RuntimeException();
 
         CompetenceProfile comp = competences.stream()
                 .filter(c -> c.getCompetence().getName().equals(competence.getName()))

@@ -18,11 +18,13 @@ import java.util.List;
 @Scope("session")
 public class ListController {
 
-    private Search searcher;
     private Iterable<Competence> competences;
     private List<ApplicationDTO> applications;
     private ListForm listForm;
     private boolean searched;
+
+    @Autowired
+    private Search searcher;
 
     @Autowired
     private CompetenceRepository competenceRepo;
@@ -49,14 +51,11 @@ public class ListController {
     @PostMapping("/list/applications")
     public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm, Model model){
 
-        if(searcher == null)
-            searcher = new Search();
-
         searched = false;
 
         if (!listForm.isEmpty()) {
             try {
-                applications = searcher.getApplications(listForm, userRepo,availabilityRepo, competences);
+                applications = searcher.getApplications(listForm, competences);
                 model.addAttribute("applicationsObject", applications);
                 searched = true;
             } catch (SearchError e) {
