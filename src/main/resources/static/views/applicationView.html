@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{../fragments/layout}" lang="en">
 <head>
-    <meta charset="UTF-8">
     <title th:text="#{title}"></title>
-    <link th:href="@{../css/global.css}" rel="stylesheet">
-    <link th:href="@{../css/footer.css}" rel="stylesheet">
-    <link th:href="@{../css/header.css}" rel="stylesheet">
+    <link th:href="@{../css/application.css}" rel="stylesheet">
+</head>
+<body>
+<main layout:fragment="content">
     <script th:inline="javascript">
         let errorOverlayOn = (text) => {
             document.getElementById("error-overlay").style.display = "block";
@@ -15,18 +15,11 @@
             document.getElementById("error-overlay").style.display = "none";
         }
     </script>
-</head>
-<body>
-<main class="container">
-    <header class="header">
-        <div th:replace="../fragments/header :: header"></div>
-    </header>
-
-    <div class="content">
+    <article>
         <div id="error-overlay" onclick="errorOverlayOff()">
             <div id="error-text"></div>
         </div>
-        <article th:switch="${form}">
+        <div th:switch="${form}">
             <div th:case="${'competence'}" >
                 <div th:replace="../fragments/competenceForm :: competenceForm"></div>
             </div>
@@ -39,15 +32,11 @@
             <div th:case="${'submitted'}">
                 <div class="subtitle" th:text="#{apply.submitted}"></div>
             </div>
-        </article>
+        </div>
         <div class="application-review" th:unless="${form == 'review' || form == 'submitted'}">
             <div th:replace="../fragments/reviewApplication :: reviewApplication"></div>
         </div>
-    </div>
-
-    <footer class="footer">
-        <div th:replace="../fragments/footer :: footer_logged_in"></div>
-    </footer>
+    </article>
 </main>
 </body>
 </html>
