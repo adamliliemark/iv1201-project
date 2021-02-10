@@ -11,14 +11,13 @@
 <body>
 <div class="container">
     <div class="header">
-        <div th:replace="../fragments/header"></div>
+        <div th:replace="../fragments/header :: header"></div>
     </div>
 
     <div class="content">
         <div class="title" th:text="Placeholder"></div>
-
         <div class="home-middle">
-            <div th:replace="../fragments/formCSRFToken"></div>
+            <div th:replace="../fragments/formCSRFToken :: csrf"></div>
         </div>
     </div>
 
