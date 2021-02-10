@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-
-<div class="header-outer" th:fragment="header">
-    <div class="header-logo">Green Garden Recruiting Portal</div>
-    <div><a th:href="@{/apply}">Apply</a></div>
-    <div><a th:href="@{/list}">List</a></div>
-</div>
-
+<header th:fragment="header" class="header">
+    <div class="header-outer">
+        <div class="header-logo" th:text="#{title}"></div>
+        <div sec:authorize="isFullyAuthenticated()">
+            <a th:href="@{/apply}">Apply</a>
+            <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{/list}">List</a>
+        </div>
+    </div>
+</header>
 </body>
 </html>

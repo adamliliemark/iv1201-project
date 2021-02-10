@@ -1,18 +1,10 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{../fragments/layout}" lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Green Garden Recruitment Portal</title>
-    <link th:href="@{../css/login.css}" rel="stylesheet">
-    <link th:href="@{../css/global.css}" rel="stylesheet">
-    <link th:href="@{../css/home.css}" rel="stylesheet">
-    <link th:href="@{../css/footer.css}" rel="stylesheet">
-    <link th:href="@{../css/header.css}" rel="stylesheet">
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <div th:replace="../fragments/header"></div>
-    </div>
-
+<main layout:fragment="content">
     <div class="content">
         <div class="login-form">
             <form name="f" th:action="@{/login}" method="post">
@@ -34,11 +26,6 @@
             </form>
         </div>
     </div>
-
-    <div class="footer">
-        <div th:replace="../fragments/footer :: footer"></div>
-    </div>
-</div>
-
+</main>
 </body>
 </html>

@@ -1,21 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
+<footer class="footer" th:fragment="footer">
+    <div class="footer-outer">
+        <div>
+            <span th:text="#{Legal} + ' | ' + #{About} + ' | ' + #{Contact}"></span><span sec:authorize="isFullyAuthenticated()" th:text="' | ' + #{Your.Account}"></span>
+        </div>
+        <div sec:authorize="isAnonymous()">Placeholder</div>
+        <form sec:authorize="isAuthenticated()" id="logout-form" method="POST" th:action="@{/logout}">
+            <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+        </form>
+    </div>
+</footer>
 
-<div class="footer-outer" th:fragment="footer">
-    <div>Legal | About | Contact</div>
-    <div>Placeholder</div>
-</div>
+<div class="footer" th:fragment="footer_logged_in">
+    <div class="footer-outer" th:fragment="footer_logged_in">
+        <div>Legal | About | Contact | Your Account</div>
 
-<div class="footer-outer" th:fragment="footer_logged_in">
-    <div>Legal | About | Contact | Your Account</div>
-    <form id="logout-form" method="POST" th:action="@{/logout}">
-        <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
-    </form>
+        <form id="logout-form2" method="POST" th:action="@{/logout}">
+            <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+        </form>
+    </div>
 </div>
 
 </body>
