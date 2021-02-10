@@ -1,6 +1,7 @@
 package com.iv1201.project.recruitment.service;
 
 import com.iv1201.project.recruitment.persistence.*;
+import com.iv1201.project.recruitment.web.AvailabilityForm;
 import com.iv1201.project.recruitment.web.ListForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,12 +9,16 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Service
 public class Search {
 
+    @Autowired
+    UserRepository userRepo;
 
+    @Autowired
+    AvailabilityRepository availabilityRepo;
 
-    public List<ApplicationDTO> getApplications(ListForm input, UserRepository userRepo, AvailabilityRepository availabilityRepo, Iterable<Competence> competences) throws SearchError {
+    public List<ApplicationDTO> getApplications(ListForm input, Iterable<Competence> competences) throws SearchError {
 
             int competenceId = setCompetenceId(input.getCompetence(), competences);
             String[] names = setNames(input.getFirstName(), input.getLastName());

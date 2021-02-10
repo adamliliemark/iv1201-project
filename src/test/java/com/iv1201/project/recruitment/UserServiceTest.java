@@ -31,16 +31,13 @@ public class UserServiceTest {
     @Autowired
     private UserRepository userRepo;
 
-    @MockBean
-    private AuthorityRepository authRepo;
-
     @Autowired
     private UserService userService;
 
     @BeforeEach
     public void init() {
-        User existantUser = new User(existentUserEmail, "testName", "testLastName", "123", encoder().encode("pass"));
-        userRepo.save(existantUser);
+        User existentUser = new User(existentUserEmail, "testName", "testLastName", "123", encoder().encode("pass"));
+        userRepo.save(existentUser);
     }
 
     @Test
