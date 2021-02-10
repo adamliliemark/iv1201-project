@@ -6,36 +6,48 @@
     <link th:href="@{../css/global.css}" rel="stylesheet">
     <link th:href="@{../css/footer.css}" rel="stylesheet">
     <link th:href="@{../css/header.css}" rel="stylesheet">
+    <script th:inline="javascript">
+        let errorOverlayOn = (text) => {
+            document.getElementById("error-overlay").style.display = "block";
+            document.getElementById("error-text").innerHTML = text;
+        }
+        let errorOverlayOff = () => {
+            document.getElementById("error-overlay").style.display = "none";
+        }
+    </script>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <div th:replace="../fragments/header"></div>
-    </div>
+<main class="container">
+    <header class="header">
+        <div th:replace="../fragments/header :: header"></div>
+    </header>
 
     <div class="content">
-        <div class="application-form" th:switch="${form}">
+        <div id="error-overlay" onclick="errorOverlayOff()">
+            <div id="error-text"></div>
+        </div>
+        <article th:switch="${form}">
             <div th:case="${'competence'}" >
-                <div th:replace="../fragments/competenceForm"></div>
+                <div th:replace="../fragments/competenceForm :: competenceForm"></div>
             </div>
             <div th:case="${'availability'}">
-                <div th:replace="../fragments/availabilityForm"></div>
+                <div th:replace="../fragments/availabilityForm :: availabilityForm"></div>
             </div>
             <div th:case="${'review'}">
-                <div th:replace="../fragments/reviewApplication"></div>
+                <div th:replace="../fragments/reviewApplication :: reviewApplication"></div>
             </div>
             <div th:case="${'submitted'}">
                 <div class="subtitle" th:text="#{apply.submitted}"></div>
             </div>
-        </div>
+        </article>
         <div class="application-review" th:unless="${form == 'review' || form == 'submitted'}">
-            <div th:replace="../fragments/reviewApplication"></div>
+            <div th:replace="../fragments/reviewApplication :: reviewApplication"></div>
         </div>
     </div>
 
-    <div class="footer">
+    <footer class="footer">
         <div th:replace="../fragments/footer :: footer_logged_in"></div>
-    </div>
-</div>
+    </footer>
+</main>
 </body>
 </html>

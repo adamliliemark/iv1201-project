@@ -3,28 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Apply for a Position</title>
-    <script th:inline="javascript">
-        let validateForm = () => {
-            let competence = document.competenceForm.competence.value;
-            let competenceYears = document.competenceForm.years.value;
-            if(((competence || competenceYears) == null) || competenceYears === "") {
-                alert("You must provide values to submit.");
-                return false;
-            }
-            if(competenceYears < 0) {
-                alert("Negative values not allowed.");
-                return false;
-            }
-        }
-    </script>
 </head>
 <body>
 
-<div class="application-form" th:fragment="expertiseForm">
+<div class="application-form" th:fragment="competenceForm">
+    <script th:replace="../formValidation/competenceFormValidation :: validator"></script>
     <div class="title" th:text="#{apply.title}"></div>
-
     <div class="subtitle" th:text="#{apply.subtitle.skills}"></div>
-    <form th:action="@{/apply/expertise}" name="competenceForm" onsubmit="validateForm()" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
+    <form th:action="@{/apply/expertise}" name="competenceForm" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
         <label for="competence" th:text="#{apply.label.competence}"></label>
         <select name="competence" id="competence" th:field="*{name}" required>
             <option th:each="competence : ${availableCompetences}" th:value="${competence}" th:text="${competence}"></option>
@@ -38,8 +24,6 @@
     <form th:action="@{/apply/availability}" action="#" class="form" method="post">
         <input type="submit" th:value="#{submit}">
     </form>
-
 </div>
-
 </body>
 </html>

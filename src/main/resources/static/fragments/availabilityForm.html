@@ -3,48 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script th:inline="javascript">
-        let validateDates = () => {
-            if(!navigator.userAgent.includes("Safari")) {
-                let from = document.forms.availabilityForm.from.valueAsDate;
-                let to = document.forms.availabilityForm.to.valueAsDate;
-                let now = new Date().setHours(0,0,0,0);
-                if((from || to) < now) {
-                    alert("Dates in the past is not valid.");
-                    return false;
-                }
-                if(from > to) {
-                    alert("From date can not be after to date. When you close this dialog, the inputs will be switched.");
-                    document.forms.availabilityForm.from.valueAsDate = to;
-                    document.forms.availabilityForm.to.valueAsDate = from;
-                    return false;
-                }
-                if((from || to) == null) {
-                    alert("Dates must be supplied.");
-                    return false;
-                }
-                if((from || to) < 0){
-                    alert("A date can not have a negative value.");
-                    return false;
-                }
-                for(const availability of document.getElementsByClassName("userAvailabilities")) {
-                    if(availability.innerText === document.forms.availabilityForm.from.value + " " + [[#{to}]] + " " + document.forms.availabilityForm.to.value) {
-                        alert("Date already added.");
-                        return false;
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body>
 
-
 <div class="application-form" th:fragment="availabilityForm">
+    <script th:replace="../formValidation/availabilityFormValidation :: validator"></script>
     <div class="title" th:text="#{apply.title}"></div>
-
     <div class="subtitle" th:text="#{apply.subtitle.availability}"></div>
-    <form th:action="@{/apply/availability}" name="availabilityForm" onsubmit="validateDates()" action="#" class="form" method="post" th:object="${availabilityFormObject}">
+    <form th:action="@{/apply/availability}" name="availabilityForm" id="availabilityForm" action="#" class="form" method="post" th:object="${availabilityFormObject}">
         <label for="from" th:text="#{label.from} + ':'"></label>
         <input type="date" name="from" id="from" th:field="*{from}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <label for="to" th:text="#{label.to} + ':'"></label>
@@ -58,6 +24,5 @@
         <input type="submit" th:value="#{apply.review.submit}">
     </form>
 </div>
-
 </body>
 </html>
