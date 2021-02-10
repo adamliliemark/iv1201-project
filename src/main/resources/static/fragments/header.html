@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="#{title}"></title>
 </head>
 <body>
-<header th:fragment="header" class="header">
-    <div class="header-outer">
+<header th:fragment="header">
+    <div class="header-content">
         <div class="header-logo" th:text="#{title}"></div>
         <div sec:authorize="isFullyAuthenticated()">
             <a th:href="@{/apply}">Apply</a>

@@ -1,0 +1,11 @@
+.apply-text {
+    padding: 1em;
+}
+
+.application-form {
+    grid-row: 1;
+}
+
+.application-review {
+    grid-row: 2;
+}

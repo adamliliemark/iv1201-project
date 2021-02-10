@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{../fragments/layout}" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Recruitment Application</title>
+    <title th:text="#{title}"></title>
+    <link th:href="@{../css/home.css}" rel="stylesheet">
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="content">
+    <div>
         <div class="title" th:text="Placeholder"></div>
         <div class="home-middle">
         </div>

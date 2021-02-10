@@ -1,19 +1,11 @@
 body {
     margin: 0;
-}
-
-.container {
     height: 100vh;
     display: grid;
     grid-template-rows: auto 1fr auto;
 }
 
-.header {
-    grid-row: 1;
-    background-color: darkcyan;
-}
-
-.content {
+main {
     grid-row: 2;
     overflow: auto;
     background-color: lightcyan;
@@ -21,9 +13,20 @@ body {
     grid-template-rows: auto 2fr;
 }
 
-.footer {
+footer {
     grid-row: 3;
     background-color: darkcyan;
+}
+
+header {
+    grid-row: 1;
+    background-color: darkcyan;
+}
+
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
 }
 
 .title {
@@ -45,19 +48,6 @@ body {
     padding: 1em;
 }
 
-.apply-text {
-    padding: 1em;
-}
-
-.application-form {
-    grid-row: 1;
-}
-
-.application-review {
-    grid-row: 2;
-}
-
-
 #error-overlay {
     position: fixed;
     display: none;
@@ -76,4 +66,23 @@ body {
     color: white;
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    font-size: large;
+    padding: 1em;
+}
+
+.header-logo {
+    font-size: x-large;
+    font-family: "DejaVu Serif Condensed", serif;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    font-size: large;
+    padding: 1em;
 }

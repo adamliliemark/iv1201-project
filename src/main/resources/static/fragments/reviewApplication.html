@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Apply for a Position</title>
+    <title th:text="#{title}"></title>
 </head>
 <body>
-
-<div class="create-account-outer" th:fragment="reviewApplication">
+<div th:fragment="reviewApplication">
     <div th:if="${form == 'review'}">
         <div class="title" th:text="#{apply.title}"></div>
         <div class="subtitle" th:text="#{apply.subtitle.review}"></div>

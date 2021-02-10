@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <title th:text="#{title}"></title>
 </head>
 <body>
-<footer class="footer" th:fragment="footer">
-    <div class="footer-outer">
+<footer th:fragment="footer">
+    <div class="footer-content">
         <div>
             <span th:text="#{Legal} + ' | ' + #{About} + ' | ' + #{Contact}"></span><span sec:authorize="isFullyAuthenticated()" th:text="' | ' + #{Your.Account}"></span>
         </div>
@@ -16,16 +15,5 @@
         </form>
     </div>
 </footer>
-
-<div class="footer" th:fragment="footer_logged_in">
-    <div class="footer-outer" th:fragment="footer_logged_in">
-        <div>Legal | About | Contact | Your Account</div>
-
-        <form id="logout-form2" method="POST" th:action="@{/logout}">
-            <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
-        </form>
-    </div>
-</div>
-
 </body>
 </html>

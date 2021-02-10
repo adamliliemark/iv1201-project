@@ -1,30 +1,26 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{../fragments/layout}" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Green Garden Recruitment Portal</title>
+    <title th:text="#{title}"></title>
+    <link th:href="@{../css/login.css}" rel="stylesheet">
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="content">
-        <div class="login-form">
-            <form name="f" th:action="@{/login}" method="post">
-                <fieldset>
-                    <legend th:text="#{login.login}">Please login</legend>
-                    <div th:if="${param.error}" class="alert alert-error" th:text="#{login.invalid}"></div>
-                    <div th:if="${param.logout}" class="alert alert-success" th:text="#{login.loggedOut}"></div>
-                    <div class="login-form-input-container">
-                        <label for="username" th:text="#{label.username}"></label>
-                        <input class="login-form-input" type="text" id="username" name="username"/>
-                        <label for="password" th:text="#{label.password}"></label>
-                        <input class="login-form-input" type="password" id="password" name="password"/>
-                        <div class="form-actions">
-                            <button type="submit" class="btn" th:text="#{login.btn}"></button>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-    </div>
+    <form class="login-form" name="f" th:action="@{/login}" method="post">
+        <fieldset>
+            <legend th:text="#{login.login}"></legend>
+            <div th:if="${param.error}" class="alert alert-error" th:text="#{login.invalid}"></div>
+            <div th:if="${param.logout}" class="alert alert-success" th:text="#{login.loggedOut}"></div>
+            <div class="login-form-input-container">
+                <label for="username" th:text="#{label.username}"></label>
+                <input class="login-form-input" type="text" id="username" name="username"/>
+                <label for="password" th:text="#{label.password}"></label>
+                <input class="login-form-input" type="password" id="password" name="password"/>
+                <div class="form-actions">
+                    <button type="submit" class="btn" th:text="#{login.btn}"></button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
 </main>
 </body>
 </html>
