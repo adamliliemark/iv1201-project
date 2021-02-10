@@ -8,14 +8,33 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles searches for and returns applications stored in the "Recruitment Applications" database.
+ */
+@Service
+public class SearchService {
 
-public class Search {
+    @Autowired
+    UserRepository userRepo;
 
-    public List<ApplicationDTO> getApplications(ListForm input, UserRepository userRepo, AvailabilityRepository availabilityRepo, Iterable<Competence> competences) throws SearchError {
+    @Autowired
+    AvailabilityRepository availabilityRepo;
+
+    /**
+     * Called when a user has initiated a search database via the listView interface. Extracts the
+     * parameters stored in the received <>ListForm</> object, parses them and set them to values
+     * that can be searched for in the database.
+     *
+     * @param input is the <>ListForm</> object containing the users entered parameters of interest.
+     * @param competences contains all stored competences in the database.
+     * @return is the found applications in the form of a list of <>ApplicationDTO</>.
+     * @throws SearchServiceError is thrown if there has been an issue with the search.
+     */
+    public List<ApplicationDTO> getApplications(ListForm input, Iterable<Competence> competences) throws SearchServiceError {
 
             int competenceId = setCompetenceId(input.getCompetence(), competences);
             String[] names = setNames(input.getFirstName(), input.getLastName());
-            List<ApplicationDTO> searchResult = new ArrayList<>();
+            List<ApplicationDTO> searchResult;
 
             switch (handleInput(input)) {
                 case "Availability":
@@ -25,10 +44,9 @@ public class Search {
                     searchResult = userRepo.getUserApplications(names[0], names[1], competenceId);
                     break;
                 case "Empty":
-                    System.err.println("Empty");
-                    break;
+                    throw new SearchServiceError("The entered listForm object was empty");
                 default:
-                    throw new SearchError("Invalid applications search!");
+                    throw new SearchServiceError("Invalid applications search!");
             }
 
         return searchResult;

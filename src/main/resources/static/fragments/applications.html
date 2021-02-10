@@ -7,24 +7,23 @@
 <div class="applications" th:fragment="applications" th:object="${listFormObject}">
         <div th:if="${applicationsObject.empty && searched}" th:text="#{list.noApp}"></div>
         <div th:each="a, iter : ${applicationsObject}">
-            <div th:if="${listFormObject.min <= iter.index && listFormObject.max > iter.index}"><span
+            <div th:if="${min <= iter.index && max > iter.index}"><span
                     th:text="${iter.index+1 + ': ' + a.firstName + ' ' + a.lastName}"></span></div>
             <p>
         </div>
-        <div th:if="${3 <= listFormObject.min}">
+        <div th:if="${interval <= min}">
             <form th:action="@{/list/prev}" action="#" class="form" method="post">
                 <input id="prevButton" type="submit" th:value="#{list.prev}">
                 <input type="hidden" th:value="${applicationsObject}" name="prev">
             </form>
         </div>
-
-        <div th:if="${applicationsObject.size > listFormObject.max}">
+        <div th:if="${applicationsObject.size > max}">
             <form th:action="@{/list/next}" action="#" class="form" method="post">
                 <input id="nextButton" type="submit" th:value="#{list.next}">
                 <input type="hidden" th:value="${applicationsObject}" name="next">
             </form>
         </div>
-</div>
+    </div>
 <div class="nosearch" th:fragment="nosearch"></div>
 </body>
 </html>

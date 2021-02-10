@@ -1,8 +1,8 @@
 package com.iv1201.project.recruitment.web;
 
 import com.iv1201.project.recruitment.persistence.*;
-import com.iv1201.project.recruitment.service.Search;
-import com.iv1201.project.recruitment.service.SearchError;
+import com.iv1201.project.recruitment.service.SearchService;
+import com.iv1201.project.recruitment.service.SearchServiceError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Serves as the controller for when a recruiter wants to search and
- * list applications of interest. All HTTPrequest map to the same view
+ * list applications of interest. All HTTPRequest map to the same view
  * which is dynamically updated by model attributes and shows proper
  * information to the user.
  */
@@ -25,20 +25,19 @@ import java.util.List;
 @Scope("session")
 public class ListController {
 
-    private Search searcher;
     private Iterable<Competence> competences;
     private List<ApplicationDTO> applications;
     private ListForm listForm;
     private boolean searched;
+    private int min = 0;
+    private int max = 3;
+    private final int interval = 3;
+
+    @Autowired
+    private SearchService searcher;
 
     @Autowired
     private CompetenceRepository competenceRepo;
-
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private AvailabilityRepository availabilityRepo;
 
     /**
      * Called when the user wants to enter the listView and set the initial state of the view.
@@ -68,27 +67,29 @@ public class ListController {
      * @return is the listView with its current state values containing the search result.
      */
     @PostMapping("/list/applications")
-    public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm, Model model, BindingResult bindingResult){
+    public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm, Model model, BindingResult bindingResult) {
 
-        if(!bindingResult.hasErrors()) {
+        if (!bindingResult.hasErrors()) {
 
             if (searcher == null)
-                searcher = new Search();
+                searcher = new SearchService();
 
-            try {
-                applications = searcher.getApplications(listForm, userRepo, availabilityRepo, competences);
-                model.addAttribute("applicationsObject", applications);
-                searched = true;
-            } catch (SearchError e) {
-                e.printStackTrace();
-            }
+                try {
+                    applications = searcher.getApplications(listForm, competences);
+                    model.addAttribute("applicationsObject", applications);
+                    searched = true;
+                } catch (SearchServiceError e) {
+                    e.printStackTrace();
+                }
         }
         this.listForm = listForm;
+        model.addAttribute("min", min);
+        model.addAttribute("max", max);
+        model.addAttribute("interval", interval);
         model.addAttribute("searched", searched);
         model.addAttribute("expertise", competences);
         return "listView";
     }
-
     /**
      * Called when the search result is to large to display on one single page and the
      * user wants to see the next set of search result following the currently showing.
@@ -96,15 +97,14 @@ public class ListController {
      * @param model is the object carrying the data processed by the Thymeleaf framework.
      * @return is the listView with its current state values containing the next set of the search result.
      */
+
     @PostMapping("/list/next")
     public String listNextParameters(Model model){
 
-            listForm.next();
+        max = max + interval;
+        min = min + interval;
 
-        model.addAttribute("listFormObject", listForm);
-        model.addAttribute("searched", searched);
-        model.addAttribute("applicationsObject",applications);
-        model.addAttribute("expertise", competences);
+        addAttributes(model);
         return "listView";
     }
 
@@ -118,12 +118,20 @@ public class ListController {
     @PostMapping("/list/prev")
     public String listPrevParameters(Model model){
 
-            listForm.prev();
+        max = max - interval;
+        min = min - interval;
 
+        addAttributes(model);
+        return "listView";
+    }
+
+    private void addAttributes(Model model){
+        model.addAttribute("min", min);
+        model.addAttribute("max", max);
+        model.addAttribute("interval", interval);
         model.addAttribute("listFormObject", listForm);
         model.addAttribute("searched", searched);
-        model.addAttribute("applicationsObject", applications);
+        model.addAttribute("applicationsObject",applications);
         model.addAttribute("expertise", competences);
-        return "listView";
     }
 }

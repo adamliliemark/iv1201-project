@@ -2,6 +2,9 @@ package com.iv1201.project.recruitment.web;
 
 import java.time.LocalDate;
 
+/**
+ * Stores the parameters entered by the user via the ListView.
+ */
 public class ListForm {
 
 
@@ -14,7 +17,9 @@ public class ListForm {
     private int max = 3;
     private int size = max - min;
 
-
+    /**
+     * Sets the new interval of showe
+     */
     void next(){
         setMin(getMin() + getSize());
         setMax(getMax() + getSize());
@@ -23,10 +28,6 @@ public class ListForm {
     void prev(){
         setMin(getMin() - getSize());
         setMax(getMax() - getSize());
-    }
-
-    boolean isEmpty(){
-        return date == null && competence.isEmpty() && firstName.isEmpty() && lastName.isEmpty() && (availabilityForm.getFrom() == null || availabilityForm.getTo() == null);
     }
 
     public int getSize() {
