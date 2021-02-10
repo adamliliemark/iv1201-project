@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface AvailabilityRepository extends CrudRepository<Availability, String> {
     Optional<Availability> findByUserAndFromDateAndToDate(User user, LocalDate fromDate, LocalDate toDate);
 
-
     @Query("select distinct new com.iv1201.project.recruitment.persistence.ApplicationDTO(u.firstName, u.lastName) from Availability a join a.user u join u.competences c where " +
             "a.fromDate <= :fromDate and " +
             "a.toDate >= :toDate and " +

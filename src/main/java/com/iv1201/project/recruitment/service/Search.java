@@ -11,13 +11,12 @@ import java.util.List;
 
 public class Search {
 
-
-
     public List<ApplicationDTO> getApplications(ListForm input, UserRepository userRepo, AvailabilityRepository availabilityRepo, Iterable<Competence> competences) throws SearchError {
 
             int competenceId = setCompetenceId(input.getCompetence(), competences);
             String[] names = setNames(input.getFirstName(), input.getLastName());
             List<ApplicationDTO> searchResult = new ArrayList<>();
+
             switch (handleInput(input)) {
                 case "Availability":
                     searchResult = availabilityRepo.getAvailabilityApplications(input.getAvailabilityForm().getFrom(), input.getAvailabilityForm().getTo(),names[0], names[1], competenceId);
@@ -31,7 +30,6 @@ public class Search {
                 default:
                     throw new SearchError("Invalid applications search!");
             }
-
 
         return searchResult;
     }
