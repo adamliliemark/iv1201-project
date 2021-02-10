@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 
 /**
  * RootController controls the user's rootview, i.e. delivers either
@@ -38,11 +37,9 @@ public class RootController {
     /**
      * Deliver home view
      * @return homeView
-     * @param principal
      */
     @GetMapping("/home")
-    public String home(Principal principal) {
-        System.out.println(principal.getName());
+    public String home() {
         return "homeView";
     }
 }
