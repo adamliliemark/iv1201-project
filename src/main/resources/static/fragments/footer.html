@@ -11,7 +11,7 @@
             <span th:text="#{Legal} + ' | ' + #{About} + ' | ' + #{Contact}"></span><span sec:authorize="isFullyAuthenticated()" th:text="' | ' + #{Your.Account}"></span>
         </div>
         <div sec:authorize="isAnonymous()">Placeholder</div>
-        <form sec:authorize="isAuthenticated()" id="logout-form" method="POST" th:action="@{/logout}">
+        <form sec:authorize="isFullyAuthenticated()" id="logout-form" method="POST" th:action="@{/logout}">
             <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
         </form>
     </div>
