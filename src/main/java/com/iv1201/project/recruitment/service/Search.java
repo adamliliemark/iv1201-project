@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Service
 public class Search {
 
+    @Autowired
+    UserRepository userRepo;
 
+    @Autowired
+    AvailabilityRepository availabilityRepo;
 
-    public List<ApplicationDTO> getApplications(ListForm input, UserRepository userRepo, AvailabilityRepository availabilityRepo, Iterable<Competence> competences) throws SearchError {
+    public List<ApplicationDTO> getApplications(ListForm input, Iterable<Competence> competences) throws SearchError {
 
             int competenceId = setCompetenceId(input.getCompetence(), competences);
             String[] names = setNames(input.getFirstName(), input.getLastName());
