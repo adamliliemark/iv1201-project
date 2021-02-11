@@ -2,7 +2,6 @@ package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -74,9 +73,9 @@ public class User {
     public Set<Availability> getAvailabilityList() { return availabilityList; }
 
     @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-    private List<CompetenceProfile> competences;
+    private Set<CompetenceProfile> competences;
 
-    public List<CompetenceProfile> getCompetences() {
+    public Set<CompetenceProfile> getCompetences() {
         return competences;
     }
 
@@ -85,7 +84,7 @@ public class User {
             throw new RuntimeException();
 
         CompetenceProfile comp = competences.stream()
-                .filter(c -> c.getCompetence().getName().equals(competence.getName()))
+                .filter(c -> c.getCompetence().getId() == competence.getId())
                 .findAny()
                 .orElse(null);
         if(comp != null) {
