@@ -73,15 +73,22 @@ public class User {
         this.availabilityList.add(new Availability(from, to, this));
     }
 
-
-    public void removeAvailability(Availability availablity) {
+    /**
+     * Removes an availability from the user.
+     * @param availability is the availability being removed.
+     */
+    public void removeAvailability(Availability availability) {
         this.availabilityList.stream()
-                .filter(a -> a.getFromDate().equals(availablity.getFromDate())
-                        && a.getToDate().equals(availablity.getToDate()))
+                .filter(a -> a.getFromDate().equals(availability.getFromDate())
+                        && a.getToDate().equals(availability.getToDate()))
                 .findAny().ifPresent(av -> this.availabilityList.remove(av));
     }
 
-
+    /**
+     * Adds a new comptence to the user.
+     * @param competence is the competence being added.
+     * @param years is the number of years the user has practiced the field the competence describes.
+     */
     public void addCompetence(Competence competence, double years) {
         CompetenceProfile comp = this.competences.stream()
                 .filter(c -> c.getCompetence().getId().equals(competence.getId()))
@@ -93,6 +100,10 @@ public class User {
             this.competences.add(new CompetenceProfile(competence, years, this));
     }
 
+    /**
+     * Removes a competence from the user.
+     * @param competence is the competence being removed.
+     */
     public void removeCompetence(Competence competence) {
         this.competences.stream()
                 .filter(c -> c.getCompetence().getId().equals(competence.getId()))
