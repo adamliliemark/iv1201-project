@@ -1,8 +1,6 @@
 package com.iv1201.project.recruitment.persistence;
 
-
 import javax.persistence.*;
-
 
 /**
  * Represents a stored authority
@@ -11,13 +9,6 @@ import javax.persistence.*;
  */
 @Entity(name = "authorities")
 public class Authority {
-
-    protected Authority() {}
-
-    public Authority(String authority, User user) {
-        this.user = user;
-        this.authority = authority;
-    }
 
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +20,19 @@ public class Authority {
     @ManyToOne
     @JoinColumn
     private User user;
+
+    /**
+     * An empty class constructor.
+     */
+    protected Authority() {}
+
+    /**
+     * A fully populated class cunstructor setting the class attributes to their initial values.
+     * @param authority is the initial value of the class attribute authority.
+     * @param user is the initial value of the class attribute user.
+     */
+    public Authority(String authority, User user) {
+        this.user = user;
+        this.authority = authority;
+    }
 }

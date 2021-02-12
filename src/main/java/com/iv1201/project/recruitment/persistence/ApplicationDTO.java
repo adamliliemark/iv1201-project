@@ -5,19 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import java.util.Collection;
-import java.util.List;
-
-
+/**
+ * A Data Transfer Object class used for transferring the first name and the
+ * last name of users matching a searched for application.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class ApplicationDTO {
-
     private String firstName;
     private String lastName;
- //   private Competence competence;
 }

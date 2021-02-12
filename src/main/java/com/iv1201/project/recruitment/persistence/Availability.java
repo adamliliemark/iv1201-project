@@ -12,17 +12,8 @@ import java.time.LocalDate;
  */
 @Entity
 @Cacheable
-@Table(name="Availability",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"FROM_DATE", "TO_DATE", "USER_EMAIL"})})
+@Table(name="Availability", uniqueConstraints = {@UniqueConstraint(columnNames = {"FROM_DATE", "TO_DATE", "USER_EMAIL"})})
 public class Availability {
-
-    protected Availability() {}
-
-    public Availability(LocalDate from, LocalDate to, User user) {
-        this.fromDate = from;
-        this.toDate = to;
-        this.user = user;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,18 +31,51 @@ public class Availability {
     @JoinColumn(name = "USER_EMAIL")
     private User user;
 
+    /**
+     * Empty class constructor.
+     */
+    protected Availability() {}
+
+    /**
+     * Populated class constructor setting the class variables to their initial values.
+     * @param from is the initial value of the class attribute fromDate.
+     * @param to is the initial value of the class attribute toDate.
+     * @param user is the initial value of the class attribute user.
+     */
+    public Availability(LocalDate from, LocalDate to, User user) {
+        this.fromDate = from;
+        this.toDate = to;
+        this.user = user;
+    }
+
+    /**
+     * Retrieves the current value of the fromDate class attribute.
+     * @return is the current value of the fromDate class attribute.
+     */
     public LocalDate getFromDate() {
         return fromDate;
     }
 
+    /**
+     * Retrieves the current value of the toDate class attribute.
+     * @return is the current value of the toDate class attribute.
+     */
     public LocalDate getToDate() {
         return toDate;
     }
 
+    /**
+     * Sets the class attribute fromDate to a new value.
+     * @param fromDate is the new value of the class attribute lastName.
+     */
     public void setFromDate(LocalDate fromDate) {
         this.fromDate = fromDate;
     }
 
+    /**
+     * Sets the class attribute toDate to a new value.
+     * @param toDate is the new value of the class attribute lastName.
+     */
     public void setToDate(LocalDate toDate) {
         this.toDate = toDate;
     }
