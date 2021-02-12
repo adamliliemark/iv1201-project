@@ -18,12 +18,16 @@ public interface UserRepository extends CrudRepository<User, String> {
      */
     Optional<User> findByEmail(String email);
 
-
+    /**
+     * Checks whether a user by this email exists
+     * @param email to find by
+     * @return User with matching email
+     */
+    boolean existsByEmail(String email);
 
     @Query("SELECT new com.iv1201.project.recruitment.persistence.ApplicationDTO(u.firstName, u.lastName) FROM users u join u.competences c " +
             "WHERE (:firstName is null or u.firstName = :firstName) and " +
             "(:lastName is null or u.lastName = :lastName) and " +
             "(:competence < 1 or c.competence.id = :competence)")
     List<ApplicationDTO> getUserApplications(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("competence") int competence);
-
 }

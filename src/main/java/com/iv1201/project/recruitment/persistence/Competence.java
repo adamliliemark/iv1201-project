@@ -1,6 +1,10 @@
 package com.iv1201.project.recruitment.persistence;
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,6 +12,7 @@ import java.util.List;
  * Represents a stored Competence
  */
 @Entity
+@Transactional
 public class Competence {
     public Competence() {}
 
@@ -15,7 +20,8 @@ public class Competence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy="competence", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="competence", fetch=FetchType.LAZY, orphanRemoval = true, cascade=CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     private List<CompetenceTranslation> translations;
 
     /**
@@ -39,15 +45,11 @@ public class Competence {
      * @see CompetenceTranslation
      */
     public String getName(String languageCode) {
-        CompetenceTranslation ct = translations.stream()
+        return translations.stream()
                 .filter(c -> c.getLanguage().getLanguageCode().equals(languageCode))
                 .findAny()
-                .orElse(null);
-        return ct != null ? ct.getText() : "MISSING TRANSLATION";
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+                .map(c -> c.getText())
+                .orElse("MISSING TRANSLATION");
     }
 
     /**
@@ -58,7 +60,14 @@ public class Competence {
         return this.getName("en_US");
     }
 
+    /**
+     * It is not known what this method does.
+     * Many have tried to figure it out, for example by looking at the name,
+     * but as many have failed.
+     */
     public Long getId() {
         return this.id;
     }
+
+
 }

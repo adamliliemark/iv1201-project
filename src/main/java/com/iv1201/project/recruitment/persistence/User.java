@@ -2,7 +2,6 @@ package com.iv1201.project.recruitment.persistence;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -54,7 +53,7 @@ public class User {
     private String lastName;
 
     @Column (nullable = false, unique = false)
-    String ssn;
+    private String ssn;
 
     @Column(nullable = true, unique = false)
     private String password;
@@ -62,35 +61,46 @@ public class User {
     @Column(nullable = false, unique = false)
     private Boolean enabled;
 
-    @OneToMany(mappedBy = "user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Availability> availabilityList;
 
+    @OneToMany(mappedBy="user", orphanRemoval = true, fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    private Set<CompetenceProfile> competences;
+
+    public Set<Availability> getAvailabilityList() { return this.availabilityList; }
+
     public void addAvailability(LocalDate from, LocalDate to) {
-        if(availabilityList == null)
+        if(this.availabilityList == null)
             throw new RuntimeException();
         this.availabilityList.add(new Availability(from, to, this));
     }
 
-    public Set<Availability> getAvailabilityList() { return availabilityList; }
+    public void removeAvailability(Availability availablity) {
+        this.availabilityList.stream()
+                .filter(a -> a.getFromDate().equals(availablity.getFromDate())
+                        && a.getToDate().equals(availablity.getToDate()))
+                .findAny().ifPresent(av -> this.availabilityList.remove(av));
+    }
 
-    @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-    private List<CompetenceProfile> competences;
-
-    public List<CompetenceProfile> getCompetences() {
-        return competences;
+    public Set<CompetenceProfile> getCompetences() {
+        return this.competences;
     }
 
     public void addCompetence(Competence competence, double years) {
-
-        CompetenceProfile comp = competences.stream()
-                .filter(c -> c.getCompetence().getName().equals(competence.getName()))
+        CompetenceProfile comp = this.competences.stream()
+                .filter(c -> c.getCompetence().getId().equals(competence.getId()))
                 .findAny()
                 .orElse(null);
-        if(comp != null) {
+        if(comp != null)
             comp.setYearsOfExperience(years);
-        } else {
+        else
             this.competences.add(new CompetenceProfile(competence, years, this));
-        }
+    }
+
+    public void removeCompetence(Competence competence) {
+        this.competences.stream()
+                .filter(c -> c.getCompetence().getId().equals(competence.getId()))
+                .findAny().ifPresent(comp -> this.competences.remove(comp));
     }
 
     public String getEmail() {
@@ -102,17 +112,17 @@ public class User {
     }
 
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public String getSsn() { return ssn; }
+    public String getSsn() { return this.ssn; }
 
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 }
 

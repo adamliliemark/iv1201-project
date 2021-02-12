@@ -17,6 +17,7 @@ public class Language {
         this.nativeName = nativeName;
     }
 
+
     @Id
     private String languageCode;
 
