@@ -29,12 +29,6 @@ public class ListController {
     @Autowired
     private CompetenceRepository competenceRepo;
 
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private AvailabilityRepository availabilityRepo;
-
     @GetMapping("/list")
     public String list(Model model){
 

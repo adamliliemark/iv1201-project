@@ -29,9 +29,6 @@ public class SearchTest {
     private AvailabilityForm avForm;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private UserRepository userRepo;
 
     @Autowired
@@ -47,7 +44,6 @@ public class SearchTest {
         competences = new ArrayList<>();
         competenceRepo.findAll().forEach(competences::add);
         User user1 = new User(user1Email, user1FirstName, user1LastName, user1SSN, "pass");
-        userRepo.save(user1);
         User user2 = new User(user2Email, user2FirstName, user2LastName, user2SSN, "pass");
         userRepo.save(user1);
         userRepo.save(user2);
@@ -65,8 +61,8 @@ public class SearchTest {
                 LocalDate.of(2021, 6, 1),
                 LocalDate.of(2021, 12,1));
 
-        userService.saveUser(user1);
-        userService.saveUser(user2);
+        userRepo.save(user1);
+        userRepo.save(user2);
     }
 
     @BeforeEach

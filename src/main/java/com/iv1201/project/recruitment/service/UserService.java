@@ -30,20 +30,16 @@ public class UserService {
     }
 
     @Autowired
-    CompetenceRepository competenceRepo;
+    private CompetenceRepository competenceRepo;
 
     @Autowired
-    UserRepository userRepo;
+    private UserRepository userRepo;
 
     @Autowired
-    AuthorityRepository authorityRepo;
+    private AuthorityRepository authorityRepo;
 
     @Autowired
-    LanguageRepository languageRepo;
-
-    @Autowired
-    AvailabilityRepository availabilityRepository;
-
+    private LanguageRepository languageRepo;
 
     /**
      * Adds a new user to the system if valid
@@ -83,7 +79,6 @@ public class UserService {
     @Transactional
     public User saveUser(User user) {
         return userRepo.save(user);
-
     }
 
     /**

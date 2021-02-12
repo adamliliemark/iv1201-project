@@ -1,7 +1,5 @@
 package com.iv1201.project.recruitment.persistence;
 
-import org.hibernate.annotations.common.reflection.java.generics.CompoundTypeEnvironment;
-
 import javax.persistence.*;
 
 

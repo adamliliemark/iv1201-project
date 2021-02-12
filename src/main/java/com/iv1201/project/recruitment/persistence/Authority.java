@@ -10,8 +10,8 @@ import javax.persistence.*;
  * @see com.iv1201.project.recruitment.service.UserService.Role
  */
 @Entity(name = "authorities")
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_EMAIL", "AUTHORITY"})})
 public class Authority {
-
     protected Authority() {}
 
     public Authority(String authority, User user) {
@@ -19,7 +19,7 @@ public class Authority {
         this.authority = authority;
     }
 
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
