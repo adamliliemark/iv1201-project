@@ -21,6 +21,12 @@ public interface UserRepository extends CrudRepository<User, String> {
      */
     Optional<User> findByEmail(String email);
 
+    /**
+     * Checks whether a user by this email exists
+     * @param email to find by
+     * @return User with matching email
+     */
+    boolean existsByEmail(String email);
 
     /**
      * Retrieves the first and last name of the users matching the parameters entered via the applications list view.
@@ -34,5 +40,4 @@ public interface UserRepository extends CrudRepository<User, String> {
             "(:lastName is null or u.lastName = :lastName) and " +
             "(:competence < 1 or c.competence.id = :competence)")
     List<ApplicationDTO> getUserApplications(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("competence") int competence);
-
 }

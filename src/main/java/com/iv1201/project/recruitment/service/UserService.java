@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -30,20 +32,16 @@ public class UserService {
     }
 
     @Autowired
-    CompetenceRepository competenceRepo;
+    private CompetenceRepository competenceRepo;
 
     @Autowired
-    UserRepository userRepo;
+    private UserRepository userRepo;
 
     @Autowired
-    AuthorityRepository authorityRepo;
+    private AuthorityRepository authorityRepo;
 
     @Autowired
-    LanguageRepository languageRepo;
-
-    @Autowired
-    AvailabilityRepository availabilityRepository;
-
+    private LanguageRepository languageRepo;
 
     /**
      * Adds a new user to the system if valid
@@ -56,12 +54,13 @@ public class UserService {
      * @param ssn users social security number as String
      * @throws UserServiceError if user is not valid, or conflicting with an existing user.
      */
+    @Transactional
     public void addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if(validateUser(email, firstName, lastName, clearTextPassword, ssn)) {
-            if(userRepo.findByEmail(email).isPresent())
+            if(userRepo.existsByEmail(email))
                 throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
             User user = new User(email, firstName, lastName, ssn, encoder.encode(clearTextPassword));
             Authority userAuth = new Authority(role.toString(), user);
@@ -79,12 +78,31 @@ public class UserService {
      * @param user the user to save
      * @return the saved user.
      */
+    @Transactional
     public User saveUser(User user) {
         return userRepo.save(user);
     }
 
+    /**
+     * Gets a user from the data store.
+     * This method is transactional because of the greedy
+     *
+     * @param email the email of the user to get.
+     * @return the found user or empty
+     */
+    @Transactional
     public Optional<User> findByEmail(String email) {
         return userRepo.findByEmail(email);
+    }
+
+
+    /**
+     * Returns true if a matching row exists, else false
+     * @param email the email to check by.
+     * @return
+     */
+    public boolean existsByEmail(String email) {
+        return userRepo.existsByEmail(email);
     }
 
 
@@ -122,7 +140,7 @@ public class UserService {
         if(userRepo.count() != 0)
             return;
         try {
-            if (!userRepo.findByEmail("testuser@example.com").isPresent()) {
+            if (!userRepo.existsByEmail("testuser@example.com")) {
                 System.err.println("Saving test user!");
                 addNewUser("testuser@example.com",
                         "userFirstName",
@@ -136,7 +154,7 @@ public class UserService {
                 userRepo.save(user);
             }
 
-            if (!userRepo.findByEmail("testadmin@example.com").isPresent()) {
+            if (!userRepo.existsByEmail("testadmin@example.com")) {
                 System.err.println("Saving test admin!");
                 addNewUser("testadmin@example.com",
                         "adminFirstName",

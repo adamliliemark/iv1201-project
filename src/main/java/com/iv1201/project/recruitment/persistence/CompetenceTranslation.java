@@ -58,4 +58,8 @@ public class CompetenceTranslation {
     public Language getLanguage() {
         return this.language;
     }
+
+    public Competence getCompetence() {
+        return this.competence;
+    }
 }

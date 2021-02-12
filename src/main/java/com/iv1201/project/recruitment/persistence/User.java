@@ -68,27 +68,35 @@ public class User {
      * @param to is the date until the user is available.
      */
     public void addAvailability(LocalDate from, LocalDate to) {
-        if(availabilityList == null)
+        if(this.availabilityList == null)
             throw new RuntimeException();
         this.availabilityList.add(new Availability(from, to, this));
     }
 
-    /**
-     * Adds a new competence to the <>User</> object.
-     * @param competence is the competence being added.
-     * @param years is the number of years the user has practiced the competence.
-     */
-    public void addCompetence(Competence competence, double years) {
 
-        CompetenceProfile comp = competences.stream()
-                .filter(c -> c.getCompetence().getName().equals(competence.getName()))
+    public void removeAvailability(Availability availablity) {
+        this.availabilityList.stream()
+                .filter(a -> a.getFromDate().equals(availablity.getFromDate())
+                        && a.getToDate().equals(availablity.getToDate()))
+                .findAny().ifPresent(av -> this.availabilityList.remove(av));
+    }
+
+
+    public void addCompetence(Competence competence, double years) {
+        CompetenceProfile comp = this.competences.stream()
+                .filter(c -> c.getCompetence().getId().equals(competence.getId()))
                 .findAny()
                 .orElse(null);
-        if(comp != null) {
+        if(comp != null)
             comp.setYearsOfExperience(years);
-        } else {
+        else
             this.competences.add(new CompetenceProfile(competence, years, this));
-        }
+    }
+
+    public void removeCompetence(Competence competence) {
+        this.competences.stream()
+                .filter(c -> c.getCompetence().getId().equals(competence.getId()))
+                .findAny().ifPresent(comp -> this.competences.remove(comp));
     }
 
     /**
@@ -118,7 +126,7 @@ public class User {
      * @return is the current value of the competences class attribute.
      */
     public List<CompetenceProfile> getCompetences() {
-        return competences;
+        return this.competences;
     }
 
     /**
@@ -142,7 +150,7 @@ public class User {
      * @return is the current value of the firstName class attribute.
      */
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
     /**
@@ -157,14 +165,14 @@ public class User {
      * Retrieves the current value of the ssn class attribute.
      * @return is the current value of the ssn class attribute.
      */
-    public String getSsn() { return ssn; }
+    public String getSsn() { return this.ssn; }
 
     /**
      * Retrieves the current value of the lastName class attribute.
      * @return is the current value of the lastName class attribute.
      */
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 }
 

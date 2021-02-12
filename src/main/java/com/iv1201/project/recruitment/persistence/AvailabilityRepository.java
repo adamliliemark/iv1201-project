@@ -12,6 +12,7 @@ import java.util.Optional;
 /**
  * Serves as an interface for handling availability related database calls.
  */
+
 @Repository
 public interface AvailabilityRepository extends CrudRepository<Availability, String> {
 

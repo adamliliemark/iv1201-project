@@ -1,5 +1,10 @@
 package com.iv1201.project.recruitment.persistence;
 
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -7,13 +12,15 @@ import java.util.List;
  * Represents a stored Competence
  */
 @Entity
+@Transactional
 public class Competence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy="competence", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="competence", fetch=FetchType.LAZY, orphanRemoval = true, cascade=CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     private List<CompetenceTranslation> translations;
 
     /**
@@ -42,20 +49,13 @@ public class Competence {
      * @see CompetenceTranslation
      */
     public String getName(String languageCode) {
-        CompetenceTranslation ct = translations.stream()
+        return translations.stream()
                 .filter(c -> c.getLanguage().getLanguageCode().equals(languageCode))
                 .findAny()
-                .orElse(null);
-        return ct != null ? ct.getText() : "MISSING TRANSLATION";
+                .map(c -> c.getText())
+                .orElse("MISSING TRANSLATION");
     }
 
-    /**
-     * Sets the class attribute id to a new value.
-     * @param id is the new value of the class attribute lastName.
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     /**
      * Get default translation (en_US)
@@ -65,6 +65,17 @@ public class Competence {
         return this.getName("en_US");
     }
 
+
+    /**
+     * Sets the class attribute id to a new value.
+     * @param id is the new value of the class attribute lastName.
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+
     /**
      * Retrieves the current value of the id class attribute.
      * @return is the current value of the id class attribute.
@@ -72,4 +83,6 @@ public class Competence {
     public Long getId() {
         return this.id;
     }
+
+
 }

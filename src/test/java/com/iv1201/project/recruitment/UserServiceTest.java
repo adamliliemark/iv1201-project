@@ -1,16 +1,15 @@
 package com.iv1201.project.recruitment;
 
-import com.iv1201.project.recruitment.persistence.AuthorityRepository;
 import com.iv1201.project.recruitment.persistence.User;
 import com.iv1201.project.recruitment.persistence.UserRepository;
 import com.iv1201.project.recruitment.service.UserService;
 import com.iv1201.project.recruitment.service.UserService.Role;
 import com.iv1201.project.recruitment.service.UserServiceError;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest {
     private final String nonexistentUserEmail = "test@nonexistent.com";
     private final String existentUserEmail = "test@existent.com";
@@ -34,8 +34,8 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    @BeforeEach
-    public void init() {
+    @BeforeAll
+    public void beforeAll() {
         User existentUser = new User(existentUserEmail, "testName", "testLastName", "123", encoder().encode("pass"));
         userRepo.save(existentUser);
     }

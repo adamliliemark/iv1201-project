@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
  * Serves as an interface for handling Authority related database calls.
  */
 @Repository
-public interface AuthorityRepository extends CrudRepository<Authority, String> {
-}
+public interface AuthorityRepository extends CrudRepository<Authority, String> { }
