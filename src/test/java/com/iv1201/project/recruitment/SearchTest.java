@@ -1,9 +1,13 @@
 package com.iv1201.project.recruitment;
 
-import com.iv1201.project.recruitment.persistence.*;
-import com.iv1201.project.recruitment.service.SearchService;
-import com.iv1201.project.recruitment.web.AvailabilityForm;
-import com.iv1201.project.recruitment.web.ListForm;
+import com.iv1201.project.recruitment.domain.ApplicationDTO;
+import com.iv1201.project.recruitment.domain.Competence;
+import com.iv1201.project.recruitment.domain.User;
+import com.iv1201.project.recruitment.repository.CompetenceRepository;
+import com.iv1201.project.recruitment.repository.UserRepository;
+import com.iv1201.project.recruitment.application.SearchService;
+import com.iv1201.project.recruitment.presentation.forms.AvailabilityForm;
+import com.iv1201.project.recruitment.presentation.forms.ListForm;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
