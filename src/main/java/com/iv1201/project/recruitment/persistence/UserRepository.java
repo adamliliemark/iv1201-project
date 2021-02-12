@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * An interface for handling <>User</> related database handling.
+ */
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
 
@@ -19,7 +22,13 @@ public interface UserRepository extends CrudRepository<User, String> {
     Optional<User> findByEmail(String email);
 
 
-
+    /**
+     * Retrieves the first and last name of the users matching the parameters entered via the applications list view.
+     * @param firstName is the first name of interest.
+     * @param lastName is the last name of interest.
+     * @param competence is the competence of interest.
+     * @return is a list of type <>ApplicationDTO</> matching the search query made.
+     */
     @Query("SELECT new com.iv1201.project.recruitment.persistence.ApplicationDTO(u.firstName, u.lastName) FROM users u join u.competences c " +
             "WHERE (:firstName is null or u.firstName = :firstName) and " +
             "(:lastName is null or u.lastName = :lastName) and " +

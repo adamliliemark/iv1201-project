@@ -1,6 +1,5 @@
 package com.iv1201.project.recruitment.persistence;
 
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import java.util.List;
  */
 @Entity
 public class Competence {
-    public Competence() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +15,11 @@ public class Competence {
 
     @OneToMany(mappedBy="competence", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
     private List<CompetenceTranslation> translations;
+
+    /**
+     * A class constructor.
+     */
+    public Competence() {}
 
     /**
      * Add a new translation for a specified competence
@@ -46,6 +49,10 @@ public class Competence {
         return ct != null ? ct.getText() : "MISSING TRANSLATION";
     }
 
+    /**
+     * Sets the class attribute id to a new value.
+     * @param id is the new value of the class attribute lastName.
+     */
     public void setId(Long id) {
         this.id = id;
     }
@@ -58,6 +65,10 @@ public class Competence {
         return this.getName("en_US");
     }
 
+    /**
+     * Retrieves the current value of the id class attribute.
+     * @return is the current value of the id class attribute.
+     */
     public Long getId() {
         return this.id;
     }

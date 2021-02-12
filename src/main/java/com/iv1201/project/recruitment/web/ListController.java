@@ -31,7 +31,7 @@ public class ListController {
     private boolean searched;
     private int min = 0;
     private int max = 3;
-    private final int interval = 3;
+    private final int interval = max - min;
 
     @Autowired
     private SearchService searcher;

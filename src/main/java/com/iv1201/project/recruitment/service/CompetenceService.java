@@ -4,10 +4,12 @@ import com.iv1201.project.recruitment.persistence.Competence;
 import com.iv1201.project.recruitment.persistence.CompetenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A service class handling retrieval of competence information from the applications database.
+ */
 @Service
 public class CompetenceService {
     @Autowired

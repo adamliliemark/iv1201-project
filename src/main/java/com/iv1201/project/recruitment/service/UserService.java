@@ -2,7 +2,6 @@ package com.iv1201.project.recruitment.service;
 
 import com.iv1201.project.recruitment.persistence.*;
 import com.iv1201.project.recruitment.service.UserServiceError.ERROR_CODE;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -11,6 +10,9 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * A service class for handling database calls concerning <>User</> entities.
+ */
 @Component
 @Service
 public class UserService {
@@ -111,8 +113,9 @@ public class UserService {
         return true;
     }
 
-
-    //Adds some default users and competences for testing.
+    /**
+     * Adds som default users and competences for testing.
+     */
     @PostConstruct
     public void addDefaultData() {
         //Proxy for "is first run"
