@@ -2,11 +2,14 @@ package com.iv1201.project.recruitment.application;
 
 import com.iv1201.project.recruitment.application.exceptions.UserServiceError;
 import com.iv1201.project.recruitment.domain.*;
-import com.iv1201.project.recruitment.repository.AuthorityRepository;
-import com.iv1201.project.recruitment.repository.CompetenceRepository;
-import com.iv1201.project.recruitment.repository.LanguageRepository;
-import com.iv1201.project.recruitment.repository.UserRepository;
+import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedAvailability;
+import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedCompetenceProfile;
+import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedPerson;
+import com.iv1201.project.recruitment.repository.*;
 import com.iv1201.project.recruitment.application.exceptions.UserServiceError.ERROR_CODE;
+import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedAvailabilityRepository;
+import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedCompetenceProfileRepository;
+import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -23,8 +26,7 @@ import java.util.Optional;
 @Component
 @Service
 public class UserService {
-
-
+    public static final String HARDCODED_RESET_PASSWORD = "new_password";
     /**
      * User role
      * the role of the user determines access levels
@@ -40,6 +42,15 @@ public class UserService {
     private CompetenceRepository competenceRepo;
 
     @Autowired
+    private UnmigratedPersonRepository unmigratedPersonRepo;
+
+    @Autowired
+    private UnmigratedCompetenceProfileRepository unmigratedCompRepo;
+
+    @Autowired
+    private UnmigratedAvailabilityRepository unmigratedAvailabilityRepo;
+
+    @Autowired
     private UserRepository userRepo;
 
     @Autowired
@@ -47,6 +58,9 @@ public class UserService {
 
     @Autowired
     private LanguageRepository languageRepo;
+
+    @Autowired
+    private CompetenceTranslationRepository translationRepo;
 
     /**
      * Adds a new user to the system if valid
@@ -64,14 +78,15 @@ public class UserService {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        if(validateUser(email, firstName, lastName, clearTextPassword, ssn)) {
-            if(userRepo.existsByEmail(email))
-                throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
-            User user = new User(email, firstName, lastName, ssn, encoder.encode(clearTextPassword));
-            Authority userAuth = new Authority(role.toString(), user);
-            userRepo.save(user);
-            authorityRepo.save(userAuth);
-        }
+        validateUser(email, firstName, lastName, clearTextPassword, ssn);
+
+        if(userRepo.existsByEmail(email))
+            throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
+
+        User user = new User(email, firstName, lastName, ssn, encoder.encode(clearTextPassword));
+        Authority userAuth = new Authority(role.toString(), user);
+        userRepo.save(user);
+        authorityRepo.save(userAuth);
     }
 
     /**
@@ -89,9 +104,61 @@ public class UserService {
     }
 
     /**
+     * Restores an incomplete user, identified by an email address.
+     * Calling this method will, if possible move the user and its
+     * associated availabilities and competence profiles to the appropriate
+     * tables.
+     *
+     * This method does not throw if no user is found, since this would leak
+     * data about what users are in the database.
+     * @param email the email of the incomplete user
+     * @throws UserServiceError the first validational error that was encoutnered
+     */
+    @Transactional
+    public void restoreUnmigratedPerson(String email) throws UserServiceError {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Optional<UnmigratedPerson> maybeUp = unmigratedPersonRepo.findByEmail(email);
+        if(!maybeUp.isPresent())
+            return;
+        UnmigratedPerson up = maybeUp.get();
+
+        if(userRepo.existsByEmail(up.getEmail()))
+            throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
+
+        User newUser = new User(up);
+        newUser.setPassword(encoder.encode(HARDCODED_RESET_PASSWORD));
+
+        this.validateUser(newUser, HARDCODED_RESET_PASSWORD);
+
+        Iterable<UnmigratedCompetenceProfile> umComps = unmigratedCompRepo.findAllBypersonId(up.getPersonId());
+
+        //We silently ignore nonexistent competences
+        umComps.forEach(umComp ->
+            translationRepo.findByText(umComp.getCompetenceName())
+                .map(CompetenceTranslation::getCompetence)
+                .ifPresent(c -> {
+                        newUser.addCompetence(c, umComp.getYearsOfExperience());
+                        unmigratedCompRepo.delete(umComp);
+                })
+        );
+
+        Iterable<UnmigratedAvailability> umAvails = unmigratedAvailabilityRepo.findAllBypersonId(up.getPersonId());
+
+        umAvails.forEach(umAvail -> {
+                newUser.addAvailability(umAvail.getFromDate(), umAvail.getToDate());
+                unmigratedAvailabilityRepo.delete(umAvail);
+        });
+
+        User savedUser = userRepo.save(newUser);
+        Role r = up.getRole_id() == 1 ? Role.ROLE_USER : Role.ROLE_ADMIN;
+        authorityRepo.save(new Authority(r.toString(), savedUser));
+        unmigratedPersonRepo.delete(up);
+    }
+
+    /**
      * Gets a user from the data store.
      * This method is transactional because of the greedy
-     *
+     * lookup on linked attributes.
      * @param email the email of the user to get.
      * @return the found user or empty
      */
@@ -134,6 +201,10 @@ public class UserService {
         if (ssn == null)
             throw new UserServiceError(ERROR_CODE.INVALID_SSN);
         return true;
+    }
+
+    public boolean validateUser(User user, String cleartextPass) throws UserServiceError {
+        return this.validateUser(user.getEmail(), user.getFirstName(), user.getLastName(), cleartextPass, user.getSsn());
     }
 
     /**
