@@ -1,10 +1,10 @@
 package com.iv1201.project.recruitment;
 
-import com.iv1201.project.recruitment.persistence.User;
-import com.iv1201.project.recruitment.persistence.UserRepository;
-import com.iv1201.project.recruitment.service.UserService;
-import com.iv1201.project.recruitment.service.UserService.Role;
-import com.iv1201.project.recruitment.service.UserServiceError;
+import com.iv1201.project.recruitment.domain.User;
+import com.iv1201.project.recruitment.repository.UserRepository;
+import com.iv1201.project.recruitment.application.UserService;
+import com.iv1201.project.recruitment.application.UserService.Role;
+import com.iv1201.project.recruitment.application.exceptions.UserServiceError;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

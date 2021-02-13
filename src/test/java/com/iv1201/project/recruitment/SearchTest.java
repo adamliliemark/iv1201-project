@@ -1,20 +1,21 @@
 package com.iv1201.project.recruitment;
 
-import com.iv1201.project.recruitment.persistence.*;
-import com.iv1201.project.recruitment.service.Search;
-import com.iv1201.project.recruitment.service.UserService;
-import com.iv1201.project.recruitment.web.AvailabilityForm;
-import com.iv1201.project.recruitment.web.ListForm;
+import com.iv1201.project.recruitment.domain.ApplicationDTO;
+import com.iv1201.project.recruitment.domain.Competence;
+import com.iv1201.project.recruitment.domain.User;
+import com.iv1201.project.recruitment.repository.CompetenceRepository;
+import com.iv1201.project.recruitment.repository.UserRepository;
+import com.iv1201.project.recruitment.application.SearchService;
+import com.iv1201.project.recruitment.presentation.forms.AvailabilityForm;
+import com.iv1201.project.recruitment.presentation.forms.ListForm;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -32,7 +33,7 @@ public class SearchTest {
     private UserRepository userRepo;
 
     @Autowired
-    private Search search;
+    private SearchService search;
 
     @Autowired
     private CompetenceRepository competenceRepo;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="listForm" th:fragment="listForm">
+    <div class="title" th:text="#{list.title}"></div>
+    <p>
+    <form th:action="@{/list/applications}" name="listForm" id="listForm" action="#" class="form" method="post" th:object="${listFormObject}">
+        <p>
+        <div th:text="#{list.period}">Period</div>
+        <p>
+            <label for="from" th:text="#{list.from}"></label>
+            <input type="date" name="from" id="from" th:field="*{availabilityForm.from}">
+        <p>
+            <label for="to" th:text="#{list.to}"></label>
+            <input type="date" name="to" id="to" th:field="*{availabilityForm.to}">
+        <p>
+        <div th:text="#{list.appDate}"></div>
+        <input type="date" name="date" id="date" th:field="*{date}">
+        <p>
+        <div th:text="#{list.competence}"></div>
+        <select name="competence" id="competence" th:field="*{competence}">
+            <option selected value="" th:text="#{list.select}"> -- select --</option>
+            <option th:each="e : ${expertise}" th:value="${e.name}" th:text="${e.name}"></option>
+        </select>
+        <p>
+        <div th:text="#{list.firstName}"></div>
+        <input name="firstname" id="firstname" type="text" th:field="*{firstName}">
+        <div th:text="#{list.lastName}"></div>
+        <input name="lastname" id="lastname" type="text" th:field="*{lastName}">
+        <p>
+            <input id="listbutton" type="submit" th:value="#{list.button}">
+    </form>
+</div>
+</body>
+</html>
