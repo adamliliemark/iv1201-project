@@ -37,9 +37,9 @@ public interface UserRepository extends CrudRepository<User, String> {
      * @param competence is the competence of interest.
      * @return is a list of type <>ApplicationDTO</> matching the search query made.
      */
-    @Query("SELECT new com.iv1201.project.recruitment.domain.ApplicationDTO(u.firstName, u.lastName) FROM users u join u.competences c " +
-            "WHERE (:firstName is null or u.firstName = :firstName) and " +
-            "(:lastName is null or u.lastName = :lastName) and " +
+    @Query("SELECT distinct new com.iv1201.project.recruitment.domain.ApplicationDTO(u.firstName, u.lastName) FROM users u join u.competences c " +
+            "WHERE (:firstName is null or lower(u.firstName) like lower(concat('%', :firstName, '%'))) and " +
+            "(:lastName is null or lower(u.lastName) like lower(concat('%', :lastName, '%'))) and " +
             "(:competence < 1 or c.competence.id = :competence)")
     List<ApplicationDTO> getUserApplications(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("competence") int competence);
 }

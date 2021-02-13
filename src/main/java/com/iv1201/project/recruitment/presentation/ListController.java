@@ -32,9 +32,9 @@ public class ListController {
     private List<ApplicationDTO> applications;
     private ListForm listForm;
     private boolean searched;
-    private int min = 0;
-    private int max = 3;
-    private final int interval = max - min;
+    private final int interval = 3;
+    private int min;
+    private int max;
 
     @Autowired
     private SearchService searcher;
@@ -81,6 +81,7 @@ public class ListController {
                     applications = searcher.getApplications(listForm, competences);
                     model.addAttribute("applicationsObject", applications);
                     searched = true;
+                    resetMinMax();
                 } catch (SearchServiceError e) {
                     e.printStackTrace();
                 }
@@ -136,5 +137,10 @@ public class ListController {
         model.addAttribute("searched", searched);
         model.addAttribute("applicationsObject",applications);
         model.addAttribute("expertise", competences);
+    }
+
+    private void resetMinMax(){
+        this.min = 0;
+        this.max = min + interval;
     }
 }
