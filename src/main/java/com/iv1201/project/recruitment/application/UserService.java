@@ -80,7 +80,7 @@ public class UserService {
 
         validateUser(email, firstName, lastName, clearTextPassword, ssn);
 
-        if(userRepo.existsByEmail(email))
+        if(userRepo.existsByEmailIgnoreCase(email))
             throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
 
         User user = new User(email, firstName, lastName, ssn, encoder.encode(clearTextPassword));
@@ -117,12 +117,12 @@ public class UserService {
     @Transactional
     public void restoreUnmigratedPerson(String email) throws UserServiceError {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        Optional<UnmigratedPerson> maybeUp = unmigratedPersonRepo.findByEmail(email);
+        Optional<UnmigratedPerson> maybeUp = unmigratedPersonRepo.findByEmailIgnoreCase(email);
         if(!maybeUp.isPresent())
             return;
         UnmigratedPerson up = maybeUp.get();
 
-        if(userRepo.existsByEmail(up.getEmail()))
+        if(userRepo.existsByEmailIgnoreCase(up.getEmail()))
             throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
 
         User newUser = new User(up);
@@ -164,7 +164,7 @@ public class UserService {
      */
     @Transactional
     public Optional<User> findByEmail(String email) {
-        return userRepo.findByEmail(email);
+        return userRepo.findByEmailIgnoreCase(email);
     }
 
 
@@ -174,7 +174,7 @@ public class UserService {
      * @return
      */
     public boolean existsByEmail(String email) {
-        return userRepo.existsByEmail(email);
+        return userRepo.existsByEmailIgnoreCase(email);
     }
 
 
@@ -216,7 +216,7 @@ public class UserService {
         if(userRepo.count() != 0)
             return;
         try {
-            if (!userRepo.existsByEmail("testuser@example.com")) {
+            if (!userRepo.existsByEmailIgnoreCase("testuser@example.com")) {
                 System.err.println("Saving test user!");
                 addNewUser("testuser@example.com",
                         "userFirstName",
@@ -224,13 +224,13 @@ public class UserService {
                         "pass",
                         Role.ROLE_USER,
                         "19880101");
-                Optional<User> userMaybe = userRepo.findByEmail("testuser@example.com");
+                Optional<User> userMaybe = userRepo.findByEmailIgnoreCase("testuser@example.com");
                 User user = userMaybe.get();
                 user.addAvailability(LocalDate.of(2022, 2, 2), LocalDate.of(2028, 2, 2));
                 userRepo.save(user);
             }
 
-            if (!userRepo.existsByEmail("testadmin@example.com")) {
+            if (!userRepo.existsByEmailIgnoreCase("testadmin@example.com")) {
                 System.err.println("Saving test admin!");
                 addNewUser("testadmin@example.com",
                         "adminFirstName",

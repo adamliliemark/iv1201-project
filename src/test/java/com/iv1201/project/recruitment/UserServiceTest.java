@@ -81,11 +81,11 @@ public class UserServiceTest {
 
         UnmigratedPerson up2 = new UnmigratedPerson(1L,1L, "username2", existentUnmigratedPersonNoCompetenceEmail, "firstname",
                 "lastname", null, "1235");
-        up2 = umPersonRepo.save(up2);
+        umPersonRepo.save(up2);
 
         UnmigratedPerson up3 = new UnmigratedPerson(2L,1L, "username3", conflictingUnmigratedPersonEmail, "firstname",
                 "lastname", null,"1236");
-        up3 = umPersonRepo.save(up3);
+        umPersonRepo.save(up3);
     }
 
     @Test
@@ -142,7 +142,7 @@ public class UserServiceTest {
     void migrate_conflicting_unmigrated_person() {
         UserServiceError e = assertThrows(UserServiceError.class, () ->userService.restoreUnmigratedPerson(conflictingUnmigratedPersonEmail));
         assertThat(e.errorCode).isEqualTo(UserServiceError.ERROR_CODE.CONFLICTING_USER);
-        assertThat(umPersonRepo.findByEmail(conflictingUnmigratedPersonEmail)).isPresent();
+        assertThat(umPersonRepo.findByEmailIgnoreCase(conflictingUnmigratedPersonEmail)).isPresent();
     }
 
     @Test
@@ -155,7 +155,7 @@ public class UserServiceTest {
         assertThat(createdUser.getAvailabilityList().size()).isEqualTo(1);
         assertThat(createdUser.getAvailabilityList().stream().findFirst().get().getFromDate()).isEqualTo(LocalDate.of(2020, 1,1));
         assertThat(createdUser.getAvailabilityList().stream().findFirst().get().getToDate()).isEqualTo(LocalDate.of(2022, 1,1));
-        assertThat(umPersonRepo.findByEmail(existentUnmigratedPersonEmail)).isEmpty();
+        assertThat(umPersonRepo.findByEmailIgnoreCase(existentUnmigratedPersonEmail)).isEmpty();
         assertThat(umavailabilityRepo.count()).isEqualTo(0);
         assertThat(umCompetenceProfileRepo.count()).isEqualTo(0);
     }
@@ -167,6 +167,6 @@ public class UserServiceTest {
         User createdUser = userService.findByEmail(existentUnmigratedPersonNoCompetenceEmail).get();
         assertThat(createdUser.getCompetences().size()).isEqualTo(0);
         assertThat(createdUser.getAvailabilityList().size()).isEqualTo(0);
-        assertThat(umPersonRepo.findByEmail(existentUnmigratedPersonNoCompetenceEmail)).isEmpty();
+        assertThat(umPersonRepo.findByEmailIgnoreCase(existentUnmigratedPersonNoCompetenceEmail)).isEmpty();
     }
 }

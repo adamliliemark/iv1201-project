@@ -21,14 +21,14 @@ public interface UserRepository extends CrudRepository<User, String> {
      * @param email to find by
      * @return User with matching email
      */
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailIgnoreCase(String email);
 
     /**
      * Checks whether a user by this email exists
      * @param email to find by
      * @return User with matching email
      */
-    boolean existsByEmail(String email);
+    boolean existsByEmailIgnoreCase(String email);
 
     /**
      * Retrieves the first and last name of the users matching the parameters entered via the applications list view.
