@@ -32,7 +32,7 @@ public class ListController {
     private List<ApplicationDTO> applications;
     private ListForm listForm;
     private boolean searched;
-    private final int interval = 3;
+    private static final int interval = 3;
     private int min;
     private int max;
 
