@@ -56,9 +56,6 @@ public class RestoreController {
                 model.addAttribute("success", true);
             } catch (UserServiceError e) {
                 e.printStackTrace();
-                //TODO: add the error message from the bindingresult to the model?
-                //How do we do this.
-                //TODO: We also want to map UserService errors to error messages? for example UserServiceError.CONFLICING_EMAIL shouöd map to a specific error message.
                 switch(e.errorCode) {
                     case CONFLICTING_USER:
                         model.addAttribute("error", "restore.conflict");
