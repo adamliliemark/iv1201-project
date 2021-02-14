@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apply for a Position</title>
+</head>
+<body>
+
+<div th:fragment="restoreForm">
+    <div th:if="${success}" class="alert alert-success" th:text="#{restore.success}"></div>
+    <!--- Why i can not just write if=${error} is beyond me. Apparantly only the literal "true" evals to true in th smh. --->
+    <div th:if="${error != null}" class="alert alert-success" th:text="#{${error}}"></div>
+    <form th:action="@{/restore}" name="restoreForm" action="#" method="post" th:object="${restoreFormObject}" id="restoreForm">
+        <input name="email" type="text" th:field="*{email}">
+        <input type="submit" th:value="#{submit}">
+    </form>
+</div>
+</body>
+</html>

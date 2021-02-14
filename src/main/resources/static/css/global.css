@@ -86,3 +86,10 @@ header {
     font-size: large;
     padding: 1em;
 }
+
+.centered-content {
+    display: flex;
+    justify-content: space-around;
+    min-width: 200px;
+    padding: 1em;
+}
