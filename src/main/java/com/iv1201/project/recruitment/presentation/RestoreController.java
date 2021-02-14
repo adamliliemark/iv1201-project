@@ -32,7 +32,7 @@ public class RestoreController {
      * @return the restore view
      */
     @GetMapping("/restore")
-    public String restore(Locale locale, @ModelAttribute("restoreFormObject") RestoreForm restoreFormObject, Model model) {
+    public String restore(@ModelAttribute("restoreFormObject") RestoreForm restoreForm) {
         return "restoreView";
     }
 
@@ -41,20 +41,20 @@ public class RestoreController {
      * it was migrated but incomplete (missing password).
      * In the finished product this should call
      * an emailService, but for now we use a hardcoded reset password.
-     * @param restoreFormObject the user submitted data
+     * @param restoreForm the user submitted data
      * @param bindingResult the form result
      * @param model the model
      * @return restoreSuccessView on successful restore, else restoreView with an error message
      */
     @PostMapping("/restore")
-    public String restorePost(@Valid @ModelAttribute("restoreFormObject") RestoreForm restoreFormObject, BindingResult bindingResult, Model model) {
+    public String restorePost(@Valid @ModelAttribute("restoreFormObject") RestoreForm restoreForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             bindingResult
                 .getFieldErrors()
                 .forEach(fe -> model.addAttribute("error", fe.getDefaultMessage()));
         } else {
             try {
-                userService.restoreUnmigratedPerson(restoreFormObject.getEmail());
+                userService.restoreUnmigratedPerson(restoreForm.getEmail());
                 model.addAttribute("success", true);
             } catch (UserServiceError e) {
                 switch(e.errorCode) {
