@@ -37,7 +37,9 @@ public class RestoreController {
     }
 
     /**
-     * Endpoint for requesting a password reset. In the finished product this should call
+     * Endpoint for requesting an account restore. An account can be restored if
+     * it was migrated but incomplete (missing password).
+     * In the finished product this should call
      * an emailService, but for now we use a hardcoded reset password.
      * @param restoreFormObject the user submitted data
      * @param bindingResult the form result
