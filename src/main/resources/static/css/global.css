@@ -93,3 +93,7 @@ header {
     min-width: 200px;
     padding: 1em;
 }
+
+.margin-bottom-small {
+    margin-bottom: 1em;
+}

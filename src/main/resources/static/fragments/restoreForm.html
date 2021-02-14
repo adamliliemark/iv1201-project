@@ -9,10 +9,15 @@
 <div th:fragment="restoreForm">
     <div th:if="${success}" class="alert alert-success" th:text="#{restore.success}"></div>
     <div th:if="${error != null}" class="alert alert-error" th:text="#{${error}}"></div>
-    <form th:action="@{/restore}" name="restoreForm" action="#" method="post" th:object="${restoreFormObject}" id="restoreForm">
+    <form class="margin-bottom-small" th:action="@{/restore}" name="restoreForm" action="#" method="post" th:object="${restoreFormObject}" id="restoreForm">
         <input name="email" type="email" required th:field="*{email}">
         <input type="submit" th:value="#{submit}">
     </form>
+    <div>
+        <a href="/login" class="padding-small">
+            <button th:text="#{restore.backToLoginBtn}"></button>
+        </a>
+    </div>
 </div>
 </body>
 </html>

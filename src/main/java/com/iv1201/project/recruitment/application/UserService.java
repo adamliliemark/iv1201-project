@@ -75,7 +75,6 @@ public class UserService {
      */
     @Transactional
     public void addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
-
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         validateUser(email, firstName, lastName, clearTextPassword, ssn);
@@ -150,7 +149,7 @@ public class UserService {
         });
 
         User savedUser = userRepo.save(newUser);
-        Role r = up.getRole_id() == 1 ? Role.ROLE_USER : Role.ROLE_ADMIN;
+        Role r = up.getRole_id() == 1 ? Role.ROLE_ADMIN : Role.ROLE_USER;
         authorityRepo.save(new Authority(r.toString(), savedUser));
         unmigratedPersonRepo.delete(up);
     }
@@ -207,70 +206,15 @@ public class UserService {
         return this.validateUser(user.getEmail(), user.getFirstName(), user.getLastName(), cleartextPass, user.getSsn());
     }
 
-    /**
-     * Adds som default users and competences for testing.
-     */
     @PostConstruct
-    public void addDefaultData() {
-        //Proxy for "is first run"
-        if(userRepo.count() != 0)
-            return;
-        try {
-            if (!userRepo.existsByEmailIgnoreCase("testuser@example.com")) {
-                System.err.println("Saving test user!");
-                addNewUser("testuser@example.com",
-                        "userFirstName",
-                        "userLastName",
-                        "pass",
-                        Role.ROLE_USER,
-                        "19880101");
-                Optional<User> userMaybe = userRepo.findByEmailIgnoreCase("testuser@example.com");
-                User user = userMaybe.get();
-                user.addAvailability(LocalDate.of(2022, 2, 2), LocalDate.of(2028, 2, 2));
-                userRepo.save(user);
-            }
-
-            if (!userRepo.existsByEmailIgnoreCase("testadmin@example.com")) {
-                System.err.println("Saving test admin!");
-                addNewUser("testadmin@example.com",
-                        "adminFirstName",
-                        "adminLastName",
-                        "pass",
-                        Role.ROLE_ADMIN,
-                        "19890103");
-            }
-
-        } catch(UserServiceError e) {
-            System.err.println("Error creating test users " + e.errorCode);
-        }
-
-        addDefaultCompetences();
-    }
-
-    /**
-     * Adds default competences for testing
-     * @exclude
-     */
-    private void addDefaultCompetences() {
-        Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
-        Language english = languageRepo.save(new Language("en_US", "english"));
-        Competence grilling = competenceRepo.save(new Competence());
-        Competence carousel = competenceRepo.save(new Competence());
-        carousel = competenceRepo.findById(carousel.getId()).get();
-        grilling = competenceRepo.findById(grilling.getId()).get();
-        grilling.addTranslation(swedish, "Korvgrillning");
-        grilling.addTranslation(english, "Grilling sausage");
-        carousel.addTranslation(swedish, "Karuselldrift");
-        carousel.addTranslation(english, "Carousel operation");
-
-        //Save them
-        Competence competences[] = {
-                grilling,
-                carousel
-        };
-
-        for (Competence c : competences) {
-            competenceRepo.save(c);
-        }
+    private void addDefaultData() {
+        DefaultDataUtility.addDefaultData(
+                this,
+                userRepo,
+                languageRepo,
+                competenceRepo,
+                unmigratedPersonRepo,
+                unmigratedCompRepo,
+                unmigratedAvailabilityRepo);
     }
 }

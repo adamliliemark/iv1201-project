@@ -12,4 +12,5 @@ import java.util.Optional;
 @Repository
 public interface UnmigratedPersonRepository extends CrudRepository<UnmigratedPerson, String> {
     Optional<UnmigratedPerson> findByEmailIgnoreCase(String email);
+    boolean existsByEmailIgnoreCase(String email);
 }

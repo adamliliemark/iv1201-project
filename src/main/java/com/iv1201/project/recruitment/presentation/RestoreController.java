@@ -55,7 +55,6 @@ public class RestoreController {
                 userService.restoreUnmigratedPerson(restoreFormObject.getEmail());
                 model.addAttribute("success", true);
             } catch (UserServiceError e) {
-                e.printStackTrace();
                 switch(e.errorCode) {
                     case CONFLICTING_USER:
                         model.addAttribute("error", "restore.conflict");
