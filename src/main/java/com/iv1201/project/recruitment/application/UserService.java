@@ -115,9 +115,6 @@ public class UserService {
      */
     @Transactional
     public void restoreUnmigratedPerson(String email) throws UserServiceError {
-        //Spotbugs should find this bug.
-        User u = userRepo.findByEmailIgnoreCase("testuser@example.com").get();
-
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Optional<UnmigratedPerson> maybeUp = unmigratedPersonRepo.findByEmailIgnoreCase(email);
         if(!maybeUp.isPresent())
