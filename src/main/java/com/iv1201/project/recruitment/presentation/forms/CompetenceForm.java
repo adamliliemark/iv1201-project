@@ -8,11 +8,11 @@ import javax.validation.constraints.PositiveOrZero;
  */
 public class CompetenceForm {
 
-    @NotNull
+    @NotNull(message="form.competence.name.null")
     private String name;
 
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message="form.competence.years.null")
+    @PositiveOrZero(message="form.competence.years.negative")
     private Double years;
 
     /**

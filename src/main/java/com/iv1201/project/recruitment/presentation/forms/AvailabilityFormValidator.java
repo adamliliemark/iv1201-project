@@ -36,12 +36,7 @@ public class AvailabilityFormValidator implements ConstraintValidator<Availabili
      * @return true if form is valid, false otherwise
      */
     public boolean isValid(AvailabilityForm availabilityForm, ConstraintValidatorContext context) {
-        if(availabilityForm.getFrom() == null || availabilityForm.getTo() == null || availabilityForm.getUser() == null)
-            return false;
-        if(availabilityForm.getTo().isBefore(availabilityForm.getFrom()))
-            return false;
-        if(availabilityRepository.findByUserAndFromDateAndToDate(availabilityForm.getUser(), availabilityForm.getFrom(), availabilityForm.getTo()).isPresent())
-            return false;
-        return true;
+        assert(availabilityForm.getFrom() != null && availabilityForm.getTo() != null);
+        return !availabilityForm.getTo().isBefore(availabilityForm.getFrom());
     }
 }

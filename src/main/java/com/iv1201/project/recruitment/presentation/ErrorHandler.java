@@ -16,14 +16,30 @@ public class ErrorHandler implements ErrorController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(IllegalArgumentException exception, Model model) {
         String exc = exception.getMessage().toUpperCase().split("\\.")[0];
-        switch (exc) {
-            case "FORM":
-                model.addAttribute("error", exception.getMessage());
-                break;
-            case "GENERIC":
-                model.addAttribute("error", "generic");
-                break;
+        if ("FORM".equals(exc)) {
+            model.addAttribute("error", exception.getMessage());
+        } else {
+            model.addAttribute("error", "generic");
         }
+        return "error";
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleException(RuntimeException exception, Model model) {
+        String exc = exception.getMessage().toUpperCase().split("\\.")[0];
+        if("FORM".equals(exc)) {
+            model.addAttribute("error", exception.getMessage());
+        } else {
+            model.addAttribute("error", "generic");
+        }
+        return "error";
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleException(Exception exception, Model model) {
+        model.addAttribute("error", "generic");
         return "error";
     }
 

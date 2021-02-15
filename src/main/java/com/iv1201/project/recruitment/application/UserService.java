@@ -62,6 +62,9 @@ public class UserService {
     @Autowired
     private CompetenceTranslationRepository translationRepo;
 
+    @Autowired
+    private AvailabilityRepository availabilityRepository;
+
     /**
      * Adds a new user to the system if valid
      * @param email a unique valid email
@@ -100,6 +103,15 @@ public class UserService {
     @Transactional
     public User saveUser(User user) {
         return userRepo.save(user);
+    }
+
+    @Transactional
+    public void saveAvailabilityToUser(User user, LocalDate from, LocalDate to) {
+        if(!availabilityRepository.findByUserAndFromDateAndToDate(user, from, to).isPresent()) {
+            user.addAvailability(from, to);
+        } else {
+            throw new IllegalArgumentException("form.duplicateDates");
+        }
     }
 
     /**
