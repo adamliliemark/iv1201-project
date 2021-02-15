@@ -3,9 +3,13 @@ package com.iv1201.project.recruitment.domain;
 import com.iv1201.project.recruitment.domain.Availability;
 import com.iv1201.project.recruitment.domain.Competence;
 import com.iv1201.project.recruitment.domain.CompetenceProfile;
+import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedPerson;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -42,7 +46,7 @@ public class User {
     Locale locale;
 
     @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-    private List<CompetenceProfile> competences;
+    private Set<CompetenceProfile> competences;
 
 
     protected User() {}
@@ -63,6 +67,12 @@ public class User {
         this.ssn = ssn;
         this.password = password;
         this.enabled = true;
+        this.availabilityList = new HashSet<>();
+        this.competences = new HashSet<>();
+    }
+
+    public User(UnmigratedPerson up) {
+        this(up.getEmail(), up.getName(), up.getSurname(), up.getSsn(), up.getPassword());
     }
 
 
@@ -131,6 +141,14 @@ public class User {
     }
 
     /**
+     * Sets the password hash for the user
+     * @param password the new hashed password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
      * Retrieves the current value of the availabilityList class attribute.
      * @return is the current value of the availabilityList class attribute.
      */
@@ -140,7 +158,7 @@ public class User {
      * Retrieves the current value of the competences class attribute.
      * @return is the current value of the competences class attribute.
      */
-    public List<CompetenceProfile> getCompetences() {
+    public Set<CompetenceProfile> getCompetences() {
         return this.competences;
     }
 

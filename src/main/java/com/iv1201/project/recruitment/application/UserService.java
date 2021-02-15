@@ -2,11 +2,14 @@ package com.iv1201.project.recruitment.application;
 
 import com.iv1201.project.recruitment.application.exceptions.UserServiceError;
 import com.iv1201.project.recruitment.domain.*;
-import com.iv1201.project.recruitment.repository.AuthorityRepository;
-import com.iv1201.project.recruitment.repository.CompetenceRepository;
-import com.iv1201.project.recruitment.repository.LanguageRepository;
-import com.iv1201.project.recruitment.repository.UserRepository;
+import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedAvailability;
+import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedCompetenceProfile;
+import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedPerson;
+import com.iv1201.project.recruitment.repository.*;
 import com.iv1201.project.recruitment.application.exceptions.UserServiceError.ERROR_CODE;
+import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedAvailabilityRepository;
+import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedCompetenceProfileRepository;
+import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -23,8 +26,7 @@ import java.util.Optional;
 @Component
 @Service
 public class UserService {
-
-
+    public static final String HARDCODED_RESET_PASSWORD = "new_password";
     /**
      * User role
      * the role of the user determines access levels
@@ -40,6 +42,15 @@ public class UserService {
     private CompetenceRepository competenceRepo;
 
     @Autowired
+    private UnmigratedPersonRepository unmigratedPersonRepo;
+
+    @Autowired
+    private UnmigratedCompetenceProfileRepository unmigratedCompRepo;
+
+    @Autowired
+    private UnmigratedAvailabilityRepository unmigratedAvailabilityRepo;
+
+    @Autowired
     private UserRepository userRepo;
 
     @Autowired
@@ -47,6 +58,9 @@ public class UserService {
 
     @Autowired
     private LanguageRepository languageRepo;
+
+    @Autowired
+    private CompetenceTranslationRepository translationRepo;
 
     /**
      * Adds a new user to the system if valid
@@ -61,17 +75,17 @@ public class UserService {
      */
     @Transactional
     public void addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
-
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        if(validateUser(email, firstName, lastName, clearTextPassword, ssn)) {
-            if(userRepo.existsByEmail(email))
-                throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
-            User user = new User(email, firstName, lastName, ssn, encoder.encode(clearTextPassword));
-            Authority userAuth = new Authority(role.toString(), user);
-            userRepo.save(user);
-            authorityRepo.save(userAuth);
-        }
+        validateUser(email, firstName, lastName, clearTextPassword, ssn);
+
+        if(userRepo.existsByEmailIgnoreCase(email))
+            throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
+
+        User user = new User(email, firstName, lastName, ssn, encoder.encode(clearTextPassword));
+        Authority userAuth = new Authority(role.toString(), user);
+        userRepo.save(user);
+        authorityRepo.save(userAuth);
     }
 
     /**
@@ -89,15 +103,67 @@ public class UserService {
     }
 
     /**
+     * Restores an incomplete user, identified by an email address.
+     * Calling this method will, if possible move the user and its
+     * associated availabilities and competence profiles to the appropriate
+     * tables.
+     *
+     * This method does not throw if no user is found, since this would leak
+     * data about what users are in the database.
+     * @param email the email of the incomplete user
+     * @throws UserServiceError the first validational error that was encoutnered
+     */
+    @Transactional
+    public void restoreUnmigratedPerson(String email) throws UserServiceError {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Optional<UnmigratedPerson> maybeUp = unmigratedPersonRepo.findByEmailIgnoreCase(email);
+        if(!maybeUp.isPresent())
+            return;
+        UnmigratedPerson up = maybeUp.get();
+
+        if(userRepo.existsByEmailIgnoreCase(up.getEmail()))
+            throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
+
+        User newUser = new User(up);
+        newUser.setPassword(encoder.encode(HARDCODED_RESET_PASSWORD));
+
+        this.validateUser(newUser, HARDCODED_RESET_PASSWORD);
+
+        Iterable<UnmigratedCompetenceProfile> umComps = unmigratedCompRepo.findAllBypersonId(up.getPersonId());
+
+        //We silently ignore nonexistent competences
+        umComps.forEach(umComp ->
+            translationRepo.findByText(umComp.getCompetenceName())
+                .map(CompetenceTranslation::getCompetence)
+                .ifPresent(c -> {
+                        newUser.addCompetence(c, umComp.getYearsOfExperience());
+                        unmigratedCompRepo.delete(umComp);
+                })
+        );
+
+        Iterable<UnmigratedAvailability> umAvails = unmigratedAvailabilityRepo.findAllBypersonId(up.getPersonId());
+
+        umAvails.forEach(umAvail -> {
+                newUser.addAvailability(umAvail.getFromDate(), umAvail.getToDate());
+                unmigratedAvailabilityRepo.delete(umAvail);
+        });
+
+        User savedUser = userRepo.save(newUser);
+        Role r = up.getRole_id() == 1 ? Role.ROLE_ADMIN : Role.ROLE_USER;
+        authorityRepo.save(new Authority(r.toString(), savedUser));
+        unmigratedPersonRepo.delete(up);
+    }
+
+    /**
      * Gets a user from the data store.
      * This method is transactional because of the greedy
-     *
+     * lookup on linked attributes.
      * @param email the email of the user to get.
      * @return the found user or empty
      */
     @Transactional
     public Optional<User> findByEmail(String email) {
-        return userRepo.findByEmail(email);
+        return userRepo.findByEmailIgnoreCase(email);
     }
 
 
@@ -107,7 +173,7 @@ public class UserService {
      * @return
      */
     public boolean existsByEmail(String email) {
-        return userRepo.existsByEmail(email);
+        return userRepo.existsByEmailIgnoreCase(email);
     }
 
 
@@ -136,70 +202,19 @@ public class UserService {
         return true;
     }
 
-    /**
-     * Adds som default users and competences for testing.
-     */
-    @PostConstruct
-    public void addDefaultData() {
-        //Proxy for "is first run"
-        if(userRepo.count() != 0)
-            return;
-        try {
-            if (!userRepo.existsByEmail("testuser@example.com")) {
-                System.err.println("Saving test user!");
-                addNewUser("testuser@example.com",
-                        "userFirstName",
-                        "userLastName",
-                        "pass",
-                        Role.ROLE_USER,
-                        "19880101");
-                Optional<User> userMaybe = userRepo.findByEmail("testuser@example.com");
-                User user = userMaybe.get();
-                user.addAvailability(LocalDate.of(2022, 2, 2), LocalDate.of(2028, 2, 2));
-                userRepo.save(user);
-            }
-
-            if (!userRepo.existsByEmail("testadmin@example.com")) {
-                System.err.println("Saving test admin!");
-                addNewUser("testadmin@example.com",
-                        "adminFirstName",
-                        "adminLastName",
-                        "pass",
-                        Role.ROLE_ADMIN,
-                        "19890103");
-            }
-
-        } catch(UserServiceError e) {
-            System.err.println("Error creating test users " + e.errorCode);
-        }
-
-        addDefaultCompetences();
+    public boolean validateUser(User user, String cleartextPass) throws UserServiceError {
+        return this.validateUser(user.getEmail(), user.getFirstName(), user.getLastName(), cleartextPass, user.getSsn());
     }
 
-    /**
-     * Adds default competences for testing
-     * @exclude
-     */
-    private void addDefaultCompetences() {
-        Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
-        Language english = languageRepo.save(new Language("en_US", "english"));
-        Competence grilling = competenceRepo.save(new Competence());
-        Competence carousel = competenceRepo.save(new Competence());
-        carousel = competenceRepo.findById(carousel.getId()).get();
-        grilling = competenceRepo.findById(grilling.getId()).get();
-        grilling.addTranslation(swedish, "Korvgrillning");
-        grilling.addTranslation(english, "Grilling sausage");
-        carousel.addTranslation(swedish, "Karuselldrift");
-        carousel.addTranslation(english, "Carousel operation");
-
-        //Save them
-        Competence competences[] = {
-                grilling,
-                carousel
-        };
-
-        for (Competence c : competences) {
-            competenceRepo.save(c);
-        }
+    @PostConstruct
+    private void addDefaultData() {
+        DefaultDataUtility.addDefaultData(
+                this,
+                userRepo,
+                languageRepo,
+                competenceRepo,
+                unmigratedPersonRepo,
+                unmigratedCompRepo,
+                unmigratedAvailabilityRepo);
     }
 }

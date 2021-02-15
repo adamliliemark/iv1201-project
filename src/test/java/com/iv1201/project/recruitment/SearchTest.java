@@ -49,8 +49,8 @@ public class SearchTest {
         userRepo.save(user1);
         userRepo.save(user2);
 
-        user1 = userRepo.findByEmail(user1Email).get();
-        user2 = userRepo.findByEmail(user2Email).get();
+        user1 = userRepo.findByEmailIgnoreCase(user1Email).get();
+        user2 = userRepo.findByEmailIgnoreCase(user2Email).get();
 
         user1.addCompetence(competences.get(0), 1.0);
         user1.addAvailability(
