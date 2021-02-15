@@ -21,7 +21,7 @@ jobs:
       with:
         java-version: 1.8
     - name: SpotBugs
-      run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B spotbugs:check
+      run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B compile spotbugs:check
     - name: Maven Package
       run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B package --file pom.xml
     - name: Print test results
