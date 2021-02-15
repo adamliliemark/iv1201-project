@@ -15,6 +15,13 @@ import java.time.LocalDate;
 @Entity
 public class UnmigratedAvailability {
 
+    public UnmigratedAvailability(Long availabilityId, Long personId, LocalDate fromDate, LocalDate toDate) {
+        this.availabilityId = availabilityId;
+        this.personId = personId;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+    }
+
     protected UnmigratedAvailability() {}
 
     @Id
@@ -32,5 +39,16 @@ public class UnmigratedAvailability {
     @Column(columnDefinition = "DATE", nullable = false, unique = false)
     private LocalDate toDate;
 
+    public Long getPersonId() {
+        return personId;
+    }
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public LocalDate getToDate() {
+        return toDate;
+    }
 }
 

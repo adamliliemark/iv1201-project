@@ -11,6 +11,13 @@ import javax.persistence.*;
 public class UnmigratedCompetenceProfile {
     protected UnmigratedCompetenceProfile(){};
 
+    public UnmigratedCompetenceProfile(Long competenceProfileId, double yearsOfExperience, String competenceName, Long personId) {
+        this.competenceProfileId = competenceProfileId;
+        this.yearsOfExperience = yearsOfExperience;
+        this.competenceName = competenceName;
+        this.personId = personId;
+    }
+
     @Id
     private Long competenceProfileId;
 
@@ -20,7 +27,22 @@ public class UnmigratedCompetenceProfile {
     @Column
     private String competenceName;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private UnmigratedPerson personId;
+    @Column
+    private Long personId;
+
+    public Long getCompetenceProfileId() {
+        return competenceProfileId;
+    }
+
+    public double getYearsOfExperience() {
+        return yearsOfExperience;
+    }
+
+    public String getCompetenceName() {
+        return competenceName;
+    }
+
+    public Long getPersonId() {
+        return personId;
+    }
 }
