@@ -1,7 +1,5 @@
 package com.iv1201.project.recruitment.presentation.forms;
 
-import com.iv1201.project.recruitment.presentation.forms.AvailabilityForm;
-import com.iv1201.project.recruitment.presentation.forms.AvailabilityFormConstraint;
 import com.iv1201.project.recruitment.repository.AvailabilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

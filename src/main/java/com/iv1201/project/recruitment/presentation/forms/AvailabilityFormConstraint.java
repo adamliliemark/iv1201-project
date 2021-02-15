@@ -18,7 +18,7 @@ import static java.lang.annotation.ElementType.*;
 @Constraint(validatedBy = AvailabilityFormValidator.class)
 @Documented
 public @interface AvailabilityFormConstraint {
-    String message() default "{Availability constraint not met}";
+    String message() default "custom.constraint";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

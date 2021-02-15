@@ -13,12 +13,12 @@ import java.time.LocalDate;
 public class AvailabilityForm {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message="from.null")
+    @FutureOrPresent(message="to.present")
     private LocalDate from;
 
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message="to.null")
+    @FutureOrPresent(message="to.present")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate to;
 

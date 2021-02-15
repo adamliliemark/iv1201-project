@@ -66,9 +66,17 @@ public class ApplicationController {
      * @param model for thymeleaf
      * @return applicationView with competence form
      */
-    @PostMapping("/apply/expertise")
+    @PostMapping("/apply/competence")
     public String fetchCompetenceForm(@Valid @ModelAttribute("competenceFormObject") CompetenceForm competenceFormObject, BindingResult bindingResult, Model model) {
-        if(!bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors()) {
+            if (competenceFormObject.getName() == null) {
+                throw new IllegalArgumentException("form.competence.name");
+            }
+            if(competenceFormObject.getYears() == null) {
+                throw new IllegalArgumentException("form.competence.years");
+            }
+            throw new IllegalArgumentException("form.generic");
+        } else {
             if(!competences.containsKey(competenceFormObject.getName())) {
                 throw new RuntimeException("Expected the supplied competence to exist in the database.");
             }
@@ -87,6 +95,14 @@ public class ApplicationController {
         return user.getCompetences().size() == competences.size();
     }
 
+    @GetMapping("/apply/availability")
+    public String showAvailabilityForm(Model model) {
+        model.addAttribute("user", user);
+        model.addAttribute("availabilityFormObject", new AvailabilityForm());
+        model.addAttribute("form", "availability");
+        return "applicationView";
+    }
+
     /**
      * Mapping to fetch the availability form.
      * @param availabilityFormObject the filled out form from thymeleaf
@@ -96,6 +112,10 @@ public class ApplicationController {
      */
     @PostMapping("/apply/availability")
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) {
+            System.out.println(Objects.requireNonNull(bindingResult.getGlobalError()).getDefaultMessage());
+            throw new IllegalArgumentException("form.competence.years");
+        }
         if(!bindingResult.hasErrors()) {
             user.addAvailability(availabilityFormObject.getFrom(), availabilityFormObject.getTo());
         }
