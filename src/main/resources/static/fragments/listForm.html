@@ -17,13 +17,10 @@
             <label for="to" th:text="#{list.to}"></label>
             <input type="date" name="to" id="to" th:field="*{availabilityForm.to}">
         <p>
-        <div th:text="#{list.appDate}"></div>
-        <input type="date" name="date" id="date" th:field="*{date}">
-        <p>
         <div th:text="#{list.competence}"></div>
         <select name="competence" id="competence" th:field="*{competence}">
             <option selected value="" th:text="#{list.select}"> -- select --</option>
-            <option th:each="e : ${expertise}" th:value="${e.name}" th:text="${e.name}"></option>
+            <option th:each="c : ${competences}" th:value="${c}" th:text="${c}"></option>
         </select>
         <p>
         <div th:text="#{list.firstName}"></div>
