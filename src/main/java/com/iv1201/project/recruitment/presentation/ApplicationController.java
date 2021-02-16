@@ -52,7 +52,7 @@ public class ApplicationController {
         }
         competences = competenceService.getAllWithLocalNames(locale.toString());
         user = userMaybe.get();
-        user.setLocale(locale);
+        userService.saveLocaleToUser(user, locale);
         model.addAttribute("form", "competence");
         model.addAttribute("user", user);
         model.addAttribute("availableCompetences", competences.keySet());
@@ -82,13 +82,12 @@ public class ApplicationController {
     @PostMapping("/apply/competence")
     public String fetchCompetenceForm(@Valid @ModelAttribute("competenceFormObject") CompetenceForm competenceFormObject, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
-            throw new IllegalArgumentException();
-            //throw new IllegalArgumentException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+            model.addAttribute("error", bindingResult.getAllErrors());
         } else {
             if(!competences.containsKey(competenceFormObject.getName())) {
                 throw new RuntimeException("form.competence.notInDB");
             }
-            user.addCompetence(competences.get(competenceFormObject.getName()), competenceFormObject.getYears());
+            userService.saveCompetenceToUser(user, competences.get(competenceFormObject.getName()), competenceFormObject.getYears());
         }
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
@@ -102,7 +101,6 @@ public class ApplicationController {
     private boolean checkForLastFetch(User user) {
         return user.getCompetences().size() == competences.size();
     }
-
 
     /**
      * Mapping to deliver the availability form for the first time.
@@ -126,14 +124,8 @@ public class ApplicationController {
      */
     @PostMapping("/apply/availability")
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, BindingResult bindingResult, Model model) {
-        if(bindingResult.hasFieldErrors()) {
-            // the following line is a placeholder for spotbugs' sake
-            throw new IllegalArgumentException();
-            // the following line is what we want, but spotbugs does not like it
-            //throw new IllegalArgumentException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        } else if(bindingResult.hasGlobalErrors()) {
-            throw new IllegalArgumentException();
-            //throw new IllegalArgumentException(Objects.requireNonNull(bindingResult.getGlobalError()).getDefaultMessage());
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getAllErrors());
         } else {
             userService.saveAvailabilityToUser(user, availabilityFormObject.getFrom(), availabilityFormObject.getTo());
         }

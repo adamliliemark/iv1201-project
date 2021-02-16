@@ -1,14 +1,11 @@
 package com.iv1201.project.recruitment.presentation.forms;
 
-import com.iv1201.project.recruitment.presentation.forms.AvailabilityForm;
-
 import java.time.LocalDate;
 
 /**
  * Stores the parameters entered by the user via the ListView and serves as a DTO class.
  */
 public class ListForm {
-
 
     private LocalDate date;
     private String competence;

@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" lang="en"  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{../fragments/layout}">
 <head>
-    <script th:inline="javascript">
-        let errorOverlayOn = (text) => {
-            document.getElementById("error-overlay").style.display = "block";
-            document.getElementById("error-text").innerHTML = text;
-        }
-        let errorOverlayOff = () => {
-            document.getElementById("error-overlay").style.display = "none";
-        }
-    </script>
+    <title th:text="#{title}"></title>
+    <link th:href="@{../css/error.css}" rel="stylesheet">
 </head>
 <body>
 <main layout:fragment="content">
-    <div id="error-overlay" onclick="errorOverlayOff()">
-        <div id="error-text"></div>
-    </div>
+    <div th:replace="../fragments/errorOverlay :: errorOverlayJs"></div>
+    <div th:replace="../fragments/errorOverlay :: errorOverlayTh"></div>
     <div class="listFormView">
         <script th:replace="../formValidation/listFormValidation :: validator"></script>
         <div th:replace="../fragments/listForm :: listForm"></div>

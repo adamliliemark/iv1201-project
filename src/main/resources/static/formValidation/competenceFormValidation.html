@@ -12,15 +12,15 @@
             let competence = document.competenceForm.competence.value;
             let competenceYears = document.competenceForm.years.value;
             if(competence === null) {
-                errorOverlayOn([[#{error.competenceMissing}]] + "<p>" + [[#{error.closeMessage}]]);
+                errorOverlayOn([[#{error.competenceMissing}]]);
                 event.preventDefault();
             }
             if(competenceYears === "" || competenceYears === null) {
-                errorOverlayOn([[#{error.competenceYearsMissing}]] + "<p>" + [[#{error.closeMessage}]]);
+                errorOverlayOn([[#{error.competenceYearsMissing}]]);
                 event.preventDefault();
             }
             if(competenceYears < 0) {
-                errorOverlayOn([[#{error.competenceYearsNegative}]] + "<p>" + [[#{error.closeMessage}]]);
+                errorOverlayOn([[#{error.competenceYearsNegative}]]);
                 event.preventDefault();
             }
             return true;

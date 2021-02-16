@@ -1,0 +1,56 @@
+.error-overlay {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#js-error-overlay {
+    display: none;
+}
+
+#th-error-overlay {
+    display: block;
+}
+
+#th-error-overlay input {
+    opacity: 0;
+    position: fixed;
+}
+
+#th-error-overlay label {
+    cursor: pointer;
+}
+
+#th-error-overlay input:not(:checked) ~ label {
+    display: none;
+}
+
+.error-text{
+    font-size: xxx-large;
+    color: white;
+}
+
+#js-error-overlay {
+    position: fixed;
+    display: none;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+#js-error-text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}

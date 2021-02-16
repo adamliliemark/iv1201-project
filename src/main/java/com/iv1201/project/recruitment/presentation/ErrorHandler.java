@@ -8,43 +8,34 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * ErrorHandler is a controller to catch all unexpected exceptions
+ * and deliver a generic error message to the client.
+ */
 @Controller
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleException(IllegalArgumentException exception, Model model) {
-        String exc = exception.getMessage().toUpperCase().split("\\.")[0];
-        if ("FORM".equals(exc)) {
-            model.addAttribute("error", exception.getMessage());
-        } else {
-            model.addAttribute("error", "generic");
-        }
-        return "error";
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleException(RuntimeException exception, Model model) {
-        String exc = exception.getMessage().toUpperCase().split("\\.")[0];
-        if("FORM".equals(exc)) {
-            model.addAttribute("error", exception.getMessage());
-        } else {
-            model.addAttribute("error", "generic");
-        }
-        return "error";
-    }
-
+    /**
+     * The catcher of all exceptions thrown that isn't catched
+     * locally.
+     * @param exception the thrown exception
+     * @param model for thymeleaf
+     * @return errorFallbackView with generic error message
+     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(Exception exception, Model model) {
         model.addAttribute("error", "generic");
-        return "error";
+        return "errorFallbackView";
     }
 
+    /**
+     * Boilerplate needed for implementing ErrorController
+     * @return not needed
+     */
     @Override
     public String getErrorPath() {
-        return "error";
+        return "";
     }
 }

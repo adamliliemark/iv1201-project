@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -105,6 +106,13 @@ public class UserService {
         return userRepo.save(user);
     }
 
+    /**
+     * Saves an availability to a user if the user already does
+     * not already have an availability with the same dates.
+     * @param user to thom the availability is saved
+     * @param from availability start date
+     * @param to availability end date
+     */
     @Transactional
     public void saveAvailabilityToUser(User user, LocalDate from, LocalDate to) {
         if(!availabilityRepository.findByUserAndFromDateAndToDate(user, from, to).isPresent()) {
@@ -112,6 +120,25 @@ public class UserService {
         } else {
             throw new IllegalArgumentException("form.duplicateDates");
         }
+    }
+
+    /**
+     * Saves a competence to a user.
+     * @param user to whom the competence is saved
+     * @param competence to save
+     * @param years of experience
+     */
+    public void saveCompetenceToUser(User user, Competence competence, Double years) {
+        user.addCompetence(competence, years);
+    }
+
+    /**
+     * Saves a locale to a user.
+     * @param user to whom the locale is saved
+     * @param locale to save
+     */
+    public void saveLocaleToUser(User user, Locale locale) {
+        user.setLocale(locale);
     }
 
     /**
