@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Stores the availability period values entered by, as well as the the user when performing a new job application.
+ * Stores the email field entered requesting an account restore.
  */
 public class RestoreForm {
 
