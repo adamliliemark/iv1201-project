@@ -32,7 +32,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select email, password, enabled "
                 + "from users "
-                + "where email = ? and password is not null")
+                + "where upper(email) = upper(?) and password is not null")
                 .authoritiesByUsernameQuery("select user_email, authority "
                 + "from authorities "
                 + "where user_email = ?");
