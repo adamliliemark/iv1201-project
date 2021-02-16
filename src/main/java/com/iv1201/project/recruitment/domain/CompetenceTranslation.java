@@ -1,6 +1,9 @@
 package com.iv1201.project.recruitment.domain;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 /**
@@ -13,18 +16,18 @@ public class CompetenceTranslation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Getter private Long id;
 
     @ManyToOne
     @JoinColumn
-    private Language language;
+    @Getter private Language language;
 
     @ManyToOne
     @JoinColumn
-    private Competence competence;
+    @Getter private Competence competence;
 
     @Column
-    String text;
+    @Getter String text;
 
     /**
      * A protected and empty class constructor.
@@ -41,25 +44,5 @@ public class CompetenceTranslation {
         this.competence = comp;
         this.language = la;
         this.text = text;
-    }
-
-    /**
-     * Retrieves the current value of the text class attribute.
-     * @return is the current value of the text class attribute.
-     */
-    public String getText() {
-        return this.text;
-    }
-
-    /**
-     * Retrieves the current value of the language class attribute.
-     * @return is the current value of the language class attribute.
-     */
-    public Language getLanguage() {
-        return this.language;
-    }
-
-    public Competence getCompetence() {
-        return this.competence;
     }
 }

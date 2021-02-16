@@ -1,6 +1,8 @@
 package com.iv1201.project.recruitment.domain;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -21,15 +23,15 @@ public class Availability {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="FROM_DATE", columnDefinition = "DATE", nullable = false, unique = false)
-    private LocalDate fromDate;
+    @Getter @Setter private LocalDate fromDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="TO_DATE", columnDefinition = "DATE", nullable = false, unique = false)
-    private LocalDate toDate;
+    @Getter @Setter private LocalDate toDate;
 
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "USER_EMAIL")
-    private User user;
+    @Getter private User user;
 
     /**
      * Empty class constructor.
@@ -46,37 +48,5 @@ public class Availability {
         this.fromDate = from;
         this.toDate = to;
         this.user = user;
-    }
-
-    /**
-     * Retrieves the current value of the fromDate class attribute.
-     * @return is the current value of the fromDate class attribute.
-     */
-    public LocalDate getFromDate() {
-        return fromDate;
-    }
-
-    /**
-     * Retrieves the current value of the toDate class attribute.
-     * @return is the current value of the toDate class attribute.
-     */
-    public LocalDate getToDate() {
-        return toDate;
-    }
-
-    /**
-     * Sets the class attribute fromDate to a new value.
-     * @param fromDate is the new value of the class attribute lastName.
-     */
-    public void setFromDate(LocalDate fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    /**
-     * Sets the class attribute toDate to a new value.
-     * @param toDate is the new value of the class attribute lastName.
-     */
-    public void setToDate(LocalDate toDate) {
-        this.toDate = toDate;
     }
 }
