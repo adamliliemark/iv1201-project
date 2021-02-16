@@ -5,23 +5,23 @@ import com.iv1201.project.recruitment.application.CompetenceService;
 import com.iv1201.project.recruitment.application.UserService;
 import com.iv1201.project.recruitment.presentation.forms.AvailabilityForm;
 import com.iv1201.project.recruitment.presentation.forms.CompetenceForm;
+import com.iv1201.project.recruitment.domain.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import com.iv1201.project.recruitment.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
 
-
 /**
  * ApplicationController is the controller for when an
  * applicant makes an application. All mappings return the
- * same view but modify it with model attributes, hence
- * no return values are explained in the JavaDoc.
+ * same view but modify it with model attributes.
  */
 @Controller
 @Scope("session")
@@ -52,10 +52,23 @@ public class ApplicationController {
         }
         competences = competenceService.getAllWithLocalNames(locale.toString());
         user = userMaybe.get();
-        user.setLocale(locale);
+        userService.saveLocaleToUser(user, locale);
         model.addAttribute("form", "competence");
         model.addAttribute("user", user);
         model.addAttribute("availableCompetences", competences.keySet());
+        return "applicationView";
+    }
+
+    /**
+     * Mapping to deliver the competence form for the first time.
+     * @param competenceFormObject the form to be filled out
+     * @param model for thymeleaf
+     * @return applicationView with competence form
+     */
+    @GetMapping("/apply/competences")
+    public String showCompetenceForm(@ModelAttribute("competenceFormObject") CompetenceForm competenceFormObject, Model model) {
+        model.addAttribute("user", user);
+        model.addAttribute("form", "competence");
         return "applicationView";
     }
 
@@ -66,13 +79,15 @@ public class ApplicationController {
      * @param model for thymeleaf
      * @return applicationView with competence form
      */
-    @PostMapping("/apply/expertise")
+    @PostMapping("/apply/competence")
     public String fetchCompetenceForm(@Valid @ModelAttribute("competenceFormObject") CompetenceForm competenceFormObject, BindingResult bindingResult, Model model) {
-        if(!bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getAllErrors());
+        } else {
             if(!competences.containsKey(competenceFormObject.getName())) {
-                throw new RuntimeException("Expected the supplied competence to exist in the database.");
+                throw new RuntimeException("form.competence.notInDB");
             }
-            user.addCompetence(competences.get(competenceFormObject.getName()), competenceFormObject.getYears());
+            userService.saveCompetenceToUser(user, competences.get(competenceFormObject.getName()), competenceFormObject.getYears());
         }
         if(checkForLastFetch(user)) {
             model.addAttribute("last", true);
@@ -88,6 +103,19 @@ public class ApplicationController {
     }
 
     /**
+     * Mapping to deliver the availability form for the first time.
+     * @param availabilityFormObject the form to be filled out
+     * @param model for thymeleaf
+     * @return applicationView with availability form
+     */
+    @GetMapping("/apply/availability")
+    public String showAvailabilityForm(@ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, Model model) {
+        model.addAttribute("user", user);
+        model.addAttribute("form", "availability");
+        return "applicationView";
+    }
+
+    /**
      * Mapping to fetch the availability form.
      * @param availabilityFormObject the filled out form from thymeleaf
      * @param bindingResult validation of the form
@@ -96,8 +124,10 @@ public class ApplicationController {
      */
     @PostMapping("/apply/availability")
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, BindingResult bindingResult, Model model) {
-        if(!bindingResult.hasErrors()) {
-            user.addAvailability(availabilityFormObject.getFrom(), availabilityFormObject.getTo());
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getAllErrors());
+        } else {
+            userService.saveAvailabilityToUser(user, availabilityFormObject.getFrom(), availabilityFormObject.getTo());
         }
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
@@ -123,7 +153,7 @@ public class ApplicationController {
      */
     @PostMapping("/apply/submit")
     public String submittedApplication(Model model) {
-        user = userService.saveUser(user);
+        userService.saveUser(user);
         model.addAttribute("user", user);
         return "redirect:/";
     }

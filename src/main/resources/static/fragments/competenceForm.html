@@ -10,7 +10,7 @@
     <script th:replace="../formValidation/competenceFormValidation :: validator"></script>
     <div class="title" th:text="#{apply.title}"></div>
     <div class="subtitle" th:text="#{apply.subtitle.skills}"></div>
-    <form th:action="@{/apply/expertise}" name="competenceForm" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
+    <form th:action="@{/apply/competence}" name="competenceForm" action="#" class="form" method="post" th:object="${competenceFormObject}" id="competenceForm">
         <label for="competence" th:text="#{apply.label.competence}"></label>
         <select name="competence" id="competence" th:field="*{name}" required>
             <option th:each="competence : ${availableCompetences}" th:value="${competence}" th:text="${competence}"></option>
@@ -21,7 +21,7 @@
             <div th:if="${last}" th:text="#{apply.message.last}"></div>
             <input type="submit" th:value="#{add}" th:unless="${last}">
     </form>
-    <form th:action="@{/apply/availability}" action="#" class="form" method="post">
+    <form th:action="@{/apply/availability}" action="#" class="form" method="get">
         <input type="submit" th:value="#{submit}">
     </form>
 </div>

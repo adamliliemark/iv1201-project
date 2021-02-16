@@ -8,12 +8,12 @@ import javax.validation.constraints.PositiveOrZero;
  */
 public class CompetenceForm {
 
-    @NotNull
+    @NotNull(message="form.competence.name.null")
     private String name;
 
-    @NotNull
-    @PositiveOrZero
-    private double years;
+    @NotNull(message="form.competence.years.null")
+    @PositiveOrZero(message="form.competence.years.negative")
+    private Double years;
 
     /**
      * Retrieves the current value of the name class attribute.
@@ -35,7 +35,7 @@ public class CompetenceForm {
      * Retrieves the current value of the years class attribute.
      * @return is the current value of the years class attribute.
      */
-    public double getYears() {
+    public Double getYears() {
         return years;
     }
 
@@ -43,7 +43,7 @@ public class CompetenceForm {
      * Sets the class attribute years to a new value.
      * @param years is the new value of the class attribute lastName.
      */
-    public void setYears(double years) {
+    public void setYears(Double years) {
         this.years = years;
     }
 }

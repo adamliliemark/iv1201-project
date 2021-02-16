@@ -1,7 +1,5 @@
 package com.iv1201.project.recruitment.presentation.forms;
 
-import com.iv1201.project.recruitment.presentation.forms.AvailabilityForm;
-import com.iv1201.project.recruitment.presentation.forms.AvailabilityFormConstraint;
 import com.iv1201.project.recruitment.repository.AvailabilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,12 +36,7 @@ public class AvailabilityFormValidator implements ConstraintValidator<Availabili
      * @return true if form is valid, false otherwise
      */
     public boolean isValid(AvailabilityForm availabilityForm, ConstraintValidatorContext context) {
-        if(availabilityForm.getFrom() == null || availabilityForm.getTo() == null || availabilityForm.getUser() == null)
-            return false;
-        if(availabilityForm.getTo().isBefore(availabilityForm.getFrom()))
-            return false;
-        if(availabilityRepository.findByUserAndFromDateAndToDate(availabilityForm.getUser(), availabilityForm.getFrom(), availabilityForm.getTo()).isPresent())
-            return false;
-        return true;
+        assert(availabilityForm.getFrom() != null && availabilityForm.getTo() != null);
+        return !availabilityForm.getTo().isBefore(availabilityForm.getFrom());
     }
 }

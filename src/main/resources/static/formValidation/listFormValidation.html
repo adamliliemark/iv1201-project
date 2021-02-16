@@ -8,7 +8,8 @@
 <script th:fragment="validator" th:inline="javascript">
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("listForm").addEventListener("submit", (event) => {
-            let from = document.forms.listForm.from.valueAsDate;
+            if (!navigator.userAgent.includes("Safari")) {
+                let from = document.forms.listForm.from.valueAsDate;
             let to = document.forms.listForm.to.valueAsDate;
             let competence = document.forms.listForm.competence.value;
             let firstName = document.forms.listForm.firstname.value;
@@ -16,29 +17,31 @@
             let date = document.forms.listForm.date.valueAsDate;
 
             if (from == null && to == null && competence === "" && firstName === "" && lastName === "" && date == null) {
-                errorOverlayOn([[#{error.noSearch}]] + "<p>" + [[#{error.closeMessage}]]);
+                errorOverlayOn([[#{error.noSearch}]]);
                 event.preventDefault();
             }
 
             if ((from != null && to == null) || (from == null && to != null)) {
-                errorOverlayOn([[#{error.oneDate}]] + "<p>" + [[#{error.closeMessage}]]);
+                errorOverlayOn([[#{error.oneDate}]]);
                 event.preventDefault();
             }
 
             if (from != null && to != null) {
 
                 if (from > to) {
-                    errorOverlayOn([[#{error.dateWrongOrder}]] + "<p>" + [[#{error.closeMessage}]]);
+                    errorOverlayOn([[#{error.dateWrongOrder}]]);
                     event.preventDefault();
                     document.forms.listForm.from.valueAsDate = to;
                     document.forms.listForm.to.valueAsDate = from;
                 }
 
                 if ((from || to) < 0) {
-                    errorOverlayOn([[#{error.dateNegativeValue}]] + "<p>" + [[#{error.closeMessage}]]);
+                    errorOverlayOn([[#{error.dateNegativeValue}]]);
                     event.preventDefault();
                 }
             }
+            return true;
+        }
             return true;
         });
     });

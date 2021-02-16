@@ -1,6 +1,5 @@
 package com.iv1201.project.recruitment.presentation.forms;
 
-import com.iv1201.project.recruitment.domain.User;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -12,29 +11,16 @@ import java.time.LocalDate;
 @AvailabilityFormConstraint
 public class AvailabilityForm {
 
+
+    @NotNull(message="form.from.null")
+    @FutureOrPresent(message="form.from.notFutureOrPresent")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull
-    @FutureOrPresent
     private LocalDate from;
 
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message="form.to.null")
+    @FutureOrPresent(message="form.to.notFutureOrPresent")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate to;
-
-    private User user;
-
-    /**
-     * Sets the class attribute user to a new value.
-     * @param user is the new value of the class attribute lastName.
-     */
-    public void setUser(User user) { this.user = user; }
-
-    /**
-     * Retrieves the current value of the user class attribute.
-     * @return is the current value of the user class attribute.
-     */
-    public User getUser() { return user; }
 
     /**
      * Retrieves the current value of the from class attribute.

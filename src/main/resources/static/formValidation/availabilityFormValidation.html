@@ -14,26 +14,26 @@
                 let to = document.forms.availabilityForm.to.valueAsDate;
                 let now = new Date().setHours(0,0,0,0);
                 if((from || to) < now) {
-                    errorOverlayOn([[#{error.dateInPast}]] + "<p>" + [[#{error.closeMessage}]]);
+                    errorOverlayOn([[#{error.dateInPast}]]);
                     event.preventDefault();
                 }
                 if(from > to) {
-                    errorOverlayOn([[#{error.dateWrongOrder}]] + "<p>" + [[#{error.closeMessage}]]);
+                    errorOverlayOn([[#{error.dateWrongOrder}]]);
                     event.preventDefault();
                     document.forms.availabilityForm.from.valueAsDate = to;
                     document.forms.availabilityForm.to.valueAsDate = from;
                 }
                 if((from || to) == null) {
-                    errorOverlayOn([[#{error.dateMissing}]] + "<p>" + [[#{error.closeMessage}]]);
+                    errorOverlayOn([[#{error.dateMissing}]]);
                     event.preventDefault();
                 }
                 if((from || to) < 0){
-                    errorOverlayOn([[#{error.dateNegativeValue}]] + "<p>" + [[#{error.closeMessage}]]);
+                    errorOverlayOn([[#{error.dateNegativeValue}]]);
                     event.preventDefault();
                 }
                 for(const availability of document.getElementsByClassName("userAvailabilities")) {
                     if(availability.innerText === document.forms.availabilityForm.from.value + " " + [[#{to}]] + " " + document.forms.availabilityForm.to.value) {
-                        errorOverlayOn([[#{error.dateDuplicate}]] + "<p>" + [[#{error.closeMessage}]]);
+                        errorOverlayOn([[#{error.dateDuplicate}]]);
                         event.preventDefault();
                     }
                 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title th:text="#{title}"></title>
+</head>
+<body>
+
+<div th:fragment="errorOverlayJs" class="js-error-overlay" id="js-error-overlay" onclick="errorOverlayOff()">
+    <script th:inline="javascript">
+        let errorOverlayOn = (text) => {
+            document.getElementById("js-error-overlay").style.display = "block";
+            document.getElementById("js-error-text").innerHTML = text;
+        }
+        let errorOverlayOff = () => {
+            document.getElementById("js-error-overlay").style.display = "none";
+        }
+    </script>
+    <div id="js-error-text" class="error-text"></div>
+</div>
+
+<div id="th-error-overlay" th:if="${error != null}" th:fragment="errorOverlayTh">
+    <input type="checkbox" id="what" th:checked="${error != null}">
+    <label for="what"  class="error-overlay">
+        <p th:each="error : ${error}" class="error-text" th:text="#{error.__${error.getDefaultMessage}__}">
+    </label>
+</div>
+
+</body>
+</html>
