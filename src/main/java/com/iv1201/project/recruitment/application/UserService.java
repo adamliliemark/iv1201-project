@@ -77,7 +77,7 @@ public class UserService {
      * @throws UserServiceError if user is not valid, or conflicting with an existing user.
      */
     @Transactional
-    public void addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
+    public User addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         validateUser(email, firstName, lastName, clearTextPassword, ssn);
@@ -89,6 +89,7 @@ public class UserService {
         Authority userAuth = new Authority(role.toString(), user);
         userRepo.save(user);
         authorityRepo.save(userAuth);
+        return user;
     }
 
     /**
@@ -248,7 +249,8 @@ public class UserService {
     }
 
     @PostConstruct
-    private void addDefaultData() {
+    @Transactional
+    void addDefaultData() {
         DefaultDataUtility.addDefaultData(
                 this,
                 userRepo,

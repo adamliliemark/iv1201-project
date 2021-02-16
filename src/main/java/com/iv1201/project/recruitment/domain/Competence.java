@@ -6,9 +6,9 @@ import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a stored Competence
@@ -23,12 +23,22 @@ public class Competence {
 
     @OneToMany(mappedBy="competence", fetch=FetchType.LAZY, orphanRemoval = true, cascade=CascadeType.ALL)
     @Fetch(FetchMode.SUBSELECT)
-    @Getter @Setter private List<CompetenceTranslation> translations;
+    @Getter @Setter private Set<CompetenceTranslation> translations;
 
+    /**
+     * Creates a Competence with empty translation list.
+     * Allows default constructor to be effect-free and protected.
+     * @return created Competence instance
+     */
+    public static Competence create() {
+        Competence c = new Competence();
+        c.translations = new HashSet<>();
+        return c;
+    }
     /**
      * A class constructor.
      */
-    public Competence() {}
+    protected Competence() {}
 
     /**
      * Add a new translation for a specified competence
