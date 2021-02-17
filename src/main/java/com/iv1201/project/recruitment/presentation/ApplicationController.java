@@ -125,7 +125,6 @@ public class ApplicationController {
     @PostMapping("/apply/availability")
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
             model.addAttribute("error", bindingResult.getAllErrors());
         } else {
             userService.saveAvailabilityToUser(user, availabilityFormObject.getFrom(), availabilityFormObject.getTo());

@@ -69,8 +69,6 @@ public class ErrorHandler implements ErrorController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(Exception exception, Model model) {
-        System.out.println(exception.toString());
-        exception.printStackTrace();
         model.addAttribute("error", "generic");
         return "errorFallbackView";
     }

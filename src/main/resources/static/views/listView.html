@@ -9,7 +9,7 @@
     <div th:replace="../fragments/errorOverlay :: errorOverlayJs"></div>
     <div th:replace="../fragments/errorOverlay :: errorOverlayTh"></div>
     <div class="listFormView">
-<!--        <script th:replace="../formValidation/listFormValidation :: validator"></script>-->
+        <script th:replace="../formValidation/listFormValidation :: validator"></script>
         <div th:replace="../fragments/listForm :: listForm"></div>
         <div th:replace="../fragments/applications :: ${searched} ? applications : nosearch "></div>
     </div>
