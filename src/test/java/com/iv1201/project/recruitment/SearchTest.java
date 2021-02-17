@@ -155,7 +155,6 @@ public class SearchTest {
     }
 
     @Test
-    @Disabled("The searcher needs to find users even if the case is not identical")
     public void search_should_be_case_agnostic() throws Exception {
         listFormMock.setAvailabilityForm(avForm);
         listFormMock.setFirstName(user1FirstName.toLowerCase(Locale.ROOT));
