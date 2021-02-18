@@ -14,9 +14,8 @@
             let competence = document.forms.listForm.competence.value;
             let firstName = document.forms.listForm.firstname.value;
             let lastName = document.forms.listForm.lastname.value;
-            let date = document.forms.listForm.date.valueAsDate;
 
-            if (from == null && to == null && competence === "" && firstName === "" && lastName === "" && date == null) {
+            if (from == null && to == null && competence === "" && firstName === "" && lastName === "") {
                 errorOverlayOn([[#{error.noSearch}]]);
                 event.preventDefault();
             }

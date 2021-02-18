@@ -1,13 +1,13 @@
 package com.iv1201.project.recruitment.presentation.forms;
 
-import java.time.LocalDate;
-
 /**
  * Stores the parameters entered by the user via the ListView and serves as a DTO class.
+ * @see ListFormConstraint for constraints.
+ * @see ListFormValidator for validation.
  */
+@ListFormConstraint
 public class ListForm {
 
-    private LocalDate date;
     private String competence;
     private String firstName;
     private String lastName;
@@ -29,26 +29,13 @@ public class ListForm {
         this.lastName = lastName;
     }
 
+    /**
+     * A constructor.
+     */
     public ListForm(){
         this.availabilityForm = new AvailabilityForm();
     }
 
-    /**
-     * Retrieves the current value of the date class attribute.
-     * @return is the current value of the date class attribute.
-     */
-    public LocalDate getDate() {
-        return date;
-    }
-
-
-    /**
-     * Sets the class attribute date to a new value.
-     * @param date is the new value of the class attribute lastName.
-     */
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 
     /**
      * Retrieves the current value of the competence class attribute.

@@ -44,25 +44,25 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
      * @throws Exception if there has been some issues concerning the configuration.
      */
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//            .authorizeRequests()
-//            .antMatchers("/login*").permitAll()
-//            .antMatchers("/restore").permitAll()
-//            .antMatchers("/test").permitAll()
-//            .antMatchers("/css/*").permitAll()
-//            .antMatchers("/admin*").hasRole("ADMIN")
-//            .anyRequest().authenticated()
-//            .and()
-//            .formLogin()
-//            .loginPage("/login")
-//            .permitAll()
-//            //.failureHandler(authenticationFailureHandler())
-//            .and()
-//            .logout()
-//            .permitAll()
-//            .logoutUrl("/logout")
-//            .deleteCookies("JSESSIONID");
-//            //.logoutSuccessHandler(logoutSuccessHandler());
+        http
+            .authorizeRequests()
+            .antMatchers("/login*").permitAll()
+            .antMatchers("/restore").permitAll()
+            .antMatchers("/test").permitAll()
+            .antMatchers("/css/*").permitAll()
+            .antMatchers("/admin*").hasRole("ADMIN")
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .loginPage("/login")
+            .permitAll()
+            //.failureHandler(authenticationFailureHandler())
+            .and()
+            .logout()
+            .permitAll()
+            .logoutUrl("/logout")
+            .deleteCookies("JSESSIONID");
+            //.logoutSuccessHandler(logoutSuccessHandler());
     }
 
     /**

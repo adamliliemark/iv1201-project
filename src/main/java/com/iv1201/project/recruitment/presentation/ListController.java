@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -71,7 +72,7 @@ public class ListController {
      * @return is the listView with its current state values containing the search result.
      */
     @PostMapping("/list/applications")
-    public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm, Model model, BindingResult bindingResult) {
+    public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm,  BindingResult bindingResult, Model model) {
 
         if (!bindingResult.hasErrors()) {
 
@@ -80,16 +81,20 @@ public class ListController {
 
                 try {
                     applications = searcher.getApplications(listForm, competences.values());
-                    model.addAttribute("applicationsObject", applications);
                     searched = true;
-                    resetMinMax();
                 } catch (SearchServiceError e) {
                     e.printStackTrace();
                 }
         }else
             model.addAttribute("error", bindingResult.getAllErrors());
 
+
+        if(applications == null)
+            applications = new ArrayList<>();
+
+        resetMinMax();
         this.listForm = listForm;
+        model.addAttribute("applicationsObject", applications);
         model.addAttribute("min", min);
         model.addAttribute("max", max);
         model.addAttribute("interval", interval);
