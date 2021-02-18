@@ -1,5 +1,7 @@
 package com.iv1201.project.recruitment.presentation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -11,6 +13,8 @@ import java.security.Principal;
  */
 @Controller
 public class LoginController {
+
+    Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     /**
      * Called when the /login URL is called by the user. Checks if the user is

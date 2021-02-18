@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 import javax.sql.DataSource;
 
 /**
@@ -55,7 +57,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
             .and()
             .formLogin()
             .loginPage("/login")
-            .permitAll()
+            .permitAll().successHandler(myAuthenticationSuccessHandler())
             //.failureHandler(authenticationFailureHandler())
             .and()
             .logout()
@@ -72,6 +74,10 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new ApplicationAuthenticationSuccessHandler();
     }
 }
 

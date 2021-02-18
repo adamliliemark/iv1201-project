@@ -3,8 +3,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./logs/spring/spring.log</file>
         <encoder>
-            <pattern>%boldGreen(%date) %level [%thread] %boldRed(%logger) [%file:%line] %boldMagenta(%msg) %n %n
-            </pattern>
+            <pattern>%boldGreen(%date) %level [%thread] %boldRed(%logger) [%file:%line] %boldMagenta(%msg) %n %n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
