@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UnmigratedAvailabilityRepository extends CrudRepository<UnmigratedAvailability, String> {
-    Iterable<UnmigratedAvailability>findAllBypersonId(Long personId);
+    Iterable<UnmigratedAvailability>findAllByPersonId(Long personId);
 }

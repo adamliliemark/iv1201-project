@@ -2,8 +2,6 @@ package com.iv1201.project.recruitment.application;
 
 import com.iv1201.project.recruitment.application.exceptions.UserServiceError;
 import com.iv1201.project.recruitment.domain.*;
-import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedAvailability;
-import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedCompetenceProfile;
 import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedPerson;
 import com.iv1201.project.recruitment.repository.*;
 import com.iv1201.project.recruitment.application.exceptions.UserServiceError.ERROR_CODE;
@@ -20,6 +18,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * A service class for handling database calls concerning <>User</> entities.
@@ -78,7 +77,7 @@ public class UserService {
      * @throws UserServiceError if user is not valid, or conflicting with an existing user.
      */
     @Transactional
-    public void addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
+    public User addNewUser(String email, String firstName, String lastName, String clearTextPassword, Role role, String ssn) throws UserServiceError {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         validateUser(email, firstName, lastName, clearTextPassword, ssn);
@@ -90,6 +89,7 @@ public class UserService {
         Authority userAuth = new Authority(role.toString(), user);
         userRepo.save(user);
         authorityRepo.save(userAuth);
+        return user;
     }
 
     /**
@@ -168,10 +168,10 @@ public class UserService {
 
         this.validateUser(newUser, HARDCODED_RESET_PASSWORD);
 
-        Iterable<UnmigratedCompetenceProfile> umComps = unmigratedCompRepo.findAllBypersonId(up.getPersonId());
-
         //We silently ignore nonexistent competences
-        umComps.forEach(umComp ->
+        unmigratedCompRepo
+        .findAllBypersonId(up.getPersonId())
+        .forEach(umComp ->
             translationRepo.findByText(umComp.getCompetenceName())
                 .map(CompetenceTranslation::getCompetence)
                 .ifPresent(c -> {
@@ -180,9 +180,9 @@ public class UserService {
                 })
         );
 
-        Iterable<UnmigratedAvailability> umAvails = unmigratedAvailabilityRepo.findAllBypersonId(up.getPersonId());
-
-        umAvails.forEach(umAvail -> {
+        unmigratedAvailabilityRepo
+        .findAllByPersonId(up.getPersonId())
+        .forEach(umAvail -> {
                 newUser.addAvailability(umAvail.getFromDate(), umAvail.getToDate());
                 unmigratedAvailabilityRepo.delete(umAvail);
         });
@@ -209,7 +209,7 @@ public class UserService {
     /**
      * Returns true if a matching row exists, else false
      * @param email the email to check by.
-     * @return
+     * @return true if the user exists else false
      */
     public boolean existsByEmail(String email) {
         return userRepo.existsByEmailIgnoreCase(email);
@@ -228,15 +228,18 @@ public class UserService {
      * @see ERROR_CODE
      */
     private boolean validateUser(String email, String firstName, String lastName, String clearTextPassword, String ssn) throws UserServiceError {
-        if (email == null || email.equals(""))
+        Function<String, Boolean> stringRules = str ->
+            str != null && !str.isEmpty() && str.trim().length() == str.length();
+
+        if (!stringRules.apply(email))
             throw new UserServiceError(ERROR_CODE.INVALID_EMAIL);
-        if (firstName == null || firstName.equals(""))
+        if (!stringRules.apply(firstName))
             throw new UserServiceError(ERROR_CODE.INVALID_FIRST_NAME);
-        if (lastName == null || lastName.equals(""))
+        if (!stringRules.apply(lastName))
             throw new UserServiceError(ERROR_CODE.INVALID_LAST_NAME);
         if (clearTextPassword == null || clearTextPassword.length() < 3)
             throw new UserServiceError(ERROR_CODE.INVALID_PASSWORD);
-        if (ssn == null)
+        if (!stringRules.apply(ssn))
             throw new UserServiceError(ERROR_CODE.INVALID_SSN);
         return true;
     }
@@ -246,7 +249,8 @@ public class UserService {
     }
 
     @PostConstruct
-    private void addDefaultData() {
+    @Transactional
+    void addDefaultData() {
         DefaultDataUtility.addDefaultData(
                 this,
                 userRepo,

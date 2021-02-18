@@ -1,5 +1,8 @@
 package com.iv1201.project.recruitment.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 /**
@@ -10,7 +13,7 @@ import javax.persistence.*;
 public class Language {
 
     @Id
-    private String languageCode;
+    @Getter private String languageCode;
 
     @Column
     String nativeName;
@@ -28,13 +31,5 @@ public class Language {
     public Language(String languageCode, String nativeName) {
         this.languageCode = languageCode;
         this.nativeName = nativeName;
-    }
-
-    /**
-     * Retrieves the current value of the languageCode class attribute.
-     * @return is the current value of the languageCode class attribute.
-     */
-    public String getLanguageCode() {
-        return this.languageCode;
     }
 }

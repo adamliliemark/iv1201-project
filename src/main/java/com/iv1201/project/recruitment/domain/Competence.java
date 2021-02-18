@@ -1,12 +1,14 @@
 package com.iv1201.project.recruitment.domain;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a stored Competence
@@ -17,28 +19,36 @@ public class Competence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Getter private Long id;
 
     @OneToMany(mappedBy="competence", fetch=FetchType.LAZY, orphanRemoval = true, cascade=CascadeType.ALL)
     @Fetch(FetchMode.SUBSELECT)
-    private List<CompetenceTranslation> translations;
+    @Getter @Setter private Set<CompetenceTranslation> translations;
 
+    /**
+     * Creates a Competence with empty translation list.
+     * Allows default constructor to be effect-free and protected.
+     * @return created Competence instance
+     */
+    public static Competence create() {
+        Competence c = new Competence();
+        c.translations = new HashSet<>();
+        return c;
+    }
     /**
      * A class constructor.
      */
-    public Competence() {}
+    protected Competence() {}
 
     /**
      * Add a new translation for a specified competence
      * @param languageCode the Language of the translation
      * @param localName the local name of the Competence
-     * @return the updated competence
      * @see Language
      * @see CompetenceTranslation
      */
-    public Competence addTranslation(Language languageCode, String localName) {
+    public void addTranslation(Language languageCode, String localName) {
         this.translations.add(new CompetenceTranslation(this, languageCode, localName));
-        return this;
     }
 
     /**
@@ -56,7 +66,6 @@ public class Competence {
                 .orElse("MISSING TRANSLATION");
     }
 
-
     /**
      * Get default translation (en_US)
      * @return the en_US localized translation
@@ -64,25 +73,4 @@ public class Competence {
     public String getName() {
         return this.getName("en_US");
     }
-
-
-    /**
-     * Sets the class attribute id to a new value.
-     * @param id is the new value of the class attribute lastName.
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-
-    /**
-     * Retrieves the current value of the id class attribute.
-     * @return is the current value of the id class attribute.
-     */
-    public Long getId() {
-        return this.id;
-    }
-
-
 }

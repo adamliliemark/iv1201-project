@@ -1,16 +1,12 @@
 package com.iv1201.project.recruitment.domain;
 
-import com.iv1201.project.recruitment.domain.Availability;
-import com.iv1201.project.recruitment.domain.Competence;
-import com.iv1201.project.recruitment.domain.CompetenceProfile;
 import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedPerson;
-import org.springframework.lang.NonNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -22,28 +18,28 @@ public class User {
 
     @Id
     @Column(nullable = false, unique = true)
-    private String email;
+    @Getter  @Setter private String email;
 
-    @Column(nullable = false, unique = false)
-    private String firstName;
+    @Column(nullable = false)
+    @Getter @Setter private String firstName;
 
-    @Column(nullable = false, unique = false)
-    private String lastName;
+    @Column(nullable = false)
+    @Getter @Setter private String lastName;
 
-    @Column (nullable = false, unique = false)
-    String ssn;
+    @Column (nullable = false)
+    @Getter @Setter String ssn;
 
-    @Column(nullable = true, unique = false)
-    private String password;
+    @Column(nullable = false)
+    @Getter @Setter private String password;
 
-    @Column(nullable = false, unique = false)
-    private Boolean enabled;
+    @Column(nullable = false)
+    @Getter @Setter private Boolean enabled;
 
     @OneToMany(mappedBy = "user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Availability> availabilityList;
 
     @Transient
-    Locale locale;
+    @Getter @Setter Locale locale;
 
     @OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
     private Set<CompetenceProfile> competences;
@@ -74,7 +70,6 @@ public class User {
     public User(UnmigratedPerson up) {
         this(up.getEmail(), up.getName(), up.getSurname(), up.getSsn(), up.getPassword());
     }
-
 
     /**
      * Adds a new availability period for the <>User</>.
@@ -125,30 +120,6 @@ public class User {
     }
 
     /**
-     * Retrieves the current value of the locale class attribute.
-     * @return is the current value of the locale class attribute.
-     */
-    public Locale getLocale() {
-        return this.locale;
-    }
-
-    /**
-     * Sets the class attribute locale to a new value.
-     * @param locale is the new value of the class attribute lastName.
-     */
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
-    /**
-     * Sets the password hash for the user
-     * @param password the new hashed password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
      * Retrieves the current value of the availabilityList class attribute.
      * @return is the current value of the availabilityList class attribute.
      */
@@ -160,52 +131,6 @@ public class User {
      */
     public Set<CompetenceProfile> getCompetences() {
         return this.competences;
-    }
-
-    /**
-     * Retrieves the current value of the email class attribute.
-     * @return is the current value of the email class attribute.
-     */
-    public String getEmail() {
-        return this.email;
-    }
-
-    /**
-     * Sets the class attribute email to a new value.
-     * @param email is the new value of the class attribute lastName.
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Retrieves the current value of the firstName class attribute.
-     * @return is the current value of the firstName class attribute.
-     */
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    /**
-     * Sets the class attribute firstName to a new value.
-     * @param firstName is the new value of the class attribute lastName.
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    /**
-     * Retrieves the current value of the ssn class attribute.
-     * @return is the current value of the ssn class attribute.
-     */
-    public String getSsn() { return this.ssn; }
-
-    /**
-     * Retrieves the current value of the lastName class attribute.
-     * @return is the current value of the lastName class attribute.
-     */
-    public String getLastName() {
-        return this.lastName;
     }
 }
 

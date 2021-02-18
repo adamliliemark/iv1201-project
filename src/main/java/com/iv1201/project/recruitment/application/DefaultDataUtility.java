@@ -13,12 +13,14 @@ import com.iv1201.project.recruitment.repository.UserRepository;
 import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedAvailabilityRepository;
 import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedCompetenceProfileRepository;
 import com.iv1201.project.recruitment.repository.unmigratedData.UnmigratedPersonRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 class DefaultDataUtility {
     private static final String unmigratedUserEmail = "anonymous@kth.se";
+
     protected static void addDefaultData(
             UserService userService,
             UserRepository userRepo,
@@ -31,14 +33,12 @@ class DefaultDataUtility {
         try {
             if (!userRepo.existsByEmailIgnoreCase("testuser@example.com")) {
                 System.err.println("Saving test user!");
-                userService.addNewUser("testuser@example.com",
+                User user = userService.addNewUser("testuser@example.com",
                         "userFirstName",
                         "userLastName",
                         "pass",
                         UserService.Role.ROLE_USER,
                         "19880101");
-                Optional<User> userMaybe = userRepo.findByEmailIgnoreCase("testuser@example.com");
-                User user = userMaybe.get();
                 user.addAvailability(LocalDate.of(2022, 2, 2), LocalDate.of(2028, 2, 2));
                 userRepo.save(user);
             }
@@ -60,10 +60,8 @@ class DefaultDataUtility {
         if (languageRepo.count() == 0) {
             Language swedish = languageRepo.save(new Language("sv_SE", "svenska"));
             Language english = languageRepo.save(new Language("en_US", "english"));
-            Competence grilling = competenceRepo.save(new Competence());
-            Competence carousel = competenceRepo.save(new Competence());
-            carousel = competenceRepo.findById(carousel.getId()).get();
-            grilling = competenceRepo.findById(grilling.getId()).get();
+            Competence grilling = competenceRepo.save(Competence.create());
+            Competence carousel = competenceRepo.save(Competence.create());
             grilling.addTranslation(swedish, "Korvgrillning");
             grilling.addTranslation(english, "Grilling sausage");
             carousel.addTranslation(swedish, "Karuselldrift");

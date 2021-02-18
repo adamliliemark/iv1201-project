@@ -1,6 +1,8 @@
 package com.iv1201.project.recruitment.domain;
 
 import com.iv1201.project.recruitment.application.UserService;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -15,14 +17,14 @@ public class Authority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Getter private Long id;
 
     @Column(nullable = false, unique = false)
-    private String authority;
+    @Getter private String authority;
 
     @ManyToOne
     @JoinColumn
-    private User user;
+    @Getter private User user;
 
     /**
      * An empty class constructor.
