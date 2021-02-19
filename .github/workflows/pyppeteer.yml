@@ -18,6 +18,6 @@ jobs:
       - name: Set up pyppeteer
         run: pip3 install pyppeteer
       - name: Compile and start server
-        run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main"
+        run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main" &
       - name: Run tests
         run: python3 pypp.py
