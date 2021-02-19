@@ -37,10 +37,16 @@ The following frameworks are used in the application:
 
 The image below shows the architectural layout of the application
 
-<div align="center>
-  <img src="images/architecture.png" width="400" >
-</div>
+<br/>
+<br/>
+<p align="center" >
+  <img src="images/architecture.png" width="600" >
+</p>
+<br/>
+<br/>
 
 
+## Getting Started
 
-
+1. Download the project source code.
+2. Since the application was developed using the Intellij IDEA it is recommended to download and install it. This can be done via this link [link](https://www.jetbrains.com/idea/)
