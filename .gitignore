@@ -34,3 +34,6 @@ build/
 
 ### Hibernate Search ###
 /indexpath/
+
+#Ignoring Log
+logs/

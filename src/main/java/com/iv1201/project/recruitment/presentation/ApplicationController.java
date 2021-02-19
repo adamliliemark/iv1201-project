@@ -7,6 +7,8 @@ import com.iv1201.project.recruitment.presentation.forms.AvailabilityForm;
 import com.iv1201.project.recruitment.presentation.forms.CompetenceForm;
 import com.iv1201.project.recruitment.domain.User;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,8 @@ import java.util.*;
 @Controller
 @Scope("session")
 public class ApplicationController {
+
+    Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
 
     @Autowired
     private UserService userService;
@@ -155,6 +159,7 @@ public class ApplicationController {
     public String submittedApplication(Model model) {
         userService.saveUser(user);
         model.addAttribute("user", user);
+        LOGGER.trace("The user " + user.getEmail() + " has updated its application");
         return "redirect:/";
     }
 }

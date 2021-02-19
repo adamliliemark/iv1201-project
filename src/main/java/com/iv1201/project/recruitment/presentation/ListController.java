@@ -1,9 +1,9 @@
 package com.iv1201.project.recruitment.presentation;
 
+import com.iv1201.project.recruitment.application.CompetenceService;
 import com.iv1201.project.recruitment.domain.ApplicationDTO;
 import com.iv1201.project.recruitment.domain.Competence;
 import com.iv1201.project.recruitment.presentation.forms.ListForm;
-import com.iv1201.project.recruitment.repository.CompetenceRepository;
 import com.iv1201.project.recruitment.application.SearchService;
 import com.iv1201.project.recruitment.application.exceptions.SearchServiceError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -28,7 +31,7 @@ import java.util.List;
 @Scope("session")
 public class ListController {
 
-    private Iterable<Competence> competences;
+    private Map<String, Competence> competences;
     private List<ApplicationDTO> applications;
     private ListForm listForm;
     private boolean searched;
@@ -40,7 +43,7 @@ public class ListController {
     private SearchService searcher;
 
     @Autowired
-    private CompetenceRepository competenceRepo;
+    private CompetenceService competenceService;
 
     /**
      * Called when the user wants to enter the listView and set the initial state of the view.
@@ -49,15 +52,14 @@ public class ListController {
      * @return is the listView with its initial state values.
      */
     @GetMapping("/list")
-    public String list(Model model){
+    public String list(Locale locale, Model model){
 
-        if(competences == null)
-            competences = competenceRepo.findAll();
+        competences = competenceService.getAllWithLocalNames(locale.toString());
 
         searched = false;
         model.addAttribute("listFormObject", new ListForm());
         model.addAttribute("searched", searched);
-        model.addAttribute("expertise", competences);
+        model.addAttribute("competences", competences.keySet());
         return "listView";
     }
 
@@ -70,7 +72,7 @@ public class ListController {
      * @return is the listView with its current state values containing the search result.
      */
     @PostMapping("/list/applications")
-    public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm, Model model, BindingResult bindingResult) {
+    public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm,  BindingResult bindingResult, Model model) {
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("error", bindingResult.getAllErrors());
@@ -81,20 +83,26 @@ public class ListController {
                 searcher = new SearchService();
 
                 try {
-                    applications = searcher.getApplications(listForm, competences);
-                    model.addAttribute("applicationsObject", applications);
+                    applications = searcher.getApplications(listForm, competences.values());
                     searched = true;
-                    resetMinMax();
                 } catch (SearchServiceError e) {
                     e.printStackTrace();
                 }
-        }
+        }else
+            model.addAttribute("error", bindingResult.getAllErrors());
+
+
+        if(applications == null)
+            applications = new ArrayList<>();
+
+        resetMinMax();
         this.listForm = listForm;
+        model.addAttribute("applicationsObject", applications);
         model.addAttribute("min", min);
         model.addAttribute("max", max);
         model.addAttribute("interval", interval);
         model.addAttribute("searched", searched);
-        model.addAttribute("expertise", competences);
+        model.addAttribute("competences", competences.keySet());
         return "listView";
     }
     /**
@@ -139,7 +147,7 @@ public class ListController {
         model.addAttribute("listFormObject", listForm);
         model.addAttribute("searched", searched);
         model.addAttribute("applicationsObject",applications);
-        model.addAttribute("expertise", competences);
+        model.addAttribute("competences", competences.keySet());
     }
 
     private void resetMinMax(){
