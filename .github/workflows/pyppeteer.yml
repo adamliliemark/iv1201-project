@@ -16,7 +16,7 @@ jobs:
         with:
           java-version: 11
       - name: Set up pyppeteer
-        run: pip install pyppeteer
+        run: pip3 install pyppeteer
       - name: Compile and start server
         run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main"
       - name: Run tests
