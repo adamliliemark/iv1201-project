@@ -1,4 +1,4 @@
-# The Gren Garden Recruitment Application
+# The Green Garden Recruitment Application
 
 
 The following software development tools are used.
