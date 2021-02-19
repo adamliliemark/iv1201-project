@@ -2,9 +2,7 @@ name: Pyppeteer
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ pypp ]
 
 jobs:
   build:
