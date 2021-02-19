@@ -1,0 +1,23 @@
+name: Pyppeteer
+
+on:
+  push:
+    branches: [ pypp ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Set up pyppeteer
+        run: pip install pyppeteer
+      - name: Compile and start server
+        run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main"
+      - name: Run tests
+        run: python3 pypp.py
