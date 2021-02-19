@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -57,14 +58,14 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
             .and()
             .formLogin()
             .loginPage("/login")
-            .permitAll().successHandler(myAuthenticationSuccessHandler())
+            .permitAll().successHandler(authenticationSuccessHandler())
             //.failureHandler(authenticationFailureHandler())
             .and()
             .logout()
             .permitAll()
             .logoutUrl("/logout")
-            .deleteCookies("JSESSIONID");
-            //.logoutSuccessHandler(logoutSuccessHandler());
+            .deleteCookies("JSESSIONID")
+            .logoutSuccessHandler(logoutSuccessHandler());
     }
 
     /**
@@ -76,8 +77,21 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+    /**
+     * Called at runtime and creates an object handling successful authentications.
+     * @return is the object handling successful authentications.
+     */
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
         return new ApplicationAuthenticationSuccessHandler();
+    }
+
+    /**
+     * Called at runtime and creates an object handling successful logouts.
+     * @return is the object handling successful logouts.
+     */
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new ApplicationLogoutSuccessHandler();
     }
 }
 
