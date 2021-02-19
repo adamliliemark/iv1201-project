@@ -1,5 +1,7 @@
 package com.iv1201.project.recruitment.presentation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ import javax.validation.ValidationException;
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(ErrorHandler.class);
+
     /**
      * Catches unexpected validation errors, for instance data of the wrong type.
      * @param exception ValidationException
@@ -28,6 +32,7 @@ public class ErrorHandler implements ErrorController {
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(ValidationException exception, Model model) {
+        logExceptionErrorLevel(exception);
         model.addAttribute("error", "validexc");
         return "errorFallbackView";
     }
@@ -41,6 +46,7 @@ public class ErrorHandler implements ErrorController {
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(BindException exception, Model model) {
+        logExceptionErrorLevel(exception);
         model.addAttribute("error", "bindexc");
         return "errorFallbackView";
     }
@@ -56,6 +62,7 @@ public class ErrorHandler implements ErrorController {
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(NullPointerException exception, Model model) {
+        logExceptionErrorLevel(exception);
         model.addAttribute("error", "nullpointer");
         return "errorFallbackView";
     }
@@ -69,6 +76,7 @@ public class ErrorHandler implements ErrorController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(Exception exception, Model model) {
+        logExceptionErrorLevel(exception);
         model.addAttribute("error", "generic");
         return "errorFallbackView";
     }
@@ -80,5 +88,9 @@ public class ErrorHandler implements ErrorController {
     @Override
     public String getErrorPath() {
         return "";
+    }
+
+    private void logExceptionErrorLevel(Exception exception) {
+        LOGGER.error("Exception handler got {}: {}", exception.getClass().getName(), exception.getMessage(), exception);
     }
 }
