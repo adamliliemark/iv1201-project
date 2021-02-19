@@ -35,12 +35,20 @@ The following frameworks are used in the application:
 
 ## Architecture
 
-The image below shows the architectural layout of the application
+The image below shows the architectural layout of the application as well as the DevOps flow
 
 <br/>
 <br/>
 <p align="center" >
   <img src="images/architecture.png" width="600" >
+</p>
+<br/>
+<br/>
+
+<br/>
+<br/>
+<p align="center" >
+  <img src="images/devops.png" width="600" >
 </p>
 <br/>
 <br/>
