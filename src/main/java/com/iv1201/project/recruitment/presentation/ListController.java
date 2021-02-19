@@ -74,6 +74,9 @@ public class ListController {
     @PostMapping("/list/applications")
     public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm,  BindingResult bindingResult, Model model) {
 
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getAllErrors());
+        }
         if (!bindingResult.hasErrors()) {
 
             if (searcher == null)

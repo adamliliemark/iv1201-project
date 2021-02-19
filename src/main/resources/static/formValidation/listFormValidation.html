@@ -20,27 +20,27 @@
                 event.preventDefault();
             }
 
-            if ((from != null && to == null) || (from == null && to != null)) {
-                errorOverlayOn([[#{error.oneDate}]]);
-                event.preventDefault();
-            }
-
-            if (from != null && to != null) {
-
-                if (from > to) {
-                    errorOverlayOn([[#{error.dateWrongOrder}]]);
-                    event.preventDefault();
-                    document.forms.listForm.from.valueAsDate = to;
-                    document.forms.listForm.to.valueAsDate = from;
-                }
-
-                if ((from || to) < 0) {
-                    errorOverlayOn([[#{error.dateNegativeValue}]]);
+                if ((from != null && to == null) || (from == null && to != null)) {
+                    errorOverlayOn([[#{error.oneDate}]]);
                     event.preventDefault();
                 }
+
+                if (from != null && to != null) {
+
+                    if (from > to) {
+                        errorOverlayOn([[#{error.dateWrongOrder}]]);
+                        event.preventDefault();
+                        document.forms.listForm.from.valueAsDate = to;
+                        document.forms.listForm.to.valueAsDate = from;
+                    }
+
+                    if ((from || to) < 0) {
+                        errorOverlayOn([[#{error.dateNegativeValue}]]);
+                        event.preventDefault();
+                    }
+                }
+                return true;
             }
-            return true;
-        }
             return true;
         });
     });

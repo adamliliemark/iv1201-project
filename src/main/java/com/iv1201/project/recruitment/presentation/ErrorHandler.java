@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.validation.BindException;
+
+import javax.validation.ValidationException;
 
 /**
  * ErrorHandler is a controller to catch all unexpected exceptions
@@ -17,8 +20,48 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ErrorHandler implements ErrorController {
 
     /**
-     * The catcher of all exceptions thrown that isn't catched
-     * locally.
+     * Catches unexpected validation errors, for instance data of the wrong type.
+     * @param exception ValidationException
+     * @param model for thymeleaf
+     * @return errorFallbackView with validation exception error message
+     */
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleException(ValidationException exception, Model model) {
+        model.addAttribute("error", "validexc");
+        return "errorFallbackView";
+    }
+
+    /**
+     * Catches when a mismatch in types slips through validation of forms.
+     * @param exception BindException
+     * @param model for thymeleaf
+     * @return errorFallbackView with bind exception error message
+     */
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleException(BindException exception, Model model) {
+        model.addAttribute("error", "bindexc");
+        return "errorFallbackView";
+    }
+
+    /**
+     * Catcher of null pointer exceptions, mainly used for when
+     * a client tries to write null values to non nullable fields
+     * in the database.
+     * @param exception the thrown exception
+     * @param model for thymeleaf
+     * @return errorFallbackView with null pointer error message
+     */
+    @ExceptionHandler(NullPointerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleException(NullPointerException exception, Model model) {
+        model.addAttribute("error", "nullpointer");
+        return "errorFallbackView";
+    }
+
+    /**
+     * The catcher of all unexpected exceptions.
      * @param exception the thrown exception
      * @param model for thymeleaf
      * @return errorFallbackView with generic error message
