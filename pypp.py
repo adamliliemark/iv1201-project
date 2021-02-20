@@ -5,7 +5,7 @@ from pyppeteer import launch
 
 
 async def main():
-    # time.sleep(30)
+    time.sleep(30)
     browser = await launch(
         options=
         {
