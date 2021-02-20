@@ -9,7 +9,7 @@
     <div class="header-content">
         <div class="header-logo" th:text="#{title}"></div>
         <div sec:authorize="isFullyAuthenticated()">
-            <a th:href="@{/apply}" th:text="#{header.apply}"></a>
+            <a th:href="@{/apply}" id="apply-link" th:text="#{header.apply}"></a>
             <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{/list}" th:text="#{header.list}"></a>
         </div>
     </div>
