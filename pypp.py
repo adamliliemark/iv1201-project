@@ -40,7 +40,7 @@ async def check_first_page(page):
 
 
 async def check_translation_table(page):
-    time.sleep(0.1)
+    time.sleep(1)
     # await page.screenshot({'path': 'translation.png'})
     print("Checking that the value in the competences list is translated to English")
     assert (await page.JJeval("#competence", "node => node.map(n => n.value)")) == ["Carousel operation"]
