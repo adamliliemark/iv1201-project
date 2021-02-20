@@ -10,7 +10,8 @@ async def main():
     page = await browser.newPage()
     await page.goto('http://127.0.0.1:8080/')
     await login(page)
-    await page.screenshot({'path': 'example2.png'})
+    raise Exception("this is a dummy exception that should kill the process")
+    # await page.screenshot({'path': 'example2.png'})
     await browser.close()
 
 
@@ -19,7 +20,7 @@ async def login(page):
     await usr.type("testuser@example.com")
     pw = await page.J("#password")
     await pw.type("pass")
-    await page.screenshot({'path': 'example1.png'})
+    # await page.screenshot({'path': 'example1.png'})
     await page.click("#loginbtn")
 
 
