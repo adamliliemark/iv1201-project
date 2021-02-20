@@ -1,11 +1,9 @@
-#!/usr/bin/python3
 
 import asyncio
-import time
 from pyppeteer import launch
 
+
 async def main():
-    time.sleep(5)
     browser = await launch(options={'args': ['--no-sandbox']})
     page = await browser.newPage()
     await page.goto('http://localhost:8080/apply')
