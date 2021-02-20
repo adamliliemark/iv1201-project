@@ -16,10 +16,6 @@ jobs:
       - name: Set up pyppeteer
         run: pip3 install pyppeteer
       - name: Compile and start server
-        run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main" &
-  pypp:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
+        run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main" -Dmaven.test.skip &
       - name: Run pypp
         run: python3 pypp.py
