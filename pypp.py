@@ -5,7 +5,7 @@ from pyppeteer import launch
 
 
 async def main():
-    sleep(15)
+    time.sleep(15)
     browser = await launch(options={'args': ['--no-sandbox']})
     page = await browser.newPage()
     await page.goto('http://localhost:8080/apply')
