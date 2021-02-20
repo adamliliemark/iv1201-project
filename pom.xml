@@ -176,30 +176,6 @@
                     </execution>
                 </executions>
              </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <mainClass>com.iv1201.project.recruitment.Main</mainClass>
-                </configuration>
-                <executions>
-                    <execution>
-                        <configuration>
-                            <executable>python3</executable>
-                            <workingDirectory>src/main/resources/</workingDirectory>
-                            <arguments>
-                                <argument>pypp.py</argument>
-                            </arguments>
-                        </configuration>
-                        <id>python_build</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
