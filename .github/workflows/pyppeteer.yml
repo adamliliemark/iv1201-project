@@ -6,9 +6,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -19,5 +17,9 @@ jobs:
         run: pip3 install pyppeteer
       - name: Compile and start server
         run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main" &
-      - name: Run tests
+  pypp:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run pypp
         run: python3 pypp.py
