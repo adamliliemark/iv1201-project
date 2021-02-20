@@ -35,7 +35,7 @@ The following frameworks are used in the application:
 
 ## Architecture
 
-The image below shows the architectural layout of the application as well as the DevOps flow
+The image below shows the architectural layout of the application
 
 <br/>
 <br/>
@@ -44,6 +44,10 @@ The image below shows the architectural layout of the application as well as the
 </p>
 <br/>
 <br/>
+
+## DevOps
+
+The image below shows the DevOps flow used during development
 
 <br/>
 <br/>
@@ -56,5 +60,16 @@ The image below shows the architectural layout of the application as well as the
 
 ## Getting Started
 
+The development was performed in Microsoft Windows and if another operating system is used there is no guarantee that the following steps will set up a working application.
+
 1. Download the project source code.
-2. Since the application was developed using the Intellij IDEA it is recommended to download and install it. This can be done via this link [link](https://www.jetbrains.com/idea/)
+2. Since the application was developed using the Intellij Ultimate IDEA it is recommended to download and install it. This can be done via this link [link](https://www.jetbrains.com/idea/). The community version can likely be used but there will probably be a need for adding plugins not existing originally.
+3. Open up the downloaded project in IntelliJ and let the IDE through Maven download adn resolve all dependencies specified in the projects pom.xml file.
+4. Run the application and connect to it with a browser of choice to the adress localhost:8080
+5. Use one of the hard coded users of the application to login and test out the functionalities. To log in as an admin/recruiter use "testAdmin<span></span>@example.com" and to log in as a user/applicant use "testUser<span></span>@example.com" as user name. Both have "pass" as their login password.
+6. To let the IDE connect to the database open up the "Database" tab in the upper right part of the development window and press the New butten marked as a + sign.
+7. Click on "New Data Source from URL" and enter jdbc:h2:file:~/IdeaProjects/iv1201-project/database and choose H2 as driver.
+8. In the authentication tab choose "No auth" and test the connection. It is important to run the application before doing this step so that a database file will be created in the specified path.
+9. If a connection is established click "Apply" and the "Ok" and the IDE should have a connection to the applications database and the its content should be browsable. 
+
+With this continued development by developers who did not participate in the original development should be possible.  
