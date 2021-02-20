@@ -8,7 +8,7 @@ async def main():
     time.sleep(15)
     browser = await launch(options={'args': ['--no-sandbox']})
     page = await browser.newPage()
-    await page.goto('http://localhost:8080/apply')
+    await page.goto('http://127.0.0.1:8080/')
     await login(page)
     await page.screenshot({'path': 'example2.png'})
     await browser.close()
