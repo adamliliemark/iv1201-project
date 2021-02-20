@@ -10,7 +10,7 @@ async def main():
     page = await browser.newPage()
     await page.goto('http://127.0.0.1:8080/')
     await login(page)
-    raise Exception("this is a dummy exception that should kill the process")
+    # raise Exception("this is a dummy exception that should kill the process")
     # await page.screenshot({'path': 'example2.png'})
     await browser.close()
 
