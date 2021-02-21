@@ -9,7 +9,7 @@ async def main():
     browser = await launch(
         options=
         {
-            'args': ['--no-sandbox --lang=en_US,en']
+            'args': ['--no-sandbox --lang=en_US']
         })
     page = await browser.newPage()
     await page.goto('http://127.0.0.1:8080/')
