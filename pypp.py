@@ -2,23 +2,37 @@
 import asyncio
 import time
 from pyppeteer import launch
+import pyppeteer as pypp
 
+BASE_URL = "http://127.0.1:8080"
 
 def printTestCaseDesc(desc):
     print(" - {}".format(desc))
 
+async def retryConnect(url, retries, page):
+    if retries <= 0:
+        return
+    else:
+        try:
+            await page.goto(url)
+        except pypp.errors.PageError:
+            print("\nretrying start connection")
+            await asyncio.sleep(0.5)
+            await retryConnect(url, retries-1, page) 
+
 async def main():
-    time.sleep(30)
     browser = await launch(
         options=
         {
             'args': ['--no-sandbox --lang=en_US']
         })
     page = await browser.newPage()
-    await page.goto('http://127.0.0.1:8080/')
+    await retryConnect('http://127.0.0.1:8080/', 20, page)
+
     await login(page)
     await check_first_page(page)
-    await page.click("#apply-link")
+    await page.click("#apply-link",{"waitUntil":"networkidle0"})
+
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
     # raise Exception("this is a dummy exception that should kill the process")
@@ -46,7 +60,7 @@ async def check_first_page(page):
 async def check_translation_table(page):
     printTestCaseDesc("Checking that the value in the competences list is translated to English")
     expectedCompetences = ["Carousel operation", "Grilling sausage"]
-    await page.content()
+    await page.goto("{}/apply".format(BASE_URL), {"waitUntil":"networkidle0"})
     competences = await page.JJeval("#competence", "node => [...node['0'].children].map(e => e.value)")
     assert len(competences) == len(expectedCompetences), "Wrong length of competence selector"
     for competence in expectedCompetences:
