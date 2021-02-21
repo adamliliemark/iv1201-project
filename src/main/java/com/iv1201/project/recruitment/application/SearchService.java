@@ -9,6 +9,7 @@ import com.iv1201.project.recruitment.presentation.forms.ListForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Handles searches for and returns applications stored in the "Recruitment Applications" database.
@@ -33,8 +34,11 @@ public class SearchService {
      * @throws SearchServiceError is thrown if there has been an issue with the search.
      */
     public List<ApplicationDTO> getApplications(ListForm input, Iterable<Competence> competences) throws SearchServiceError {
+        return this.getApplications(input, competences, "en_US");
+    }
+        public List<ApplicationDTO> getApplications(ListForm input, Iterable<Competence> competences, String locale) throws SearchServiceError {
 
-            int competenceId = setCompetenceId(input.getCompetence(), competences);
+            int competenceId = setCompetenceId(input.getCompetence(), competences, locale);
             String[] names = setNames(input.getFirstName(), input.getLastName());
             List<ApplicationDTO> searchResult;
 
@@ -77,12 +81,12 @@ public class SearchService {
         return names;
     }
 
-    private int setCompetenceId(String competence, Iterable<Competence> competences){
+    private int setCompetenceId(String competence, Iterable<Competence> competences, String locale){
 
         int id = 1;
 
         for (Competence c: competences) {
-            if (c.getName().equals(competence))
+            if (c.getName(locale).equals(competence))
                 return id;
             id++;
         }
