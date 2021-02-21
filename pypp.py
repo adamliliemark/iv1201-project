@@ -12,6 +12,7 @@ def printTestCaseDesc(desc):
 
 async def retryConnect(url, retries, page):
     if retries <= 0:
+        "Connection failed"
         return
     else:
         try:
@@ -41,7 +42,8 @@ async def main():
 
 
 async def login(page):
-    await page.goto("{}/login".format(BASE_URL), WAIT_OPTS)
+    await page.waitForSelector("#username")
+    printTestCaseDesc("Navigating to login")
     usr = await page.J("#username")
     await usr.type("testuser@example.com")
     pw = await page.J("#password")
@@ -52,7 +54,6 @@ async def login(page):
 
 async def check_first_page(page):
     printTestCaseDesc("Checking that first page contains correct text.")
-    await page.content()
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
 
 
@@ -62,7 +63,6 @@ async def check_first_page(page):
 async def check_translation_table(page):
     printTestCaseDesc("Checking that the value in the competences list is translated to English")
     expectedCompetences = ["Carousel operation", "Grilling sausage"]
-    await page.goto("{}/apply".format(BASE_URL), WAIT_OPTS)
     competences = await page.JJeval("#competence", "node => [...node['0'].children].map(e => e.value)")
     assert len(competences) == len(expectedCompetences), "Wrong length of competence selector"
     for competence in expectedCompetences:
