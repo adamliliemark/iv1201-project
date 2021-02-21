@@ -8,7 +8,7 @@ def printTestCaseDesc(desc):
     print(" - {}".format(desc))
 
 async def main():
-    #time.sleep(30)
+    time.sleep(30)
     browser = await launch(
         options=
         {
