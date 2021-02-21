@@ -4,8 +4,11 @@ import time
 from pyppeteer import launch
 
 
+def printTestCaseDesc(desc):
+    print(" - {}".format(desc))
+
 async def main():
-    time.sleep(30)
+    #time.sleep(30)
     browser = await launch(
         options=
         {
@@ -32,8 +35,8 @@ async def login(page):
 
 
 async def check_first_page(page):
-    page.on('domcontentloaded')
-    print("Checking that first page contains correct text.")
+    printTestCaseDesc("Checking that first page contains correct text.")
+    await page.content()
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
 
 
@@ -41,16 +44,17 @@ async def check_first_page(page):
 
 
 async def check_translation_table(page):
-    page.on('domcontentloaded')
-    print(await page.JJeval("#competence", "node => node.map(n => n.value)"))
-    # await page.screenshot({'path': 'translation.png'})
-    print("Checking that the value in the competences list is translated to English")
-    assert (await page.JJeval("#competence", "node => node.map(n => n.value)")) == ["Carousel operation"]
-
+    printTestCaseDesc("Checking that the value in the competences list is translated to English")
+    expectedCompetences = ["Carousel operation", "Grilling sausage"]
+    await page.content()
+    competences = await page.JJeval("#competence", "node => [...node['0'].children].map(e => e.value)")
+    assert len(competences) == len(expectedCompetences), "Wrong length of competence selector"
+    for competence in expectedCompetences:
+        assert competence in competences, "Expected competence {} not in competence selector".format(competence)
 
 async def enter_and_check_competence_years(page):
-    page.on('domcontentloaded')
-    print("Entering 2.0 to competence years and checks that it is updated on the page")
+    printTestCaseDesc("Entering 2.0 to competence years and checks that it is updated on the page")
+    await page.content()
     years = await page.J("#competenceYears")
     await years.type("2.0")
     # await page.screenshot({'path': 'competence_years.png'})
