@@ -33,7 +33,6 @@ async def login(page):
 
 async def check_first_page(page):
     page.on('domcontentloaded')
-    print(await page.JJeval(".home-middle", "node => node.map(n => n.innerText)"))
     print("Checking that first page contains correct text.")
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
 
@@ -43,6 +42,7 @@ async def check_first_page(page):
 
 async def check_translation_table(page):
     page.on('domcontentloaded')
+    print(await page.JJeval("#competence", "node => node.map(n => n.value)"))
     # await page.screenshot({'path': 'translation.png'})
     print("Checking that the value in the competences list is translated to English")
     assert (await page.JJeval("#competence", "node => node.map(n => n.value)")) == ["Carousel operation"]
