@@ -18,7 +18,7 @@ async def retryConnect(url, retries, page):
             await page.goto(url)
         except pypp.errors.PageError:
             print("\nretrying start connection")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(4)
             await retryConnect(url, retries-1, page) 
 
 async def main():
