@@ -4,7 +4,7 @@ import time
 from pyppeteer import launch
 import pyppeteer as pypp
 
-BASE_URL = "http://127.0.1:8080"
+BASE_URL = "http://127.0.0.1:8080"
 WAIT_OPTS =  {"waitUntil":"networkidle0"}
 
 def printTestCaseDesc(desc):
