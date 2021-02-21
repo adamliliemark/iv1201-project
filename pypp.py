@@ -12,11 +12,12 @@ def printTestCaseDesc(desc):
 
 async def retryConnect(url, retries, page):
     if retries <= 0:
-        "Connection failed"
+        print("Connection failed!")
         return
     else:
         try:
             await page.goto(url)
+            print("Connected!")
         except pypp.errors.PageError:
             print("\nretrying start connection")
             await asyncio.sleep(4)
@@ -34,7 +35,6 @@ async def main():
     await login(page)
     await check_first_page(page)
     await page.click("#apply-link",WAIT_OPTS)
-
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
     # raise Exception("this is a dummy exception that should kill the process")
@@ -54,6 +54,7 @@ async def login(page):
 
 async def check_first_page(page):
     printTestCaseDesc("Checking that first page contains correct text.")
+    await page.waitForSelector(".home-middle")
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
 
 
@@ -61,6 +62,7 @@ async def check_first_page(page):
 
 
 async def check_translation_table(page):
+    await page.waitForSelector("#competence")
     printTestCaseDesc("Checking that the value in the competences list is translated to English")
     expectedCompetences = ["Carousel operation", "Grilling sausage"]
     competences = await page.JJeval("#competence", "node => [...node['0'].children].map(e => e.value)")
