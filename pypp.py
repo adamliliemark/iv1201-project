@@ -33,6 +33,7 @@ async def login(page):
 
 async def check_first_page(page):
     page.on('domcontentloaded')
+    print(await page.JJeval(".home-middle", "node => node.map(n => n.innerText)"))
     print("Checking that first page contains correct text.")
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
 
