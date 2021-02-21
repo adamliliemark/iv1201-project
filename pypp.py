@@ -9,7 +9,7 @@ async def main():
     browser = await launch(
         options=
         {
-            'args': ['--no-sandbox --lang=en_US,en']
+            'args': ['--no-sandbox']
         })
     page = await browser.newPage()
     await page.goto('http://127.0.0.1:8080/')
@@ -32,6 +32,7 @@ async def login(page):
 
 
 async def check_first_page(page):
+    page.on('domcontentloaded')
     print("Checking that first page contains correct text.")
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
 
@@ -40,13 +41,14 @@ async def check_first_page(page):
 
 
 async def check_translation_table(page):
-    time.sleep(1)
+    page.on('domcontentloaded')
     # await page.screenshot({'path': 'translation.png'})
     print("Checking that the value in the competences list is translated to English")
     assert (await page.JJeval("#competence", "node => node.map(n => n.value)")) == ["Carousel operation"]
 
 
 async def enter_and_check_competence_years(page):
+    page.on('domcontentloaded')
     print("Entering 2.0 to competence years and checks that it is updated on the page")
     years = await page.J("#competenceYears")
     await years.type("2.0")
