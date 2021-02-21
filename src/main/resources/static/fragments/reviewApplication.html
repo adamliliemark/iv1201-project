@@ -19,10 +19,12 @@
         <span th:text="#{Mail} + ':'"></span><div th:text="${user.getEmail}"></div>
         <p>
             <span th:text="#{Competences} + ':'"></span>
+        <div id="userCompetences">
             <div th:each="comp : ${user.getCompetences}">
-        <div th:text="${comp.getCompetence.getName(user.getLocale)}"></div>
-        <div th:text="${comp.getYearsOfExperience}"></div>
-    </div>
+                <div th:text="${comp.getCompetence.getName(user.getLocale)}"></div>
+                <div th:text="${comp.getYearsOfExperience}"></div>
+            </div>
+        </div>
         <p>
         <div>
             <span th:text="#{Availability} + ':'"></span>
