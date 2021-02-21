@@ -5,6 +5,7 @@ from pyppeteer import launch
 import pyppeteer as pypp
 
 BASE_URL = "http://127.0.1:8080"
+WAIT_OPTS =  {"waitUntil":"networkidle0"}
 
 def printTestCaseDesc(desc):
     print(" - {}".format(desc))
@@ -27,11 +28,11 @@ async def main():
             'args': ['--no-sandbox --lang=en_US']
         })
     page = await browser.newPage()
-    await retryConnect('http://127.0.0.1:8080/', 20, page)
+    await retryConnect(BASE_URL, 20, page)
 
     await login(page)
     await check_first_page(page)
-    await page.click("#apply-link",{"waitUntil":"networkidle0"})
+    await page.click("#apply-link",WAIT_OPTS)
 
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
@@ -40,6 +41,7 @@ async def main():
 
 
 async def login(page):
+    await page.goto("{}/login".format(BASE_URL), WAIT_OPTS)
     usr = await page.J("#username")
     await usr.type("testuser@example.com")
     pw = await page.J("#password")
@@ -60,7 +62,7 @@ async def check_first_page(page):
 async def check_translation_table(page):
     printTestCaseDesc("Checking that the value in the competences list is translated to English")
     expectedCompetences = ["Carousel operation", "Grilling sausage"]
-    await page.goto("{}/apply".format(BASE_URL), {"waitUntil":"networkidle0"})
+    await page.goto("{}/apply".format(BASE_URL), WAIT_OPTS)
     competences = await page.JJeval("#competence", "node => [...node['0'].children].map(e => e.value)")
     assert len(competences) == len(expectedCompetences), "Wrong length of competence selector"
     for competence in expectedCompetences:
