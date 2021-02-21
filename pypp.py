@@ -13,10 +13,15 @@ async def main():
         })
     page = await browser.newPage()
     await page.goto('http://127.0.0.1:8080/')
+    page.on('domcontentloaded')
     await login(page)
+    page.on('domcontentloaded')
     await check_first_page(page)
+    page.on('domcontentloaded')
     await page.click("#apply-link")
+    page.on('domcontentloaded')
     await check_translation_table(page)
+    page.on('domcontentloaded')
     await enter_and_check_competence_years(page)
     # raise Exception("this is a dummy exception that should kill the process")
     await browser.close()
@@ -32,7 +37,6 @@ async def login(page):
 
 
 async def check_first_page(page):
-    page.on('domcontentloaded')
     print("Checking that first page contains correct text.")
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
 
@@ -41,7 +45,6 @@ async def check_first_page(page):
 
 
 async def check_translation_table(page):
-    page.on('domcontentloaded')
     print(await page.JJeval("#competence", "node => node.map(n => n.value)"))
     # await page.screenshot({'path': 'translation.png'})
     print("Checking that the value in the competences list is translated to English")
@@ -49,7 +52,6 @@ async def check_translation_table(page):
 
 
 async def enter_and_check_competence_years(page):
-    page.on('domcontentloaded')
     print("Entering 2.0 to competence years and checks that it is updated on the page")
     years = await page.J("#competenceYears")
     await years.type("2.0")
