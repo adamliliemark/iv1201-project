@@ -1,3 +1,4 @@
+import asyncio
 from pyppeteer import launch
 from shared import *
 
@@ -46,7 +47,7 @@ last_name_string = "userLastName"
 
 
 async def search_for_existing_application(page):
-    print_test_case_desc("Searching for an application that was added in application_test.py")
+    print_test_case_desc("Searching for an application that was added in tempapplication_test.py")
     await page.content()
 
     # fetch input fields
