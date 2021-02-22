@@ -21,16 +21,16 @@
             <span th:text="#{Competences} + ':'"></span>
         <div id="userCompetences">
             <div th:each="comp : ${user.getCompetences}">
-                <div th:text="${comp.getCompetence.getName(user.getLocale)}"></div>
-                <div th:text="${comp.getYearsOfExperience}"></div>
+                <div class="userCompetenceName" th:text="${comp.getCompetence.getName(user.getLocale)}"></div>
+                <div class="userCompetenceYears" th:text="${comp.getYearsOfExperience}"></div>
             </div>
         </div>
         <p>
         <div>
             <span th:text="#{Availability} + ':'"></span>
-            <div th:each="availability : ${user.getAvailabilityList}">
-                <div class="userAvailabilities" th:text="${availability.getFromDate} + ' ' + #{to} + ' ' + ${availability.getToDate}"></div>
-            </div>
+        <div id="userAvailabilities">
+            <div th:each="availability : ${user.getAvailabilityList}" th:text="${availability.getFromDate} + ' ' + #{to} + ' ' + ${availability.getToDate}"></div>
+        </div>
         </div>
     </div>
 </div>
