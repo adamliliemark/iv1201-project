@@ -93,8 +93,8 @@ async def add_availability_and_check(page):
     await page.content()
 
     # add availability dates
-    await page.waitForSelector("#from", SELECTOR_WAIT)
-    await page.waitForSelector("#to", SELECTOR_WAIT)
+    await page.waitForSelector("#from")
+    await page.waitForSelector("#to")
     from_input = await page.J("#from")
     to_input = await page.J("#to")
     from_string = "2222-02-02"
@@ -107,7 +107,7 @@ async def add_availability_and_check(page):
 
     # check that the page has been updated correctly
     # this test sometimes locks, dont knot why yet
-    await page.waitForSelector("#userAvailabilities", SELECTOR_WAIT)
+    await page.waitForSelector("#userAvailabilities")
     ua = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => e.innerText)")
     expected_availability = from_string + " to " + to_string
     assert expected_availability in ua, "Expected availability not in availability list"
