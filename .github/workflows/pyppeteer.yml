@@ -17,5 +17,5 @@ jobs:
         run: pip3 install pyppeteer
       - name: Compile and start server
         run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main" -Dmaven.test.skip -q -Dspring-boot.run.arguments="--spring.profiles.active=test" &
-      - name: Run pypp
-        run: python3 pypp.py
+      - name: User test, login and make application
+        run: python3 /src/test/acceptance/applicationTest.py
