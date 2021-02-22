@@ -181,11 +181,13 @@ public class UserService {
             .forEach(umComp ->
                 translationRepo.findByText(umComp.getCompetenceName())
                 .map(CompetenceTranslation::getCompetence)
-                .ifPresent(c -> {
-                        LOGGER.trace("\tTransfering availability from old to new User:\n" + umComp);
+                .ifPresentOrElse(c -> {
+                        LOGGER.trace("\tTransfering competence from old to new User:\n" + umComp);
                         newUser.addCompetence(c, umComp.getYearsOfExperience());
                         unmigratedCompRepo.delete(umComp);
-                })
+                },               () ->
+                        LOGGER.trace("Skipping transfer of nonexistent competence: " + umComp.getCompetenceName())
+                )
             );
 
             unmigratedAvailabilityRepo
