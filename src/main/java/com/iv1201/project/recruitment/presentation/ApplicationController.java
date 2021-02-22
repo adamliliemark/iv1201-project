@@ -131,6 +131,7 @@ public class ApplicationController {
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, BindingResult bindingResult, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
+        
         if(bindingResult.hasErrors()) {
             model.addAttribute("errorsPresent", true);
             model.addAttribute("fieldErrors", bindingResult.getAllErrors());
@@ -142,8 +143,6 @@ public class ApplicationController {
                 switch (e.errorCode) {
                     case CONFLICT_AVAILABIITY:
                         model.addAttribute("error", "apply.duplicateAvailability");
-                        LOGGER.trace("User tried to enter duplicate availabilities\n{"
-                        + user.getEmail() + "\n," + availabilityFormObject.getFrom() + "\n," + availabilityFormObject.getTo() + "\n}");
                         break;
                     default:
                         model.addAttribute("error", "apply.uncaught");
