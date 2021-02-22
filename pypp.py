@@ -91,17 +91,17 @@ async def enter_and_check_competence_years(page):
     await page.waitForSelector("#userCompetences")
 
     # fetch the user competences
-    uc = await page.J("#userCompetences")
+    user_competences = await page.J("#userCompetences")
 
     # fetch values: length of list, competence name and years
-    uclen = await uc.JJeval("div", "node => [...node['0'].children]")
-    ucp = await uc.JJeval(".userCompetenceName", "node => node.map(n => n.innerText)")
-    ucy = await uc.JJeval(".userCompetenceYears", "node => node.map(n => n.innerText)")
+    user_competences_divs = await user_competences.JJeval("div", "node => [...node['0'].children]")
+    user_competence_name = await user_competences.JJeval(".userCompetenceName", "node => node.map(n => n.innerText)")
+    user_competence_years = await user_competences.JJeval(".userCompetenceYears", "node => node.map(n => n.innerText)")
 
     # assert correct values
-    assert competence_to_choose in ucp, "Expected competence name to be " + competence_to_choose
-    assert competence_years_to_add in ucy, "Exepected competence years to be " + competence_years_to_add
-    assert len(uclen) == 2, "Wrong length of competence list"
+    assert competence_to_choose in user_competence_name, "Expected competence name to be " + competence_to_choose
+    assert competence_years_to_add in user_competence_years, "Exepected competence years to be " + competence_years_to_add
+    assert len(user_competences_divs) == 2, "Wrong length of competence list"
 
     # submit the form
     await page.click("#competenceFormSubmit")
@@ -112,6 +112,8 @@ async def add_availability_and_check(page):
     await page.content()
 
     # add availability dates
+    await page.waitForSelector("#from")
+    await page.waitForSelector("#to")
     from_input = await page.J("#from")
     to_input = await page.J("#to")
     from_string = "2222-02-02"
