@@ -180,26 +180,30 @@ public class UserService {
             .findAllBypersonId(up.getPersonId())
             .forEach(umComp ->
                 translationRepo.findByText(umComp.getCompetenceName())
-                    .map(CompetenceTranslation::getCompetence)
-                    .ifPresent(c -> {
-                            newUser.addCompetence(c, umComp.getYearsOfExperience());
-                            unmigratedCompRepo.delete(umComp);
-                    })
+                .map(CompetenceTranslation::getCompetence)
+                .ifPresent(c -> {
+                        LOGGER.trace("\tTransfering availability from old to new User:\n" + umComp);
+                        newUser.addCompetence(c, umComp.getYearsOfExperience());
+                        unmigratedCompRepo.delete(umComp);
+                })
             );
 
             unmigratedAvailabilityRepo
             .findAllByPersonId(up.getPersonId())
             .forEach(umAvail -> {
+                    LOGGER.trace("\tTransfering availability from old to new User:\n" + umAvail);
                     newUser.addAvailability(umAvail.getFromDate(), umAvail.getToDate());
                     unmigratedAvailabilityRepo.delete(umAvail);
             });
-
+            LOGGER.trace("\tsaving new User.");
             User savedUser = userRepo.save(newUser);
             Role r = up.getRole_id() == 1 ? Role.ROLE_ADMIN : Role.ROLE_USER;
+            LOGGER.trace("\tsaving Authority for new User.");
             authorityRepo.save(new Authority(r.toString(), savedUser));
+            LOGGER.trace("\tdeleting old UnmigratedUser.");
             unmigratedPersonRepo.delete(up);
         } catch (Exception e) {
-            LOGGER.error("Could not restore user, reason: EXCEPTION '" + email + "' ", e);
+            LOGGER.error("Could not restore user, reason: EXCEPTION '" + email + "' [reverting transaction]", e);
             //very important to rethrow this error!
             throw e;
         }
