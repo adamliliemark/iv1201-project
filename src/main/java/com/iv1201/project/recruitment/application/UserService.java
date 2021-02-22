@@ -118,7 +118,7 @@ public class UserService {
         if(!availabilityRepository.findByUserAndFromDateAndToDate(user, from, to).isPresent()) {
             user.addAvailability(from, to);
         } else {
-            //throw new IllegalArgumentException("form.duplicateDates");
+            throw new IllegalArgumentException("form.duplicateDates");
         }
     }
 

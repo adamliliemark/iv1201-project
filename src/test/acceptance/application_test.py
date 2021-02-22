@@ -85,7 +85,7 @@ async def enter_and_check_competence_years(page):
     assert len(user_competences_divs) == 2, "Wrong length of competence list"
 
     # submit the form
-    await page.click("#competenceFormSubmit")
+    await page.click("#competenceFormSubmit", WAIT_OPTS)
     print_success()
 
 
@@ -104,18 +104,18 @@ async def add_availability_and_check(page):
     await to_input.type(to_string[::-1])
 
     # submit the form
-    await page.click("#availabilityFormSubmit")
+    await page.click("#availabilityFormSubmit", WAIT_OPTS)
 
     # check that the page has been updated correctly
     # this test sometimes locks, dont knot why yet
     await page.waitForSelector("#userAvailabilities")
-    ua = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => e.innerText)")
+    user_availabilities = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => e.innerText)")
     expected_availability = from_string + " to " + to_string
-    assert expected_availability in ua, "Expected availability not in availability list"
+    assert expected_availability in user_availabilities, "Expected availability not in availability list"
 
     # submit the form
     await page.waitForSelector("#applicationFormReviewBtn")
-    await page.click("#applicationFormReviewBtn")
+    await page.click("#applicationFormReviewBtn", WAIT_OPTS)
     print_success()
 
 
@@ -123,7 +123,7 @@ async def submit_entire_application(page):
     print_test_case_desc("Submitting the previously created application")
     await page.content()
 
-    await page.click("#submitApplication")
+    await page.click("#submitApplication", WAIT_OPTS)
     print_success()
 
 
