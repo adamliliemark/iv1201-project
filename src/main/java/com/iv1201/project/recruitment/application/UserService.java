@@ -114,11 +114,12 @@ public class UserService {
      * @param to availability end date
      */
     @Transactional
-    public void saveAvailabilityToUser(User user, LocalDate from, LocalDate to) {
-        if(!availabilityRepository.findByUserAndFromDateAndToDate(user, from, to).isPresent()) {
-            user.addAvailability(from, to);
+    public void saveAvailabilityToUser(User user, LocalDate from, LocalDate to) throws UserServiceError {
+        Availability av = new Availability(from, to, user);
+        if(!user.getAvailabilityList().contains(av)) {
+            user.addAvailability(av);
         } else {
-            throw new IllegalArgumentException("form.duplicateDates");
+            throw new UserServiceError(ERROR_CODE.CONFLICT_AVAILABIITY);
         }
     }
 

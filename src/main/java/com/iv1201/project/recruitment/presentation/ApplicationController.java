@@ -1,5 +1,6 @@
 package com.iv1201.project.recruitment.presentation;
 
+import com.iv1201.project.recruitment.application.exceptions.UserServiceError;
 import com.iv1201.project.recruitment.domain.Competence;
 import com.iv1201.project.recruitment.application.CompetenceService;
 import com.iv1201.project.recruitment.application.UserService;
@@ -128,13 +129,27 @@ public class ApplicationController {
      */
     @PostMapping("/apply/availability")
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, BindingResult bindingResult, Model model) {
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("error", bindingResult.getAllErrors());
-        } else {
-            userService.saveAvailabilityToUser(user, availabilityFormObject.getFrom(), availabilityFormObject.getTo());
-        }
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("errorsPresent", true);
+            model.addAttribute("fieldErrors", bindingResult.getAllErrors());
+        } else {
+            try {
+                userService.saveAvailabilityToUser(user, availabilityFormObject.getFrom(), availabilityFormObject.getTo());
+            } catch (UserServiceError e) {
+                        model.addAttribute("errorsPresent", true);
+                switch (e.errorCode) {
+                    case CONFLICT_AVAILABIITY:
+                        model.addAttribute("error", "apply.duplicateAvailability");
+                        LOGGER.trace("User tried to enter duplicate availabilities\n{"
+                        + user.getEmail() + "\n," + availabilityFormObject.getFrom() + "\n," + availabilityFormObject.getTo() + "\n}");
+                        break;
+                    default:
+                        model.addAttribute("error", "apply.uncaught");
+                }
+            }
+        }
         return "applicationView";
     }
 

@@ -18,10 +18,11 @@
     <div id="js-error-text" class="error-text"></div>
 </div>
 
-<div id="th-error-overlay" th:if="${error != null}" th:fragment="errorOverlayTh">
-    <input type="checkbox" id="what" th:checked="${error != null}">
+<div id="th-error-overlay" th:if="${errorsPresent}" th:fragment="errorOverlayTh">
+    <input type="checkbox" id="what" th:checked="${errorsPresent}">
     <label for="what"  class="error-overlay">
-        <p th:each="error : ${error}" class="error-text" th:text="#{error.__${error.getDefaultMessage}__}">
+        <p th:if="${fieldErrors != null}" th:each="error : ${fieldErrors}" class="error-text" th:text="#{error.__${error.getDefaultMessage}__}">
+        <p th:if="${error != null}" class="error-text" th:text="#{${error}}">
     </label>
 </div>
 
