@@ -5,6 +5,7 @@ import pyppeteer as pypp
 
 BASE_URL = "http://127.0.0.1:8080"
 WAIT_OPTS = {"waitUntil": "networkidle0"}
+SELECTOR_WAIT = {"timeout": "1000"}
 
 
 def print_test_case_desc(desc):
@@ -112,8 +113,8 @@ async def add_availability_and_check(page):
     await page.content()
 
     # add availability dates
-    await page.waitForSelector("#from")
-    await page.waitForSelector("#to")
+    await page.waitForSelector("#from", SELECTOR_WAIT)
+    await page.waitForSelector("#to", SELECTOR_WAIT)
     from_input = await page.J("#from")
     to_input = await page.J("#to")
     from_string = "2222-02-02"
