@@ -85,7 +85,6 @@ public class ApplicationController {
      */
     @PostMapping("/apply/competence")
     public String fetchCompetenceForm(@Valid @ModelAttribute("competenceFormObject") CompetenceForm competenceFormObject, BindingResult bindingResult, Model model) {
-        System.out.println(competenceFormObject.getYears());
         if(bindingResult.hasErrors()) {
             model.addAttribute("error", bindingResult.getAllErrors());
         } else {
