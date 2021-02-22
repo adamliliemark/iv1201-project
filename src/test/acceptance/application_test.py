@@ -1,3 +1,4 @@
+import asyncio
 from pyppeteer import launch
 from shared import *
 
