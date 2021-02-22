@@ -131,7 +131,7 @@ public class ApplicationController {
     public String fetchAvailabilityForm(@Valid @ModelAttribute("availabilityFormObject") AvailabilityForm availabilityFormObject, BindingResult bindingResult, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
-        
+
         if(bindingResult.hasErrors()) {
             model.addAttribute("errorsPresent", true);
             model.addAttribute("fieldErrors", bindingResult.getAllErrors());

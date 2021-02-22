@@ -13,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -26,6 +27,7 @@ import java.util.function.Function;
 @Component
 @Service
 public class UserService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     public static final String HARDCODED_RESET_PASSWORD = "new_password";
     /**
      * User role
@@ -157,41 +159,51 @@ public class UserService {
     public void restoreUnmigratedPerson(String email) throws UserServiceError {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Optional<UnmigratedPerson> maybeUp = unmigratedPersonRepo.findByEmailIgnoreCase(email);
-        if(!maybeUp.isPresent())
+        if(!maybeUp.isPresent()) {
+            LOGGER.trace("Could not restore user, reason: NONEXISTENT '" + email + "'");
             return;
+        }
         UnmigratedPerson up = maybeUp.get();
 
-        if(userRepo.existsByEmailIgnoreCase(up.getEmail()))
+        if(userRepo.existsByEmailIgnoreCase(up.getEmail())) {
+            LOGGER.trace("Could not restore user, reason: CONFLICT '" + email + "'");
             throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
+        }
 
         User newUser = new User(up);
         newUser.setPassword(encoder.encode(HARDCODED_RESET_PASSWORD));
+        try {
+            this.validateUser(newUser, HARDCODED_RESET_PASSWORD);
 
-        this.validateUser(newUser, HARDCODED_RESET_PASSWORD);
+            //We silently ignore nonexistent competences
+            unmigratedCompRepo
+            .findAllBypersonId(up.getPersonId())
+            .forEach(umComp ->
+                translationRepo.findByText(umComp.getCompetenceName())
+                    .map(CompetenceTranslation::getCompetence)
+                    .ifPresent(c -> {
+                            newUser.addCompetence(c, umComp.getYearsOfExperience());
+                            unmigratedCompRepo.delete(umComp);
+                    })
+            );
 
-        //We silently ignore nonexistent competences
-        unmigratedCompRepo
-        .findAllBypersonId(up.getPersonId())
-        .forEach(umComp ->
-            translationRepo.findByText(umComp.getCompetenceName())
-                .map(CompetenceTranslation::getCompetence)
-                .ifPresent(c -> {
-                        newUser.addCompetence(c, umComp.getYearsOfExperience());
-                        unmigratedCompRepo.delete(umComp);
-                })
-        );
+            unmigratedAvailabilityRepo
+            .findAllByPersonId(up.getPersonId())
+            .forEach(umAvail -> {
+                    newUser.addAvailability(umAvail.getFromDate(), umAvail.getToDate());
+                    unmigratedAvailabilityRepo.delete(umAvail);
+            });
 
-        unmigratedAvailabilityRepo
-        .findAllByPersonId(up.getPersonId())
-        .forEach(umAvail -> {
-                newUser.addAvailability(umAvail.getFromDate(), umAvail.getToDate());
-                unmigratedAvailabilityRepo.delete(umAvail);
-        });
-
-        User savedUser = userRepo.save(newUser);
-        Role r = up.getRole_id() == 1 ? Role.ROLE_ADMIN : Role.ROLE_USER;
-        authorityRepo.save(new Authority(r.toString(), savedUser));
-        unmigratedPersonRepo.delete(up);
+            User savedUser = userRepo.save(newUser);
+            Role r = up.getRole_id() == 1 ? Role.ROLE_ADMIN : Role.ROLE_USER;
+            authorityRepo.save(new Authority(r.toString(), savedUser));
+            unmigratedPersonRepo.delete(up);
+        } catch (Exception e) {
+            LOGGER.error("Could not restore user, reason: EXCEPTION '" + email + "' ", e);
+            //very important to rethrow this error!
+            throw e;
+        }
+            LOGGER.error("successfully restored user '" + email + "'.");
     }
 
     /**
