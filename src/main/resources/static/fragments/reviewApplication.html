@@ -10,7 +10,7 @@
         <div class="subtitle" th:text="#{apply.subtitle.review}"></div>
         <p>
             <form th:if="${form == 'review'}" th:action="@{/apply/submit}" name="submitForm" action="#" class="form" method="post">
-                <input type="submit" th:value="#{submit}">
+                <input type="submit" id="submitApplication" th:value="#{submit}">
             </form>
     </div>
 

@@ -18,4 +18,6 @@ jobs:
       - name: Compile and start server
         run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main" -Dmaven.test.skip -q -Dspring-boot.run.arguments="--spring.profiles.active=test" &
       - name: User test, login and make application
-        run: python3 ./src/test/acceptance/applicationTest.py
+        run: python3 ./src/test/acceptance/application_test.py
+      - name: Admin test, login and search for applications
+        run: python3 ./src/test/acceptance/list_test.py

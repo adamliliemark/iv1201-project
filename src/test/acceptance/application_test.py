@@ -1,4 +1,3 @@
-import asyncio
 from pyppeteer import launch
 from shared import *
 
@@ -6,7 +5,7 @@ from shared import *
 async def main():
     browser = await launch(
         options={
-            'args': ['--no-sandbox']
+            'args': ['--no-sandbox --lang=en_US']
         })
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
@@ -17,7 +16,7 @@ async def main():
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
     await add_availability_and_check(page)
-    # raise Exception("this is a dummy exception that should kill the process")
+    await submit_entire_application(page)
     await browser.close()
 
 
@@ -30,12 +29,14 @@ async def login(page):
     await pw.type("pass")
     # await page.screenshot({'path': 'login.png'})
     await page.click("#loginbtn")
+    print_success()
 
 
 async def check_first_page(page):
     print_test_case_desc("Checking that first page contains correct text.")
     await page.waitForSelector(".home-middle")
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
+    print_success()
 
 
 async def check_translation_table(page):
@@ -46,6 +47,7 @@ async def check_translation_table(page):
     assert len(competences) == len(expected_competences), "Wrong length of competence selector"
     for competence in expected_competences:
         assert competence in competences, "Expected competence {} not in competence selector".format(competence)
+    print_success()
 
 
 async def enter_and_check_competence_years(page):
@@ -83,6 +85,7 @@ async def enter_and_check_competence_years(page):
 
     # submit the form
     await page.click("#competenceFormSubmit")
+    print_success()
 
 
 async def add_availability_and_check(page):
@@ -103,6 +106,7 @@ async def add_availability_and_check(page):
     await page.click("#availabilityFormSubmit")
 
     # check that the page has been updated correctly
+    # this test sometimes locks, dont knot why yet
     await page.waitForSelector("#userAvailabilities", SELECTOR_WAIT)
     ua = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => e.innerText)")
     expected_availability = from_string + " to " + to_string
@@ -111,6 +115,15 @@ async def add_availability_and_check(page):
     # submit the form
     await page.waitForSelector("#applicationFormReviewBtn")
     await page.click("#applicationFormReviewBtn")
+    print_success()
+
+
+async def submit_entire_application(page):
+    print_test_case_desc("Submitting the previously created application")
+    await page.content()
+
+    await page.click("#submitApplication")
+    print_success()
 
 
 asyncio.get_event_loop().run_until_complete(main())
