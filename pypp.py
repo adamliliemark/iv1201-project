@@ -126,6 +126,7 @@ async def add_availability_and_check(page):
     await page.click("#availabilityFormSubmit")
 
     # check that the page has been updated correctly
+    await page.waitForSelector("#userAvailabilities", SELECTOR_WAIT)
     ua = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => e.innerText)")
     expected_availability = from_string + " to " + to_string
     assert expected_availability in ua, "Expected availability not in availability list"
