@@ -104,7 +104,7 @@ async def add_availability_and_check(page):
     await to_input.type(to_string[::-1])
 
     # submit the form
-    await page.click("#availabilityFormSubmit", WAIT_OPTS)
+    await page.click("#availabilityFormSubmit")
 
     # check that the page has been updated correctly
     # this test sometimes locks, dont knot why yet
@@ -116,7 +116,7 @@ async def add_availability_and_check(page):
 
     # submit the form
     await page.waitForSelector("#applicationFormReviewBtn")
-    await page.click("#applicationFormReviewBtn", WAIT_OPTS)
+    await page.click("#applicationFormReviewBtn")
     print_success()
 
 
