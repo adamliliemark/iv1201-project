@@ -81,7 +81,7 @@ async def enter_and_check_competence_years(page):
 
     # assert correct values
     assert competence_to_choose in user_competence_name, "Expected competence name to be " + competence_to_choose
-    assert competence_years_to_add in user_competence_years, "Exepected competence years to be " + competence_years_to_add
+    assert competence_years_to_add in user_competence_years, "Expected competence years to be " + competence_years_to_add
     assert len(user_competences_divs) == 2, "Wrong length of competence list"
 
     # submit the form
