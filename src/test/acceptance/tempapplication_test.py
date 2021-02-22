@@ -1,29 +1,6 @@
-
 import asyncio
 from pyppeteer import launch
-import pyppeteer as pypp
-
-BASE_URL = "http://127.0.0.1:8080"
-WAIT_OPTS = {"waitUntil": "networkidle0"}
-SELECTOR_WAIT = {"timeout": "1000"}
-
-
-def print_test_case_desc(desc):
-    print(" - {}".format(desc))
-
-
-async def retry_connect(url, retries, page):
-    if retries <= 0:
-        print("Connection failed!")
-        return
-    else:
-        try:
-            await page.goto(url)
-            print("Connected!")
-        except pypp.errors.PageError:
-            print("\nretrying start connection")
-            await asyncio.sleep(4)
-            await retry_connect(url, retries - 1, page)
+from shared import *
 
 
 async def main():
@@ -40,7 +17,7 @@ async def main():
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
     await add_availability_and_check(page)
-    # raise Exception("this is a dummy exception that should kill the process")
+    await submit_entire_application(page)
     await browser.close()
 
 
@@ -53,12 +30,14 @@ async def login(page):
     await pw.type("pass")
     # await page.screenshot({'path': 'login.png'})
     await page.click("#loginbtn")
+    print_success()
 
 
 async def check_first_page(page):
     print_test_case_desc("Checking that first page contains correct text.")
     await page.waitForSelector(".home-middle")
     assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
+    print_success()
 
 
 async def check_translation_table(page):
@@ -69,6 +48,7 @@ async def check_translation_table(page):
     assert len(competences) == len(expected_competences), "Wrong length of competence selector"
     for competence in expected_competences:
         assert competence in competences, "Expected competence {} not in competence selector".format(competence)
+    print_success()
 
 
 async def enter_and_check_competence_years(page):
@@ -101,11 +81,12 @@ async def enter_and_check_competence_years(page):
 
     # assert correct values
     assert competence_to_choose in user_competence_name, "Expected competence name to be " + competence_to_choose
-    assert competence_years_to_add in user_competence_years, "Exepected competence years to be " + competence_years_to_add
+    assert competence_years_to_add in user_competence_years, "Expected competence years to be " + competence_years_to_add
     assert len(user_competences_divs) == 2, "Wrong length of competence list"
 
     # submit the form
-    await page.click("#competenceFormSubmit")
+    await page.click("#competenceFormSubmit", WAIT_OPTS)
+    print_success()
 
 
 async def add_availability_and_check(page):
@@ -113,8 +94,8 @@ async def add_availability_and_check(page):
     await page.content()
 
     # add availability dates
-    await page.waitForSelector("#from", SELECTOR_WAIT)
-    await page.waitForSelector("#to", SELECTOR_WAIT)
+    await page.waitForSelector("#from")
+    await page.waitForSelector("#to")
     from_input = await page.J("#from")
     to_input = await page.J("#to")
     from_string = "2222-02-02"
@@ -123,17 +104,27 @@ async def add_availability_and_check(page):
     await to_input.type(to_string[::-1])
 
     # submit the form
-    await page.click("#availabilityFormSubmit")
+    await page.click("#availabilityFormSubmit", WAIT_OPTS)
 
     # check that the page has been updated correctly
-    await page.waitForSelector("#userAvailabilities", SELECTOR_WAIT)
-    ua = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => e.innerText)")
+    # this test sometimes locks, dont knot why yet
+    await page.waitForSelector("#userAvailabilities")
+    user_availabilities = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => e.innerText)")
     expected_availability = from_string + " to " + to_string
-    assert expected_availability in ua, "Expected availability not in availability list"
+    assert expected_availability in user_availabilities, "Expected availability not in availability list"
 
     # submit the form
     await page.waitForSelector("#applicationFormReviewBtn")
-    await page.click("#applicationFormReviewBtn")
+    await page.click("#applicationFormReviewBtn", WAIT_OPTS)
+    print_success()
+
+
+async def submit_entire_application(page):
+    print_test_case_desc("Submitting the previously created application")
+    await page.content()
+
+    await page.click("#submitApplication", WAIT_OPTS)
+    print_success()
 
 
 asyncio.get_event_loop().run_until_complete(main())
