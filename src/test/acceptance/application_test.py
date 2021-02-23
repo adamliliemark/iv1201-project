@@ -17,6 +17,7 @@ async def main():
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
     #await add_availability_and_check(page)
+    await submit_availability_form(page)
     await submit_entire_application(page)
     await browser.close()
 
@@ -115,6 +116,13 @@ async def add_availability_and_check(page):
     assert expected_availability in user_availabilities, "Expected availability not in availability list"
 
     # submit the form
+    await page.waitForSelector("#applicationFormReviewBtn")
+    await page.click("#applicationFormReviewBtn")
+    print_success()
+
+
+async def submit_availability_form(page):
+    await page.content()
     await page.waitForSelector("#applicationFormReviewBtn")
     await page.click("#applicationFormReviewBtn")
     print_success()
