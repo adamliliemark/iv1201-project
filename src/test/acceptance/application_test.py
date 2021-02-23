@@ -122,6 +122,7 @@ async def add_availability_and_check(page):
 
 
 async def submit_availability_form(page):
+    print_test_case_desc("Submitting availability form")
     await page.content()
     await page.waitForSelector("#applicationFormReviewBtn")
     await page.click("#applicationFormReviewBtn")
@@ -132,6 +133,7 @@ async def submit_entire_application(page):
     print_test_case_desc("Submitting the previously created application")
     await page.content()
 
+    await page.waitForSelector("#submitApplication")
     await page.click("#submitApplication", WAIT_OPTS)
     print_success()
 
