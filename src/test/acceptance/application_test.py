@@ -17,6 +17,7 @@ async def main():
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
     #await add_availability_and_check(page)
+    await add_availability(page)
     await submit_availability_form(page)
     #await submit_entire_application(page)
     await browser.close()
@@ -90,7 +91,11 @@ async def enter_and_check_competence_years(page):
     print_success()
 
 
-async def add_availability_and_check(page):
+from_string = "2222-02-02"
+to_string = "2222-03-03"
+
+
+async def add_availability(page):
     print_test_case_desc("Entering 2222-02-02 to 2222-03-03 as availability and checks that it is updated on the page")
     await page.content()
 
@@ -99,14 +104,17 @@ async def add_availability_and_check(page):
     await page.waitForSelector("#to", SELECTOR_WAIT)
     from_input = await page.J("#from")
     to_input = await page.J("#to")
-    from_string = "2222-02-02"
-    to_string = "2222-03-03"
+
     await from_input.type(from_string[::-1])
     await to_input.type(to_string[::-1])
 
     # submit the form
     await page.click("#availabilityFormSubmit")
+    print_success()
 
+
+async def check_availability_form(page):
+    print_test_case_desc("Checking that the availability has been added")
     # check that the page has been updated correctly
     # this test sometimes locks, dont knot why yet
     await page.waitForSelector("#userAvailabilities", SELECTOR_WAIT)
@@ -132,7 +140,6 @@ async def submit_availability_form(page):
 async def submit_entire_application(page):
     print_test_case_desc("Submitting the previously created application")
     await page.content()
-
     await page.waitForSelector("#submitApplication")
     await page.click("#submitApplication", WAIT_OPTS)
     print_success()
