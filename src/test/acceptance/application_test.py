@@ -16,10 +16,9 @@ async def main():
     await page.click("#apply-link", WAIT_OPTS)
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
-    #await add_availability_and_check(page)
     await add_availability(page)
     await check_availability_form(page)
-    #await submit_availability_form(page)
+    await submit_availability_form(page)
     #await submit_entire_application(page)
     await browser.close()
 
@@ -117,23 +116,17 @@ async def add_availability(page):
 async def check_availability_form(page):
     print_test_case_desc("Checking that the availability has been added")
     # check that the page has been updated correctly
-    # this test sometimes locks, dont knot why yet
     await page.waitForSelector("#userAvailabilities", SELECTOR_WAIT)
     user_availabilities = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => "
                                                                    "e.innerText)")
     expected_availability = from_string + " to " + to_string
     assert expected_availability in user_availabilities, "Expected availability not in availability list"
-
-    # submit the form
-    await page.waitForSelector("#applicationFormReviewBtn")
-    await page.click("#applicationFormReviewBtn")
     print_success()
 
 
 async def submit_availability_form(page):
     print_test_case_desc("Submitting availability form")
-    await page.content()
-    await page.waitForSelector("#applicationFormReviewBtn")
+    await page.waitForSelector("#applicationFormReviewBtn", WAIT_OPTS)
     await page.click("#applicationFormReviewBtn")
     print_success()
 
