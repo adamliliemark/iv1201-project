@@ -18,8 +18,8 @@ async def main():
     await enter_and_check_competence_years(page)
     await add_availability(page)
     await check_availability_form(page)
-    await submit_availability_form(page)
-    #await submit_entire_application(page)
+    #await submit_availability_form(page)
+    await submit_entire_application(page)
     await browser.close()
 
 
@@ -126,16 +126,16 @@ async def check_availability_form(page):
 
 async def submit_availability_form(page):
     print_test_case_desc("Submitting availability form")
-    await page.waitForSelector("#applicationFormReviewBtn", WAIT_OPTS)
     await page.click("#applicationFormReviewBtn")
     print_success()
 
 
 async def submit_entire_application(page):
     print_test_case_desc("Submitting the previously created application")
-    await page.content()
-    await page.waitForSelector("#submitApplication")
-    await page.click("#submitApplication", WAIT_OPTS)
+    await page.waitForSelector("#applicationFormReviewBtn", WAIT_OPTS)
+    await page.click("#applicationFormReviewBtn")
+    await page.waitForSelector("#submitApplication", WAIT_OPTS)
+    await page.click("#submitApplication")
     print_success()
 
 
