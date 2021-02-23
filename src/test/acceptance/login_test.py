@@ -57,14 +57,14 @@ async def test_logout(page):
 async def check_logout_redirect(page):
     print_test_case_desc("Checking that browser was redirected to /login")
     expected_url = "http://127.0.0.1:8080/login"
-    assert expected_url == page.url
+    assert expected_url == page.url, "Actual URL: {}".format(page.url)
     print_success()
 
 
 async def check_testuser_login_redirect(page):
     print_test_case_desc("Checking that testuser was redirected to /home")
     expected_url = "http://127.0.0.1:8080/home"
-    assert expected_url == page.url
+    assert expected_url == page.url, "Actual URL: {}".format(page.url)
     print_success()
 
 
@@ -77,7 +77,7 @@ async def login_with_testadmin_credentials(page):
 async def check_testadmin_login_redirect(page):
     print_test_case_desc("Checking that testadmin was redirected to /admin")
     expected_url = "http://127.0.0.1:8080/admin"
-    assert expected_url == page.url
+    assert expected_url == page.url, "Actual URL: {}".format(page.url)
     print_success()
 
 
