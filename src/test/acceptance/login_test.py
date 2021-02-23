@@ -12,14 +12,23 @@ async def main():
     await retry_connect(BASE_URL, 20, page)
 
     await login_with_testuser_credentials(page)
+    await asyncio.sleep(1)
     await check_testuser_login_redirect(page)
+    await asyncio.sleep(1)
     await test_logout(page)
+    await asyncio.sleep(1)
     await check_logout_redirect(page)
+    await asyncio.sleep(1)
     await login_with_testadmin_credentials(page)
+    await asyncio.sleep(1)
     await check_testadmin_login_redirect(page)
+    await asyncio.sleep(1)
     await test_logout(page)
+    await asyncio.sleep(1)
     await check_logout_redirect(page)
+    await asyncio.sleep(1)
     await login_with_wrong_credentials(page)
+    await asyncio.sleep(1)
     await check_wrong_login(page)
     await browser.close()
 
@@ -52,7 +61,7 @@ async def login_with_testuser_credentials(page):
 async def test_logout(page):
     print_test_case_desc("Logging out")
     await logout(page)
-    await asyncio.sleep(0.5)
+    #await asyncio.sleep(0.5)
     print_success()
 
 
