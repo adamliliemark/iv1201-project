@@ -26,3 +26,18 @@ async def retry_connect(url, retries, page):
             print("\nretrying start connection")
             await asyncio.sleep(4)
             await retry_connect(url, retries - 1, page)
+
+
+async def login(page, user, password):
+    await page.waitForSelector("#username")
+    usr = await page.J("#username")
+    await usr.type(user)
+    pw = await page.J("#password")
+    await pw.type(password)
+    await page.click("#loginbtn")
+
+
+async def logout(page):
+    await page.waitForSelector("#logoutBtn")
+    await page.click("#logoutBtn")
+

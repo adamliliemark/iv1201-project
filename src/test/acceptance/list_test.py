@@ -1,6 +1,6 @@
 import asyncio
 from pyppeteer import launch
-from shared import *
+from test_utils import *
 
 
 async def main():

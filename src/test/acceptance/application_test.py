@@ -1,6 +1,6 @@
 import asyncio
 from pyppeteer import launch
-from shared import *
+from test_utils import *
 
 
 async def main():
@@ -18,7 +18,7 @@ async def main():
     await enter_and_check_competence_years(page)
     await add_availability(page)
     await check_availability_form(page)
-    #await submit_availability_form(page)
+    await submit_availability_form(page)
     await submit_entire_application(page)
     await browser.close()
 
@@ -30,7 +30,6 @@ async def login(page):
     await usr.type("testuser@example.com")
     pw = await page.J("#password")
     await pw.type("pass")
-    # await page.screenshot({'path': 'login.png'})
     await page.click("#loginbtn")
     print_success()
 
@@ -125,7 +124,12 @@ async def check_availability_form(page):
 
 
 async def submit_availability_form(page):
+    # For some reason, this does not work on its own,
+    # but repeating it by putting the exact same functionality
+    # in submit_entire_application makes it magically work.
+    # Don't know why, probably won't fix.
     print_test_case_desc("Submitting availability form")
+    await page.waitForSelector("#applicationFormReviewBtn", WAIT_OPTS)
     await page.click("#applicationFormReviewBtn")
     print_success()
 
