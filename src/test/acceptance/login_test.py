@@ -10,8 +10,7 @@ async def main():
         })
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
-    await login_with_wrong_credentials(page)
-    await check_wrong_login(page)
+
     await login_with_testuser_credentials(page)
     await check_testuser_login_redirect(page)
     await test_logout(page)
@@ -20,6 +19,8 @@ async def main():
     await check_testadmin_login_redirect(page)
     await test_logout(page)
     await check_logout_redirect(page)
+    await login_with_wrong_credentials(page)
+    await check_wrong_login(page)
     await browser.close()
 
 
