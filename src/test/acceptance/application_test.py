@@ -143,8 +143,8 @@ async def submit_availability_form(page):
 
 async def submit_entire_application(page):
     print_test_case_desc("Submitting the previously created application")
-    await page.waitForSelector("#applicationFormReviewBtn", WAIT_OPTS)
-    await page.click("#applicationFormReviewBtn")
+    #await page.waitForSelector("#applicationFormReviewBtn", WAIT_OPTS)
+    #await page.click("#applicationFormReviewBtn")
     await page.waitForSelector("#submitApplication", WAIT_OPTS)
     await page.click("#submitApplication")
     print_success()
