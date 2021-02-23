@@ -52,12 +52,13 @@ async def login_with_testuser_credentials(page):
 async def test_logout(page):
     print_test_case_desc("Logging out")
     await logout(page)
+    await asyncio.sleep(0.5)
     print_success()
 
 
 async def check_logout_redirect(page):
     print_test_case_desc("Checking that browser was redirected to /login")
-    expected_url = "http://127.0.0.1:8080/login "
+    expected_url = "http://127.0.0.1:8080/login"
     assert expected_url == page.url, "Expected URL: {} Actual URL: {}".format(expected_url, page.url)
     print_success()
 
