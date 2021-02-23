@@ -52,6 +52,7 @@ async def login_with_testuser_credentials(page):
 async def test_logout(page):
     print_test_case_desc("Logging out")
     await logout(page)
+    await page.waitForNavigation()
     print_success()
 
 
