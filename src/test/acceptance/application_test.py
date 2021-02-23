@@ -16,7 +16,7 @@ async def main():
     await page.click("#apply-link", WAIT_OPTS)
     await check_translation_table(page)
     await enter_and_check_competence_years(page)
-    await add_availability_and_check(page)
+    #await add_availability_and_check(page)
     await submit_entire_application(page)
     await browser.close()
 
