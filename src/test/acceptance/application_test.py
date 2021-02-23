@@ -18,6 +18,7 @@ async def main():
     await enter_and_check_competence_years(page)
     #await add_availability_and_check(page)
     await add_availability(page)
+    await check_availability_form(page)
     #await submit_availability_form(page)
     #await submit_entire_application(page)
     await browser.close()
@@ -108,7 +109,7 @@ async def add_availability(page):
     await from_input.type(from_string[::-1])
     await to_input.type(to_string[::-1])
 
-    # submit the form
+    # add the availability
     await page.click("#availabilityFormSubmit")
     print_success()
 
