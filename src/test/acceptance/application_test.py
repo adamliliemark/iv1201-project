@@ -12,13 +12,21 @@ async def main():
     await retry_connect(BASE_URL, 20, page)
 
     await login(page)
+    await asyncio.sleep(0.5)
     await check_first_page(page)
+    await asyncio.sleep(0.5)
     await page.click("#apply-link", WAIT_OPTS)
+    await asyncio.sleep(0.5)
     await check_translation_table(page)
+    await asyncio.sleep(0.5)
     await enter_and_check_competence_years(page)
+    await asyncio.sleep(0.5)
     await add_availability(page)
+    await asyncio.sleep(0.5)
     await check_availability_form(page)
+    await asyncio.sleep(0.5)
     await submit_availability_form(page)
+    await asyncio.sleep(0.5)
     await submit_entire_application(page)
     await browser.close()
 
@@ -96,7 +104,6 @@ to_string = "2222-03-03"
 
 async def add_availability(page):
     print_test_case_desc("Entering 2222-02-02 to 2222-03-03 as availability and checks that it is updated on the page")
-    await page.content()
 
     # add availability dates
     await page.waitForSelector("#from", SELECTOR_WAIT)
