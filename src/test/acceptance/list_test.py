@@ -6,7 +6,7 @@ from shared import *
 async def main():
     browser = await launch(
         options={
-            'args': ['--no-sandbox --lang=en_US']
+            'args': ['--no-sandbox']
         })
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)

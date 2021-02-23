@@ -95,7 +95,7 @@ public class ApplicationController {
             userService.saveCompetenceToUser(user, competences.get(competenceFormObject.getName()), competenceFormObject.getYears());
         }
         if(checkForLastFetch(user)) {
-            model.addAttribute("last", true);
+            //model.addAttribute("last", true);
         }
         model.addAttribute("user", user);
         model.addAttribute("form", "competence");
