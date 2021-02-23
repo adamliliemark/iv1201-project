@@ -4,40 +4,31 @@ from test_utils import *
 
 
 async def main():
-    browser = await launch(
-        options={
-            'args': ['--no-sandbox']
-        })
+    browser = await launch(options=LAUNCH_OPTIONS_EN)
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
 
-    await login(page)
+    await login(page, "testadmin@example.com", "pass")
+    await nap()
     await check_first_page(page)
+    await nap()
     await page.click("#list-link", WAIT_OPTS)
+    await nap()
     await search_for_existing_application(page)
+    await nap()
     await check_existing_application_search(page)
+    await nap()
     await search_for_non_existing_application(page)
+    await nap()
     await check_non_existing_application_search(page)
-    # raise Exception("this is a dummy exception that should kill the process")
     await browser.close()
-
-
-async def login(page):
-    await page.waitForSelector("#username")
-    print_test_case_desc("Navigating to login")
-    usr = await page.J("#username")
-    await usr.type("testadmin@example.com")
-    pw = await page.J("#password")
-    await pw.type("pass")
-    # await page.screenshot({'path': 'login.png'})
-    await page.click("#loginbtn")
-    print_success()
 
 
 async def check_first_page(page):
     print_test_case_desc("Checking that first page contains correct text.")
-    await page.waitForSelector(".home-middle")
-    assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are an admin!"]
+    expected_message = "You are an admin!"
+    actual_message = await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")
+    assert expected_message in actual_message, "Expected: {}\tActual: {}".format(expected_message, actual_message)
     print_success()
 
 
@@ -47,8 +38,7 @@ last_name_string = "userLastName"
 
 
 async def search_for_existing_application(page):
-    print_test_case_desc("Searching for an application that was added in tempapplication_test.py")
-    await page.content()
+    print_test_case_desc("Searching for an application that was added in application_test.py")
 
     # fetch input fields
     from_input = await page.J("#from")
@@ -76,11 +66,11 @@ async def search_for_existing_application(page):
 
 async def check_existing_application_search(page):
     print_test_case_desc("Checking that the correct application showed up on the page")
-    await page.content()
 
     user_application = await page.JJeval(".userApplication", "node => node.map(n => n.innerText)")
     expected_user_application = "1: " + first_name_string + " " + last_name_string
-    assert expected_user_application in user_application, "Wrong applicant found."
+    assert expected_user_application in user_application, "Expected: {}\t" \
+                                                          "Actual: {}".format(expected_user_application, user_application)
     print_success()
 
 
@@ -89,7 +79,8 @@ async def search_for_non_existing_application(page):
 
     # click on list-link to clear form
     await page.click("#list-link", WAIT_OPTS)
-    await page.content()
+    # allow some time for reload
+    await nap()
 
     # hard coded values not in database
     from_string = "3333-02-02"
@@ -108,11 +99,11 @@ async def search_for_non_existing_application(page):
 
 async def check_non_existing_application_search(page):
     print_test_case_desc("Checking that the no application showed up on the page")
-    await page.content()
-
     found_application = await page.JJeval(".applications", "node => node.map(n => n.innerText)")
     expected_user_application = "No applications matched your search"
-    assert expected_user_application in found_application, "Applicant found when no one was expected."
+    assert expected_user_application in found_application, "Applicant found when no" \
+                                                           " one was expected in: {}".format(found_application)
     print_success()
+
 
 asyncio.get_event_loop().run_until_complete(main())

@@ -4,42 +4,28 @@ from test_utils import *
 
 
 async def main():
-    browser = await launch(
-        options={
-            'args': ['--no-sandbox']
-        })
+    browser = await launch(options=LAUNCH_OPTIONS_EN)
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
 
-    await login(page)
-    await asyncio.sleep(0.5)
+    await login(page, "testuser@example.com", "pass")
+    await nap()
     await check_first_page(page)
-    await asyncio.sleep(0.5)
+    await nap()
     await page.click("#apply-link", WAIT_OPTS)
-    await asyncio.sleep(0.5)
+    await nap()
     await check_translation_table(page)
-    await asyncio.sleep(0.5)
+    await nap()
     await enter_and_check_competence_years(page)
-    await asyncio.sleep(0.5)
+    await nap()
     await add_availability(page)
-    await asyncio.sleep(0.5)
+    await nap()
     await check_availability_form(page)
-    await asyncio.sleep(0.5)
+    await nap()
     await submit_availability_form(page)
-    await asyncio.sleep(0.5)
+    await nap()
     await submit_entire_application(page)
     await browser.close()
-
-
-async def login(page):
-    await page.waitForSelector("#username")
-    print_test_case_desc("Navigating to login")
-    usr = await page.J("#username")
-    await usr.type("testuser@example.com")
-    pw = await page.J("#password")
-    await pw.type("pass")
-    await page.click("#loginbtn")
-    print_success()
 
 
 async def check_first_page(page):
@@ -50,8 +36,8 @@ async def check_first_page(page):
 
 
 async def check_translation_table(page):
-    await page.waitForSelector("#competence")
     print_test_case_desc("Checking that the value in the competences list is translated to English")
+    await page.waitForSelector("#competence")
     expected_competences = ["Carousel operation", "Grilling sausage"]
     competences = await page.JJeval("#competence", "node => [...node['0'].children].map(e => e.value)")
     assert len(competences) == len(expected_competences), "Wrong length of competence selector"
@@ -131,21 +117,18 @@ async def check_availability_form(page):
 
 
 async def submit_availability_form(page):
-    # For some reason, this does not work on its own,
-    # but repeating it by putting the exact same functionality
-    # in submit_entire_application makes it magically work.
-    # Don't know why, probably won't fix.
     print_test_case_desc("Submitting availability form")
-    await page.waitForSelector("#applicationFormReviewBtn", WAIT_OPTS)
     await page.click("#applicationFormReviewBtn")
-    print_success()
+    if await page.J("#applicationFormReviewBtn") is None:
+        print_success()
+    else:
+        await submit_availability_form(page)
 
 
 async def submit_entire_application(page):
     print_test_case_desc("Submitting the previously created application")
-    #await page.waitForSelector("#applicationFormReviewBtn", WAIT_OPTS)
-    #await page.click("#applicationFormReviewBtn")
-    await page.waitForSelector("#submitApplication", WAIT_OPTS)
+    await page.screenshot({"path": "hej.png"})
+    await page.waitForSelector("#submitApplication")
     await page.click("#submitApplication")
     print_success()
 
