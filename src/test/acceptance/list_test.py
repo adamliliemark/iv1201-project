@@ -4,7 +4,7 @@ from utils import *
 
 
 async def main():
-    browser = await launch(options=LAUNCH_OPTIONS_EN)
+    browser = await launch(options=LAUNCH_OPTIONS)
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
 

@@ -4,9 +4,9 @@ import asyncio
 BASE_URL = "http://127.0.0.1:8080"
 WAIT_OPTS = {"waitUntil": "networkidle0"}
 SELECTOR_WAIT = {"timeout": "1000"}
-LAUNCH_OPTIONS_EN = {'args': ['--no-sandbox, --lang=en_US']}
-LAUNCH_OPTIONS_SE = {'args': ['--no-sandbox']}
-
+LAUNCH_OPTIONS = {'args': ['--no-sandbox']}
+USER = "testuser@example.com"
+PASS = "pass"
 
 async def perform_action(action, args):
     for i in range(10):
