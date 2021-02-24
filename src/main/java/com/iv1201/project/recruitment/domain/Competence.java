@@ -63,14 +63,18 @@ public class Competence {
                 .filter(c -> c.getLanguage().getLanguageCode().equals(languageCode))
                 .findAny()
                 .map(c -> c.getText())
-                .orElse("MISSING TRANSLATION");
+                .orElse(getNameFallback());
     }
 
     /**
      * Get default translation (en_US)
      * @return the en_US localized translation
      */
-    public String getName() {
-        return this.getName("en_US");
+    public String getNameFallback() {
+        return translations.stream()
+                .filter(c -> c.getLanguage().getLanguageCode().equals("en_US"))
+                .findAny()
+                .map(c -> c.getText())
+                .orElse("MISSING TRANSLATION");
     }
 }

@@ -47,6 +47,15 @@ public class UnmigratedAvailability {
         return fromDate;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\n\tpersonId:" + personId +
+                "\n\tfromDate:" + fromDate +
+                "\n\ttoDate:" + toDate +
+                "\n}";
+    }
+
     public LocalDate getToDate() {
         return toDate;
     }

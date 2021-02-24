@@ -37,3 +37,6 @@ build/
 
 #Ignoring Log
 logs/
+
+# pycache
+/src/test/acceptance/__pycache__/

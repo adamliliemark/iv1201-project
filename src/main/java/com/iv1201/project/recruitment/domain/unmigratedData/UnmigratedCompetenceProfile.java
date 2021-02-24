@@ -45,4 +45,13 @@ public class UnmigratedCompetenceProfile {
     public Long getPersonId() {
         return personId;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\n\tpersonId:" + personId +
+                "\n\tcometenceName:" + competenceName +
+                "\n\tcompetenceProfileID:" + competenceProfileId +
+                "\n}";
+    }
 }

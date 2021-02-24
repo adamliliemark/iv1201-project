@@ -14,7 +14,8 @@ public class UserServiceError extends Exception {
         UNAUTHORIZED_RESOURCE_ACCESS,
         INVALID_FIRST_NAME,
         INVALID_LAST_NAME,
-        INVALID_SSN;
+        INVALID_SSN,
+        CONFLICT_AVAILABIITY;
     }
 
     public ERROR_CODE errorCode;

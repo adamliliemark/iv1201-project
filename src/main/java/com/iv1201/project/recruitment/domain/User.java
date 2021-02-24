@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -77,9 +78,15 @@ public class User {
      * @param to is the date until the user is available.
      */
     public void addAvailability(LocalDate from, LocalDate to) {
-        if(this.availabilityList == null)
-            throw new RuntimeException();
         this.availabilityList.add(new Availability(from, to, this));
+    }
+
+    /**
+     * Adds a new availability period for the <>User</>.
+     * @param a the availability tro add.
+     */
+    public void addAvailability(Availability a) {
+        this.availabilityList.add(a);
     }
 
     /**
@@ -131,6 +138,19 @@ public class User {
      */
     public Set<CompetenceProfile> getCompetences() {
         return this.competences;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return email.equals(user.email) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(ssn, user.ssn) && Objects.equals(password, user.password) && enabled.equals(user.enabled);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, firstName, lastName, ssn, password, enabled);
     }
 }
 

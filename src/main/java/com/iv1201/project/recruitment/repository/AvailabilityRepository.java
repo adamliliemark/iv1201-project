@@ -41,6 +41,6 @@ public interface AvailabilityRepository extends CrudRepository<Availability, Str
             "a.toDate >= :toDate and " +
             "(:firstName is null or lower(u.firstName) like lower(concat('%', :firstName, '%'))) and " +
             "(:lastName is null or lower(u.lastName) like lower(concat('%', :lastName, '%'))) and " +
-            "(:competence < 1 or c.competence.id = :competence)")
+            "(:competence < 0 or c.competence.id = :competence)")
     List<ApplicationDTO> getAvailabilityApplications(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate, @Param("firstName")String firstName, @Param("lastName")String lastName, @Param("competence") int competence);
 }

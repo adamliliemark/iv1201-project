@@ -10,7 +10,7 @@
         <div class="subtitle" th:text="#{apply.subtitle.review}"></div>
         <p>
             <form th:if="${form == 'review'}" th:action="@{/apply/submit}" name="submitForm" action="#" class="form" method="post">
-                <input type="submit" th:value="#{submit}">
+                <input type="submit" id="submitApplication" th:value="#{submit}">
             </form>
     </div>
 
@@ -19,16 +19,18 @@
         <span th:text="#{Mail} + ':'"></span><div th:text="${user.getEmail}"></div>
         <p>
             <span th:text="#{Competences} + ':'"></span>
+        <div id="userCompetences">
             <div th:each="comp : ${user.getCompetences}">
-        <div th:text="${comp.getCompetence.getName(user.getLocale)}"></div>
-        <div th:text="${comp.getYearsOfExperience}"></div>
-    </div>
+                <div class="userCompetenceName" th:text="${comp.getCompetence.getName(user.getLocale)}"></div>
+                <div class="userCompetenceYears" th:text="${comp.getYearsOfExperience}"></div>
+            </div>
+        </div>
         <p>
         <div>
             <span th:text="#{Availability} + ':'"></span>
-            <div th:each="availability : ${user.getAvailabilityList}">
-                <div class="userAvailabilities" th:text="${availability.getFromDate} + ' ' + #{to} + ' ' + ${availability.getToDate}"></div>
-            </div>
+        <div id="userAvailabilities">
+            <div th:each="availability : ${user.getAvailabilityList}" th:text="${availability.getFromDate} + ' ' + #{to} + ' ' + ${availability.getToDate}"></div>
+        </div>
         </div>
     </div>
 </div>

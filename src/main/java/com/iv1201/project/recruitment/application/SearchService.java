@@ -9,6 +9,7 @@ import com.iv1201.project.recruitment.presentation.forms.ListForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Handles searches for and returns applications stored in the "Recruitment Applications" database.
@@ -33,24 +34,26 @@ public class SearchService {
      * @throws SearchServiceError is thrown if there has been an issue with the search.
      */
     public List<ApplicationDTO> getApplications(ListForm input, Iterable<Competence> competences) throws SearchServiceError {
+        return this.getApplications(input, competences, "en_US");
+    }
+        public List<ApplicationDTO> getApplications(ListForm input, Iterable<Competence> competences, String locale) throws SearchServiceError {
 
-            int competenceId = setCompetenceId(input.getCompetence(), competences);
+            long competenceId = setCompetenceId(input.getCompetence(), competences, locale);
             String[] names = setNames(input.getFirstName(), input.getLastName());
             List<ApplicationDTO> searchResult;
 
             switch (handleInput(input)) {
                 case "Availability":
-                    searchResult = availabilityRepo.getAvailabilityApplications(input.getAvailabilityForm().getFrom(), input.getAvailabilityForm().getTo(),names[0], names[1], competenceId);
+                    searchResult = availabilityRepo.getAvailabilityApplications(input.getAvailabilityForm().getFrom(), input.getAvailabilityForm().getTo(),names[0], names[1], (int)competenceId);
                     break;
                 case "User":
-                    searchResult = userRepo.getUserApplications(names[0], names[1], competenceId);
+                    searchResult = userRepo.getUserApplications(names[0], names[1], (int)competenceId);
                     break;
                 case "Empty":
                     throw new SearchServiceError("The entered listForm object was empty");
                 default:
                     throw new SearchServiceError("Invalid applications search!");
             }
-
         return searchResult;
     }
 
@@ -77,15 +80,12 @@ public class SearchService {
         return names;
     }
 
-    private int setCompetenceId(String competence, Iterable<Competence> competences){
-
-        int id = 1;
+    private long setCompetenceId(String competence, Iterable<Competence> competences, String locale) throws SearchServiceError{
 
         for (Competence c: competences) {
-            if (c.getName().equals(competence))
-                return id;
-            id++;
+            if (c.getName(locale).equalsIgnoreCase(competence))
+                return c.getId();
         }
-        return 0;
+        return -1;
     }
 }

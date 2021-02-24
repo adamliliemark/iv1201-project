@@ -2,8 +2,9 @@ package com.iv1201.project.recruitment.presentation;
 
 import com.iv1201.project.recruitment.application.UserService;
 import com.iv1201.project.recruitment.application.exceptions.UserServiceError;
-import com.iv1201.project.recruitment.presentation.forms.CompetenceForm;
 import com.iv1201.project.recruitment.presentation.forms.RestoreForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import java.util.Locale;
  */
 @Controller
 public class RestoreController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestoreController.class);
 
     @Autowired
     UserService userService;
@@ -48,6 +50,7 @@ public class RestoreController {
      */
     @PostMapping("/restore")
     public String restorePost(@Valid @ModelAttribute("restoreFormObject") RestoreForm restoreForm, BindingResult bindingResult, Model model) {
+        LOGGER.trace("Requested restore of account: " + restoreForm.getEmail());
         if (bindingResult.hasErrors()) {
             bindingResult
                 .getFieldErrors()

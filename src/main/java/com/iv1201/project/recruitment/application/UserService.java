@@ -13,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -26,6 +27,7 @@ import java.util.function.Function;
 @Component
 @Service
 public class UserService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     public static final String HARDCODED_RESET_PASSWORD = "new_password";
     /**
      * User role
@@ -114,11 +116,12 @@ public class UserService {
      * @param to availability end date
      */
     @Transactional
-    public void saveAvailabilityToUser(User user, LocalDate from, LocalDate to) {
-        if(!availabilityRepository.findByUserAndFromDateAndToDate(user, from, to).isPresent()) {
-            user.addAvailability(from, to);
+    public void saveAvailabilityToUser(User user, LocalDate from, LocalDate to) throws UserServiceError {
+        Availability av = new Availability(from, to, user);
+        if(!user.getAvailabilityList().contains(av)) {
+            user.addAvailability(av);
         } else {
-            throw new IllegalArgumentException("form.duplicateDates");
+            throw new UserServiceError(ERROR_CODE.CONFLICT_AVAILABIITY);
         }
     }
 
@@ -156,41 +159,57 @@ public class UserService {
     public void restoreUnmigratedPerson(String email) throws UserServiceError {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Optional<UnmigratedPerson> maybeUp = unmigratedPersonRepo.findByEmailIgnoreCase(email);
-        if(!maybeUp.isPresent())
+        if(!maybeUp.isPresent()) {
+            LOGGER.trace("Could not restore user, reason: NONEXISTENT '" + email + "'");
             return;
+        }
         UnmigratedPerson up = maybeUp.get();
 
-        if(userRepo.existsByEmailIgnoreCase(up.getEmail()))
+        if(userRepo.existsByEmailIgnoreCase(up.getEmail())) {
+            LOGGER.trace("Could not restore user, reason: CONFLICT '" + email + "'");
             throw new UserServiceError(ERROR_CODE.CONFLICTING_USER);
+        }
 
         User newUser = new User(up);
         newUser.setPassword(encoder.encode(HARDCODED_RESET_PASSWORD));
+        try {
+            this.validateUser(newUser, HARDCODED_RESET_PASSWORD);
 
-        this.validateUser(newUser, HARDCODED_RESET_PASSWORD);
-
-        //We silently ignore nonexistent competences
-        unmigratedCompRepo
-        .findAllBypersonId(up.getPersonId())
-        .forEach(umComp ->
-            translationRepo.findByText(umComp.getCompetenceName())
+            //We silently ignore nonexistent competences
+            unmigratedCompRepo
+            .findAllBypersonId(up.getPersonId())
+            .forEach(umComp ->
+                translationRepo.findByText(umComp.getCompetenceName())
                 .map(CompetenceTranslation::getCompetence)
-                .ifPresent(c -> {
+                .ifPresentOrElse(c -> {
+                        LOGGER.trace("\tTransfering competence from old to new User:\n" + umComp);
                         newUser.addCompetence(c, umComp.getYearsOfExperience());
                         unmigratedCompRepo.delete(umComp);
-                })
-        );
+                },               () ->
+                        LOGGER.trace("Skipping transfer of nonexistent competence: " + umComp.getCompetenceName())
+                )
+            );
 
-        unmigratedAvailabilityRepo
-        .findAllByPersonId(up.getPersonId())
-        .forEach(umAvail -> {
-                newUser.addAvailability(umAvail.getFromDate(), umAvail.getToDate());
-                unmigratedAvailabilityRepo.delete(umAvail);
-        });
-
-        User savedUser = userRepo.save(newUser);
-        Role r = up.getRole_id() == 1 ? Role.ROLE_ADMIN : Role.ROLE_USER;
-        authorityRepo.save(new Authority(r.toString(), savedUser));
-        unmigratedPersonRepo.delete(up);
+            unmigratedAvailabilityRepo
+            .findAllByPersonId(up.getPersonId())
+            .forEach(umAvail -> {
+                    LOGGER.trace("\tTransfering availability from old to new User:\n" + umAvail);
+                    newUser.addAvailability(umAvail.getFromDate(), umAvail.getToDate());
+                    unmigratedAvailabilityRepo.delete(umAvail);
+            });
+            LOGGER.trace("\tsaving new User.");
+            User savedUser = userRepo.save(newUser);
+            Role r = up.getRole_id() == 1 ? Role.ROLE_ADMIN : Role.ROLE_USER;
+            LOGGER.trace("\tsaving Authority for new User.");
+            authorityRepo.save(new Authority(r.toString(), savedUser));
+            LOGGER.trace("\tdeleting old UnmigratedUser.");
+            unmigratedPersonRepo.delete(up);
+        } catch (Exception e) {
+            LOGGER.error("Could not restore user, reason: EXCEPTION '" + email + "' [reverting transaction]", e);
+            //very important to rethrow this error!
+            throw e;
+        }
+            LOGGER.error("successfully restored user '" + email + "'.");
     }
 
     /**

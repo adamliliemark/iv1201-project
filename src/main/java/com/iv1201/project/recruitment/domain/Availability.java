@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Represents a stored Availability
@@ -48,5 +49,18 @@ public class Availability {
         this.fromDate = from;
         this.toDate = to;
         this.user = user;
+    }
+
+    @Override
+    public int hashCode() {
+        return (this.fromDate.toString() + this.toDate.toString() + user.getEmail()).hashCode();
+    }
+
+    @Override
+    public boolean equals (Object other) {
+        if(!(other instanceof Availability))
+            return false;
+        Availability oAvail = (Availability)other;
+        return this.fromDate.equals(oAvail.fromDate) && this.toDate.equals(oAvail.toDate) && Objects.equals(this.user.getEmail(), oAvail.user.getEmail());
     }
 }

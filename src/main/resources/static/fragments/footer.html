@@ -11,7 +11,7 @@
         </div>
         <div sec:authorize="isAnonymous()">Placeholder</div>
         <form sec:authorize="isFullyAuthenticated()" id="logout-form" method="POST" th:action="@{/logout}">
-            <a href="#" onclick="document.getElementById('logout-form').submit();" th:text="#{footer.logOut}"></a>
+            <a href="#" id="logoutBtn" onclick="document.getElementById('logout-form').submit();" th:text="#{footer.logOut}"></a>
         </form>
     </div>
 </footer>

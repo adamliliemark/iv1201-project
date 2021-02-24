@@ -10,7 +10,7 @@
     <div>
         <div class="title" th:text="#{error.title}"></div>
         <div class="home-middle">
-            <span th:text="#{error.__${error}__}"></span>
+            <span id="fallback-error" th:text="#{error.__${error}__}"></span>
             <form>
                 <input type="button" value="Go back!" onclick="history.back()">
             </form>

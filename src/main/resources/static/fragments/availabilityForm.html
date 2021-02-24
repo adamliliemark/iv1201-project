@@ -17,11 +17,11 @@
         <input type="date" name="to" id="to" th:field="*{to}" placeholder="yyyy-mm-dd" pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))" required>
         <input type="hidden" th:value="${user.email}" th:name="user">
         <p>
-            <input type="submit" th:value="#{submit}">
+            <input type="submit" id="availabilityFormSubmit" th:value="#{submit}">
         </p>
     </form>
     <form th:action="@{/apply/review}" action="#" class="form" method="post">
-        <input type="submit" th:value="#{apply.review.submit}">
+        <input type="submit" id="applicationFormReviewBtn" th:value="#{apply.review.submit}">
     </form>
 </div>
 </body>

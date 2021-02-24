@@ -19,10 +19,10 @@
         <input id="competenceYears" name="competenceYears" type="number" step="any" th:field="*{years}">
         <p>
             <div th:if="${last}" th:text="#{apply.message.last}"></div>
-            <input type="submit" th:value="#{add}" th:unless="${last}">
+            <input type="submit" id="competenceFormAdd" th:value="#{add}" th:unless="${last}">
     </form>
     <form th:action="@{/apply/availability}" action="#" class="form" method="get">
-        <input type="submit" th:value="#{submit}">
+        <input type="submit" id="competenceFormSubmit" th:value="#{submit}">
     </form>
 </div>
 </body>

@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
 </head>
 <body>
 <div class="applications" th:fragment="applications" th:object="${listFormObject}">
         <div th:if="${applicationsObject.empty && searched}" th:text="#{list.noApp}"></div>
         <div th:each="a, iter : ${applicationsObject}">
-            <div th:if="${min <= iter.index && max > iter.index}"><span
-                    th:text="${iter.index+1 + ': ' + a.firstName + ' ' + a.lastName}"></span></div>
+            <span th:if="${min <= iter.index && max > iter.index}" class="userApplication" th:text="${iter.index+1 + ': ' + a.firstName + ' ' + a.lastName}"></span>
             <p>
         </div>
         <div th:if="${interval <= min}">
