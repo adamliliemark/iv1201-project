@@ -8,13 +8,9 @@ async def main():
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
 
-    await login(page, "testuser@example.com", "pass")
-    await nap()
-    await check_first_page(page)
+    await login(page, USER, PASS)
     await nap()
     await page.click("#apply-link", WAIT_OPTS)
-    await nap()
-    await check_translation_table(page)
     await nap()
     await enter_and_check_competence_years(page)
     await nap()
@@ -25,24 +21,6 @@ async def main():
     await nap()
     await submit_entire_application(page)
     await browser.close()
-
-
-async def check_first_page(page):
-    print_test_case_desc("Checking that first page contains correct text.")
-    await page.waitForSelector(".home-middle")
-    assert (await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")) == ["You are a simple user..."]
-    print_success()
-
-
-async def check_translation_table(page):
-    print_test_case_desc("Checking that the value in the competences list is translated to English")
-    await page.waitForSelector("#competence")
-    expected_competences = ["Carousel operation", "Grilling sausage"]
-    competences = await page.JJeval("#competence", "node => [...node['0'].children].map(e => e.value)")
-    assert len(competences) == len(expected_competences), "Wrong length of competence selector"
-    for competence in expected_competences:
-        assert competence in competences, "Expected competence {} not in competence selector".format(competence)
-    print_success()
 
 
 async def enter_and_check_competence_years(page):

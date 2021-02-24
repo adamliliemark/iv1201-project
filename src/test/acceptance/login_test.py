@@ -51,7 +51,7 @@ async def check_wrong_login(page):
 
 async def login_with_testuser_credentials(page):
     print_test_case_desc("Logging in with testuser credentials")
-    await login(page, "testuser@example.com", "pass")
+    await login(page, USER, PASS)
     print_success()
 
 
@@ -77,7 +77,7 @@ async def check_testuser_login_redirect(page):
 
 async def login_with_testadmin_credentials(page):
     print_test_case_desc("Logging in with testadmin credentials")
-    await login(page, "testadmin@example.com", "pass")
+    await login(page, ADMIN, PASS)
     print_success()
 
 

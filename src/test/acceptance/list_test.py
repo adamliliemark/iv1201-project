@@ -8,9 +8,7 @@ async def main():
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
 
-    await login(page, "testadmin@example.com", "pass")
-    await nap()
-    await check_first_page(page)
+    await login(page, ADMIN, PASS)
     await nap()
     await page.click("#list-link", WAIT_OPTS)
     await nap()
@@ -22,14 +20,6 @@ async def main():
     await nap()
     await check_non_existing_application_search(page)
     await browser.close()
-
-
-async def check_first_page(page):
-    print_test_case_desc("Checking that first page contains correct text.")
-    expected_message = "You are an admin!"
-    actual_message = await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")
-    assert expected_message in actual_message, "Expected: {}\tActual: {}".format(expected_message, actual_message)
-    print_success()
 
 
 # hard coded global variables to be reused in multiple functions
