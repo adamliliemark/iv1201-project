@@ -11,6 +11,7 @@ async def main():
     await login_page(page)
     await login(page, USER, PASS)
     await nap()
+    await home_page(page)
     await browser.close()
 
 
@@ -23,5 +24,11 @@ async def login_page(page):
     print_success()
 
 
+async def home_page(page):
+    print_test_case_desc("Checking if home page is translated")
+    actual_text = await page.JJeval(".home-middle", "node => node.map(n => n.innerText)")
+    expected_text = "Du är endast en simpel användare..."
+    assert expected_text in actual_text, "Actual: {}\tExpected: {}".format(actual_text, expected_text)
+    print_success()
 
 asyncio.get_event_loop().run_until_complete(main())

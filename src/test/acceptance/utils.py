@@ -6,7 +6,9 @@ WAIT_OPTS = {"waitUntil": "networkidle0"}
 SELECTOR_WAIT = {"timeout": "1000"}
 LAUNCH_OPTIONS = {'args': ['--no-sandbox']}
 USER = "testuser@example.com"
+ADMIN = "testadmin@example.com"
 PASS = "pass"
+
 
 async def perform_action(action, args):
     for i in range(10):
