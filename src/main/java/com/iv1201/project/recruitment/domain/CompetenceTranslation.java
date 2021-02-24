@@ -45,4 +45,22 @@ public class CompetenceTranslation {
         this.language = la;
         this.text = text;
     }
+
+    @Override
+    public int hashCode() {
+        return this.text.hashCode() + this.language.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CompetenceTranslation that = (CompetenceTranslation) o;
+        if(this.competence == null) {
+            return language.equals(that.language) && that.competence == null && text.equals(that.text);
+        } else if (that.competence == null)
+            return false;
+        return language.equals(that.language) && competence.getId().equals(that.competence.getId()) && text.equals(that.text);
+    }
 }
