@@ -23,6 +23,7 @@ async def main():
     await nap()
     await wrong_type_availability_dates(page)
     await nap()
+    await page.click("body")
     await page.click("#apply-link", WAIT_OPTS)
     await nap()
     await page.click("#competenceFormSubmit")
@@ -63,10 +64,10 @@ async def null_availability_dates(page):
     await page.evaluate("document.forms['availabilityForm'].to.removeAttribute('required')")
     await page.click("#availabilityFormSubmit")
     await nap()
-    actual_error = await page.Jeval("#fallback-error", "node => node.innerText")
     expected_error = "There was an unexpected error when validation your data, for instance data of the wrong type. " \
                      "Please enter an appropriate value and try again."
-    assert actual_error == expected_error, "\nActual: {}\nExpected: {}".format(actual_error, expected_error)
+    actual_errors = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(value => value)")
+    assert len(actual_errors) == 3, "\nActual: {}\nExpected: {}".format(len(actual), 3)
     print_success()
 
 
@@ -82,10 +83,8 @@ async def wrong_type_availability_dates(page):
     await to_input.type("wrong")
     await page.click("#availabilityFormSubmit")
     await nap()
-    actual_error = await page.Jeval("#fallback-error", "node => node.innerText")
-    expected_error = "There was an unexpected error when validation your data, for instance data of the wrong type. " \
-                     "Please enter an appropriate value and try again."
-    assert actual_error == expected_error, "\nActual: {}\nExpected: {}".format(actual_error, expected_error)
+    actual_errors = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(value => value)")
+    assert len(actual_errors) == 3, "Incorrect amount of errors, expected {}, got {}".format(len(actual_errors), 3)
     print_success()
 
 
