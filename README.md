@@ -27,7 +27,7 @@ The following frameworks are used in the application:
 
 - Spring Boot
 - Thymeleaf
-- Spring Data (Commons and JPA)
+- Hibernate
 
 ## Architecture
 
