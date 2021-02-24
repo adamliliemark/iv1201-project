@@ -8,7 +8,9 @@ SELECTOR_WAIT = {"timeout": "1000"}
 LAUNCH_OPTIONS = {'args': ['--no-sandbox']}
 USER = "testuser@example.com"
 ADMIN = "testadmin@example.com"
+RESTORE = "anonymous@kth.se"
 PASS = "pass"
+RESTORE_PASS = "new_password"
 
 
 async def perform_action(action, args):

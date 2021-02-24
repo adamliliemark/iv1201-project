@@ -8,6 +8,10 @@ async def main():
     page = await browser.newPage()
     await page.setExtraHTTPHeaders({'Content-Language': 'sv-SE', 'Accept-Language': 'sv-SE,sv;q=0.9'})
     await retry_connect(BASE_URL, 20, page)
+    await restore_page(page)
+    await nap()
+    await page.goto(BASE_URL + "/login")
+    await nap()
     await login_page(page)
     await login(page, USER, PASS)
     await nap()
@@ -32,6 +36,16 @@ async def login_page(page):
     actual_legend = await page.Jeval("legend", "node => node.innerText")
     expected_legend = "Vänligen logga in."
     assert actual_legend == expected_legend, "Actual: {}\tExpected: {}".format(actual_legend, expected_legend)
+    print_success()
+
+
+async def restore_page(page):
+    print_test_case_desc("Checking if restore page is translated")
+    await page.goto(BASE_URL + "/restore")
+    await nap()
+    actual = await page.Jeval(".title", "node => node.innerText")
+    expected = "Ange epostadressen till ditt tidigare konto för att återställa det."
+    assert actual == expected, "Actual: {}\tExpected: {}".format(actual, expected)
     print_success()
 
 

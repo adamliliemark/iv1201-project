@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Validation of AvailabilityForm.
  * @see AvailabilityForm
@@ -36,7 +38,10 @@ public class AvailabilityFormValidator implements ConstraintValidator<Availabili
      * @return true if form is valid, false otherwise
      */
     public boolean isValid(AvailabilityForm availabilityForm, ConstraintValidatorContext context) {
-        assert(availabilityForm.getFrom() != null && availabilityForm.getTo() != null);
+        requireNonNull(availabilityForm);
+        if(availabilityForm.getFrom() == null || availabilityForm.getTo() == null) {
+            return false;
+        }
         return !availabilityForm.getTo().isBefore(availabilityForm.getFrom());
     }
 }
