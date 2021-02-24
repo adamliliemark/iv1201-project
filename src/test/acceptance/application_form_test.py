@@ -67,7 +67,7 @@ async def null_availability_dates(page):
     expected_error = "There was an unexpected error when validation your data, for instance data of the wrong type. " \
                      "Please enter an appropriate value and try again."
     actual_errors = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(value => value)")
-    assert len(actual_errors) == 3, "\nActual: {}\nExpected: {}".format(len(actual), 3)
+    assert len(actual_errors) == 3, "\nActual: {}\nExpected: {}".format(len(actual_errors), 3)
     print_success()
 
 
