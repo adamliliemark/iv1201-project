@@ -2,6 +2,7 @@ package com.iv1201.project.recruitment;
 
 import com.iv1201.project.recruitment.application.CompetenceService;
 import com.iv1201.project.recruitment.domain.Competence;
+import com.iv1201.project.recruitment.domain.CompetenceProfile;
 import com.iv1201.project.recruitment.domain.Language;
 import com.iv1201.project.recruitment.repository.CompetenceRepository;
 import com.iv1201.project.recruitment.repository.CompetenceTranslationRepository;
