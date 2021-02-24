@@ -1,6 +1,6 @@
 import asyncio
 from pyppeteer import launch
-from test_utils import *
+from utils import *
 
 
 async def main():
@@ -106,7 +106,6 @@ async def add_availability(page):
 
 async def check_availability_form(page):
     print_test_case_desc("Checking that the availability has been added")
-    # check that the page has been updated correctly
     await page.waitForSelector("#userAvailabilities", SELECTOR_WAIT)
     user_availabilities = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => "
                                                                    "e.innerText)")
