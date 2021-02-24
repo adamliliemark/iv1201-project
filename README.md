@@ -56,7 +56,7 @@ The image below shows the DevOps flow used during development
 
 ## Getting Started
 
-The development was performed in Microsoft Windows and if another operating system is used there is no guarantee that the following steps will set up a working application.
+The development was performed in Microsoft Windows and Mac OS and if another operating system is used there is no guarantee that the following steps will set up a working application.
 
 1. Download the project source code.
 2. Since the application was developed using the Intellij Ultimate IDEA it is recommended to download and install it. This can be done via this link [link](https://www.jetbrains.com/idea/). The community version can likely be used but there will probably be a need for adding plugins not existing originally.
