@@ -8,6 +8,7 @@ import org.hibernate.annotations.FetchMode;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -76,5 +77,20 @@ public class Competence {
                 .findAny()
                 .map(c -> c.getText())
                 .orElse("MISSING TRANSLATION");
+    }
+
+    @Override
+    public int hashCode() {
+        if(this.id != null)
+            return this.id.intValue() + this.translations.hashCode();
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Competence that = (Competence) o;
+        return Objects.equals(id, that.id) && Objects.equals(translations, that.translations);
     }
 }

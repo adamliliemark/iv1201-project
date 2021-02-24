@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Represents a stored Language
@@ -31,5 +32,18 @@ public class Language {
     public Language(String languageCode, String nativeName) {
         this.languageCode = languageCode;
         this.nativeName = nativeName;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.nativeName.hashCode() + this.languageCode.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Language language = (Language) o;
+        return Objects.equals(languageCode, language.languageCode) && Objects.equals(nativeName, language.nativeName);
     }
 }

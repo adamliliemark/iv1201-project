@@ -2,16 +2,9 @@ package com.iv1201.project.recruitment;
 
 
 import com.iv1201.project.recruitment.application.CompetenceService;
-import com.iv1201.project.recruitment.application.UserService;
-import com.iv1201.project.recruitment.application.exceptions.UserServiceError;
 import com.iv1201.project.recruitment.domain.*;
-import com.iv1201.project.recruitment.repository.CompetenceRepository;
-import com.iv1201.project.recruitment.repository.UserRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -19,23 +12,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserTest {
     private final String nonexistentUserEmail = "test@nonexistent.com";
-    private final String existentUserEmail = "test@existent.com";
-
-    private final String existentUnmigratedPersonEmail = "existent@unmigrated.com";
-    private final String existentUnmigratedPersonNoCompetenceEmail = "existentnocompetence@unmigrated.com";
-    private final String conflictingUnmigratedPersonEmail = existentUserEmail;
-
-    @Autowired
-    private UserRepository userRepo;
 
     @Autowired
     CompetenceService compService;
@@ -45,11 +28,6 @@ public class UserTest {
         return new BCryptPasswordEncoder();
     }
 
-    @BeforeAll
-    public void beforeAll() {
-        User existentUser = new User(existentUserEmail, "testName", "testLastName", "123", encoder().encode("pass"));
-        userRepo.save(existentUser);
-    }
 
     @Test
     public void user_should_be_instantiated_with_avail_and_competence() {
