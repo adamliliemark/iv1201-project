@@ -21,7 +21,6 @@ async def main():
     await add_availability(page)
     await nap()
     await check_availability_form(page)
-    await nap()
     await submit_availability_form(page)
     await nap()
     await submit_entire_application(page)
@@ -119,15 +118,11 @@ async def check_availability_form(page):
 async def submit_availability_form(page):
     print_test_case_desc("Submitting availability form")
     await page.click("#applicationFormReviewBtn")
-    if await page.J("#applicationFormReviewBtn") is None:
-        print_success()
-    else:
-        await submit_availability_form(page)
+    print_success()
 
 
 async def submit_entire_application(page):
     print_test_case_desc("Submitting the previously created application")
-    await page.screenshot({"path": "hej.png"})
     await page.waitForSelector("#submitApplication")
     await page.click("#submitApplication")
     print_success()
