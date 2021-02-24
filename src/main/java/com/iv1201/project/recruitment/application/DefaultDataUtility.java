@@ -43,6 +43,17 @@ class DefaultDataUtility {
                 userRepo.save(user);
             }
 
+            if (!userRepo.existsByEmailIgnoreCase("restoretest@example.com")) {
+                System.err.println("Saving restore user!");
+                User user = userService.addNewUser("restoretest@example.com",
+                        "restoreFirstName",
+                        "restoreLastName",
+                        "pass",
+                        UserService.Role.ROLE_USER,
+                        "19880102");
+                userRepo.save(user);
+            }
+
             if (!userRepo.existsByEmailIgnoreCase("testadmin@example.com")) {
                 System.err.println("Saving test admin!");
                 userService.addNewUser("testadmin@example.com",
