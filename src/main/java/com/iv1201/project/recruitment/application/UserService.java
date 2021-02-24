@@ -1,6 +1,7 @@
 package com.iv1201.project.recruitment.application;
 
 import com.iv1201.project.recruitment.application.exceptions.UserServiceError;
+import com.iv1201.project.recruitment.config.MockBeanConfig;
 import com.iv1201.project.recruitment.domain.*;
 import com.iv1201.project.recruitment.domain.unmigratedData.UnmigratedPerson;
 import com.iv1201.project.recruitment.repository.*;
@@ -39,6 +40,9 @@ public class UserService {
         /** ROLE_ADMIN denotes recruiter level access */
         ROLE_ADMIN
     }
+
+    @Autowired
+    private MockBeanConfig.EmailDispatcher emailDispatcher;
 
     @Autowired
     private CompetenceRepository competenceRepo;
@@ -209,7 +213,10 @@ public class UserService {
             //very important to rethrow this error!
             throw e;
         }
-            LOGGER.error("successfully restored user '" + email + "'.");
+        emailDispatcher.sendEmail(email, "Your account has been restored, " +
+                "you can login with your email address " +
+                "and the password: " + HARDCODED_RESET_PASSWORD + ".");
+        LOGGER.error("successfully restored user '" + email + "'.");
     }
 
     /**
