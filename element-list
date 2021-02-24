@@ -1,0 +1,10 @@
+com.iv1201.project.recruitment
+com.iv1201.project.recruitment.application
+com.iv1201.project.recruitment.application.exceptions
+com.iv1201.project.recruitment.config
+com.iv1201.project.recruitment.domain
+com.iv1201.project.recruitment.domain.unmigratedData
+com.iv1201.project.recruitment.presentation
+com.iv1201.project.recruitment.presentation.forms
+com.iv1201.project.recruitment.repository
+com.iv1201.project.recruitment.repository.unmigratedData
