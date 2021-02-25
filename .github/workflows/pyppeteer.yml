@@ -14,7 +14,7 @@ jobs:
         with:
           java-version: 11
       - name: Set up pyppeteer
-        run: pip3 install pyppeteer && pip3 install pyjavaproperties
+        run: pip3 install pyppeteer pyjavaproperties
       - name: Compile and start server
         run: mvn compile exec:java -Dexec.mainClass="com.iv1201.project.recruitment.Main" -Dmaven.test.skip -q -Dspring-boot.run.arguments="--spring.profiles.active=test" &
       - name: Login test, login and logout as testuser and testadmin
