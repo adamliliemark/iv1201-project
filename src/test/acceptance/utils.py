@@ -21,6 +21,13 @@ def load_properties_file(locale):
     return props
 
 
+def load_properties_locally(locale):
+    props = Properties()
+    props.load(open(os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.getcwd(), os.pardir)), os.pardir)) +
+                    locale + '.properties', mode='r'))
+    return props
+
+
 async def perform_action(action, args):
     for i in range(10):
         try:
