@@ -87,7 +87,8 @@ public class ApplicationController {
     @PostMapping("/apply/competence")
     public String fetchCompetenceForm(@Valid @ModelAttribute("competenceFormObject") CompetenceForm competenceFormObject, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
-            model.addAttribute("error", bindingResult.getAllErrors());
+            model.addAttribute("errorsPresent", true);
+            model.addAttribute("fieldErrors", bindingResult.getAllErrors());
         } else {
             if(!competences.containsKey(competenceFormObject.getName())) {
                 throw new RuntimeException("form.competence.notInDB");

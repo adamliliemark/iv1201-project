@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,23 +74,22 @@ public class ListController {
      */
     @PostMapping("/list/applications")
     public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm,  BindingResult bindingResult, Model model) {
+        System.out.println("POST!");
 
         if(bindingResult.hasErrors()) {
-            model.addAttribute("error", bindingResult.getAllErrors());
+            model.addAttribute("errorsPresent", true);
+            model.addAttribute("fieldErrors", bindingResult.getAllErrors());
         }
-        if (!bindingResult.hasErrors()) {
-
+        else {
             if (searcher == null)
                 searcher = new SearchService();
-
-                try {
-                    applications = searcher.getApplications(listForm, competences.values());
-                    searched = true;
-                } catch (SearchServiceError e) {
-                    e.printStackTrace();
-                }
-        }else
-            model.addAttribute("error", bindingResult.getAllErrors());
+            try {
+                applications = searcher.getApplications(listForm, competences.values());
+                searched = true;
+            } catch (SearchServiceError e) {
+                e.printStackTrace();
+            }
+        }
 
 
         if(applications == null)
