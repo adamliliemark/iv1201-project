@@ -1,5 +1,10 @@
 # The Green Garden Recruitment Application
 
+![Java CI with Maven](https://github.com/adamliliemark/iv1201-project/actions/workflows/maven.yml/badge.svg)
+![Pyppeteer acceptance tests](https://github.com/adamliliemark/iv1201-project/actions/workflows/pyppeteer.yml/badge.svg)
+
+
+
 This application was developed as part of the Royal Institute of Technology KTH course IV1201 - Design of Global Applications.
 
 It serves as system handling recruitment applications and distinguish between two types of users: 
@@ -8,6 +13,8 @@ It serves as system handling recruitment applications and distinguish between tw
 
 Applicants can log in and specify their competences from a given list, their experience in form of years as well as the time periods which they are available for work.
 Recruiters can in addition to what a normal applicant can do, also search for applications entered by system users based on competence, availability periods and names. 
+
+### [Javadocs](https://adamliliemark.github.io/iv1201-project/index.html)
 
 ## Tools
 
