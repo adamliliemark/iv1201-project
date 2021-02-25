@@ -22,7 +22,6 @@ async def main():
 
 async def only_one_date(page, props):
     print_test_case_desc("Checking entering only one date results in error")
-    await nap()
     #await page.evaluate("document.forms['listForm'].from.valueAsDate = (new Date())")
     from_input = await page.J("#from")
     await from_input.type("01-01-2222")
