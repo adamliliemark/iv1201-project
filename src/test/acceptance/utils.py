@@ -24,7 +24,7 @@ def load_properties_file(locale):
 def load_properties_locally(locale):
     props = Properties()
     props.load(open(os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.getcwd(), os.pardir)), os.pardir)) +
-                    locale + '.properties', mode='r'))
+                    '/main/resources/messages' + locale + '.properties', mode='r'))
     return props
 
 
