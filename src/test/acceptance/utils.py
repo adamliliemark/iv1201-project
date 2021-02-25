@@ -17,7 +17,7 @@ RESTORE_PASS = "new_password"
 def load_properties_file(locale):
     props = Properties()
     props.load(open(os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.getcwd(), os.pardir)), os.pardir)) +
-                    'iv1201-project/iv1201-project/src/main/resources/messages' + locale + '.properties', mode='r'))
+                    '/iv1201-project/iv1201-project/src/main/resources/messages' + locale + '.properties', mode='r'))
     return props
 
 
