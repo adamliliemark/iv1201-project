@@ -1,9 +1,9 @@
-import asyncio
 from pyppeteer import launch
 from utils import *
 
 
 async def main():
+    props = load_properties_file("")
     browser = await launch(options=LAUNCH_OPTIONS)
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
@@ -18,7 +18,7 @@ async def main():
     await nap()
     await search_for_non_existing_application(page)
     await nap()
-    await check_non_existing_application_search(page)
+    await check_non_existing_application_search(page, props)
     await browser.close()
 
 
@@ -87,10 +87,10 @@ async def search_for_non_existing_application(page):
     print_success()
 
 
-async def check_non_existing_application_search(page):
+async def check_non_existing_application_search(page, props):
     print_test_case_desc("Checking that the no application showed up on the page")
     found_application = await page.JJeval(".applications", "node => node.map(n => n.innerText)")
-    expected_user_application = "No applications matched your search"
+    expected_user_application = props['list.noApp']
     assert expected_user_application in found_application, "Applicant found when no" \
                                                            " one was expected in: {}".format(found_application)
     print_success()

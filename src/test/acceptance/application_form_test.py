@@ -1,8 +1,8 @@
-import asyncio
 from pyppeteer import launch
 from utils import *
 
 async def main():
+    props = load_properties_file("")
     browser = await launch(options=LAUNCH_OPTIONS)
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
@@ -11,11 +11,11 @@ async def main():
     await nap()
     await page.click("#apply-link", WAIT_OPTS)
     await nap()
-    await null_years_js(page)
+    await null_years(page, props)
     await nap()
     await page.click("#competenceFormSubmit")
     await nap()
-    await wrong_order_availability_dates(page)
+    await wrong_order_availability_dates(page, props)
     await nap()
     await page.click("#apply-link", WAIT_OPTS)
     await nap()
@@ -28,46 +28,33 @@ async def main():
     await nap()
     await page.click("#competenceFormSubmit")
     await nap()
-    await null_availability_dates(page)
+    await null_availability_dates(page, props)
     await browser.close()
 
 
-async def null_years_js(page):
+async def null_years(page, props):
     print_test_case_desc("Checking that en empty input in competence years results in error")
     years = await page.J("#competenceYears")
     await years.type("")
     await page.click("#competenceFormAdd")
     actual_error = await page.Jeval("#js-error-text", "node => node.innerText")
-    expected_error = "Years of experience must be supplied."
+    expected_error = props['error.competenceYearsMissing']
     assert actual_error == expected_error, "Actual: {}\tExpected: {}".format(actual_error, expected_error)
     await page.click("body")
     print_success()
 
 
-async def wrong_years_nonjs(page):
-    csrf = await page.J("#_csrf")
-    await page.setRequestInterception(True)
-    page.on('request', "interceptedRequest => {"
-                       "   var data = {"
-                       "      'method': 'POST',"
-                       "      'postData': 'name=Carousel+operation&years=NaN'"
-                       "};"
-                       "interceptedRequest.continue(data);"
-                       "});")
-    await page.click("#apply-link")
-    await page.screenshot({"path": "int.png"})
-
-
-async def null_availability_dates(page):
+async def null_availability_dates(page, props):
     print_test_case_desc("Checking that an empty input in availability dates results in error")
     await page.evaluate("document.forms['availabilityForm'].from.removeAttribute('required')")
     await page.evaluate("document.forms['availabilityForm'].to.removeAttribute('required')")
     await page.click("#availabilityFormSubmit")
     await nap()
-    expected_error = "There was an unexpected error when validation your data, for instance data of the wrong type. " \
-                     "Please enter an appropriate value and try again."
-    actual_errors = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(value => value)")
-    assert len(actual_errors) == 3, "\nActual: {}\nExpected: {}".format(len(actual_errors), 3)
+    expected_error = [props['error.form.availability.datesInWrongOrder'], props['error.form.from.null'],
+                      props['error.form.to.null']]
+    actual_errors = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(n => n.innerText)")
+    assert expected_error.sort() == actual_errors.sort(), f"\nActual: {actual_errors}\nExpected: {expected_error}"
+    assert len(actual_errors) == 3, f"\nActual: {len(actual_errors)}\nExpected: {3}"
     print_success()
 
 
@@ -88,7 +75,7 @@ async def wrong_type_availability_dates(page):
     print_success()
 
 
-async def wrong_order_availability_dates(page):
+async def wrong_order_availability_dates(page, props):
     print_test_case_desc("Checking that dates in wrong order results in error")
     from_input = await page.J("#from")
     to_input = await page.J("#to")
@@ -97,16 +84,9 @@ async def wrong_order_availability_dates(page):
     await page.click("#availabilityFormSubmit")
     await nap()
     actual_error = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(c => c.innerText)")
-    expected_error = "From date can not be after to date."
+    expected_error = props['error.form.availability.datesInWrongOrder']
     assert expected_error in actual_error
     await page.click("body")
-    print_success()
-
-
-async def submit_entire_application(page):
-    print_test_case_desc("Submitting the previously created application")
-    await page.waitForSelector("#submitApplication")
-    await page.click("#submitApplication")
     print_success()
 
 

@@ -1,9 +1,9 @@
-import asyncio
 from pyppeteer import launch
 from utils import *
 
 
 async def main():
+    props = load_properties_file("")
     browser = await launch(options=LAUNCH_OPTIONS)
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
@@ -26,7 +26,7 @@ async def main():
     await nap()
     await login_with_wrong_credentials(page)
     await nap()
-    await check_wrong_login(page)
+    await check_wrong_login(page, props)
     await browser.close()
 
 
@@ -41,10 +41,10 @@ async def login_with_wrong_credentials(page):
     print_success()
 
 
-async def check_wrong_login(page):
+async def check_wrong_login(page, props):
     print_test_case_desc("Checking error message due to wrong credentials")
     error_message = await page.Jeval(".alert.alert-error", "node => node.innerText")
-    expected_error_message = "Invalid username and password."
+    expected_error_message = props['login.invalid']
     assert error_message == expected_error_message, "Unexpected error message: {}".format(error_message)
     print_success()
 
