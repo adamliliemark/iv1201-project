@@ -1,9 +1,9 @@
-import asyncio
 from pyppeteer import launch
 from utils import *
 
 
 async def main():
+    props = load_properties_file("")
     browser = await launch(options=LAUNCH_OPTIONS)
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
@@ -16,7 +16,7 @@ async def main():
     await nap()
     await add_availability(page)
     await nap()
-    await check_availability_form(page)
+    await check_availability_form(page, props)
     await submit_availability_form(page)
     await nap()
     await submit_entire_application(page)
@@ -82,12 +82,12 @@ async def add_availability(page):
     print_success()
 
 
-async def check_availability_form(page):
+async def check_availability_form(page, props):
     print_test_case_desc("Checking that the availability has been added")
     await page.waitForSelector("#userAvailabilities", SELECTOR_WAIT)
     user_availabilities = await page.JJeval("#userAvailabilities", "node => [...node['0'].children].map(e => "
                                                                    "e.innerText)")
-    expected_availability = from_string + " to " + to_string
+    expected_availability = from_string + " " + props['to'] + " " + to_string
     assert expected_availability in user_availabilities, "Expected availability not in availability list"
     print_success()
 

@@ -1,6 +1,7 @@
 import pyppeteer as pypp
 import asyncio
-
+from pyjavaproperties import Properties
+import os
 
 BASE_URL = "http://127.0.0.1:8080"
 WAIT_OPTS = {"waitUntil": "networkidle0"}
@@ -11,6 +12,13 @@ ADMIN = "testadmin@example.com"
 RESTORE = "anonymous@kth.se"
 PASS = "pass"
 RESTORE_PASS = "new_password"
+
+
+def load_properties_file(locale):
+    props = Properties()
+    props.load(open(os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.getcwd(), os.pardir)), os.pardir)) +
+                    '/main/resources/messages' + locale + '.properties', mode='r'))
+    return props
 
 
 async def perform_action(action, args):
@@ -30,7 +38,7 @@ def print_test_case_desc(desc):
 
 
 def print_success():
-    print("   \N{check mark}")
+    print("\t\t\N{check mark}")
 
 
 async def retry_connect(url, retries, page):
@@ -59,4 +67,3 @@ async def login(page, user, password):
 async def logout(page):
     await page.waitForSelector("#logoutBtn")
     await page.click("#logoutBtn")
-
