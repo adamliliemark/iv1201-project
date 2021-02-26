@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.validation.BindException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ValidationException;
 
@@ -35,6 +36,34 @@ public class ErrorHandler implements ErrorController {
     public String handleException(ValidationException exception, Model model) {
         logExceptionErrorLevel(exception);
         model.addAttribute("error", "validexc");
+        return "errorFallbackView";
+    }
+
+    /**
+     * Catches errors when no handler is found.
+     * @param exception for logging
+     * @param model for thymeleaf
+     * @return errorFallbackView with 404 message
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String notfound(NoHandlerFoundException exception, Model model) {
+        logExceptionErrorLevel(exception);
+        model.addAttribute("error", "404");
+        return "errorFallbackView";
+    }
+
+    /**
+     * Catches errors when illegal state occurs.
+     * @param exception for logging
+     * @param model for thymeleaf
+     * @return errorFallbackView with 404 message
+     */
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String illegalState(IllegalStateException exception, Model model) {
+        logExceptionErrorLevel(exception);
+        model.addAttribute("error", "404");
         return "errorFallbackView";
     }
 
@@ -81,6 +110,7 @@ public class ErrorHandler implements ErrorController {
         model.addAttribute("error", "generic");
         return "errorFallbackView";
     }
+
 
     /**
      * Boilerplate needed for implementing ErrorController

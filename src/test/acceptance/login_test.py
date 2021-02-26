@@ -12,6 +12,10 @@ async def main():
     await nap()
     await check_testuser_login_redirect(page)
     await nap()
+    await page.goto(BASE_URL + "/qwerty")
+    await nap()
+    await check_404_page(page, props)
+    await nap()
     await test_logout(page)
     await nap()
     await check_logout_redirect(page)
@@ -28,6 +32,14 @@ async def main():
     await nap()
     await check_wrong_login(page, props)
     await browser.close()
+
+
+async def check_404_page(page, props):
+    print_test_case_desc("Checking that the 404 page is displayed")
+    actual_error = await page.Jeval("#fallback-error", "node => node.innerText")
+    expected_error = props['error.404']
+    assert actual_error == expected_error, f"Actual: {actual_error}\tExpected: {expected_error}"
+    print_success()
 
 
 async def login_with_wrong_credentials(page):
