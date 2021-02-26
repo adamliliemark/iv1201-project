@@ -21,7 +21,7 @@ async def main():
     await nap()
     await page.click("#competenceFormSubmit")
     await nap()
-    await wrong_type_availability_dates(page)
+    await wrong_type_availability_dates(page, props)
     await nap()
     await page.click("body")
     await page.click("#apply-link", WAIT_OPTS)
@@ -58,7 +58,7 @@ async def null_availability_dates(page, props):
     print_success()
 
 
-async def wrong_type_availability_dates(page):
+async def wrong_type_availability_dates(page, props):
     print_test_case_desc("Checking that wrong input in availability dates results in error")
     await page.evaluate("document.forms['availabilityForm'].from.removeAttribute('type')")
     await page.evaluate("document.forms['availabilityForm'].to.removeAttribute('type')")
@@ -70,7 +70,10 @@ async def wrong_type_availability_dates(page):
     await to_input.type("wrong")
     await page.click("#availabilityFormSubmit")
     await nap()
-    actual_errors = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(value => value)")
+    actual_errors = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(n => n.innerText)")
+    expected_errors = [props['error.from.typeMismatch'], props['error.to.typeMismatch'],
+                       props['error.form.availability.datesInWrongOrder']]
+    assert expected_errors.sort() == actual_errors.sort(), f"\nActual: {actual_errors}\nExpected: {expected_errors}"
     assert len(actual_errors) == 3, "Incorrect amount of errors, expected {}, got {}".format(len(actual_errors), 3)
     print_success()
 

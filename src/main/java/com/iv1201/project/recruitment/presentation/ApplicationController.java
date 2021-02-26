@@ -87,7 +87,9 @@ public class ApplicationController {
     @PostMapping("/apply/competence")
     public String fetchCompetenceForm(@Valid @ModelAttribute("competenceFormObject") CompetenceForm competenceFormObject, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
-            model.addAttribute("error", bindingResult.getAllErrors());
+            model.addAttribute("errorsPresent", true);
+            model.addAttribute("fieldErrors", bindingResult.getFieldErrors());
+            model.addAttribute("globalErrors", bindingResult.getGlobalErrors());
         } else {
             if(!competences.containsKey(competenceFormObject.getName())) {
                 throw new RuntimeException("form.competence.notInDB");
@@ -132,9 +134,10 @@ public class ApplicationController {
         model.addAttribute("user", user);
         model.addAttribute("form", "availability");
 
-        if(bindingResult.hasErrors()) {
+          if(bindingResult.hasErrors()) {
             model.addAttribute("errorsPresent", true);
-            model.addAttribute("fieldErrors", bindingResult.getAllErrors());
+            model.addAttribute("fieldErrors", bindingResult.getFieldErrors());
+            model.addAttribute("globalErrors", bindingResult.getGlobalErrors());
         } else {
             try {
                 userService.saveAvailabilityToUser(user, availabilityFormObject.getFrom(), availabilityFormObject.getTo());
@@ -151,6 +154,7 @@ public class ApplicationController {
         }
         return "applicationView";
     }
+
 
     /**
      * Delivers the review page.

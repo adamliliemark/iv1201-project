@@ -21,12 +21,11 @@ def load_properties_file(locale):
     return props
 
 
-async def perform_action(action, args):
-    for i in range(10):
-        try:
-            return await action(args)
-        except pypp.errors.NetworkError:
-            print("Something went wrong but I'm ignoring it.")
+def load_properties_locally(locale):
+    props = Properties()
+    props.load(open(os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.getcwd(), os.pardir)), os.pardir)) +
+                    '/main/resources/messages' + locale + '.properties', mode='r'))
+    return props
 
 
 async def nap():

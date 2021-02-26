@@ -23,6 +23,7 @@ public class ErrorHandler implements ErrorController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ErrorHandler.class);
 
+
     /**
      * Catches unexpected validation errors, for instance data of the wrong type.
      * @param exception ValidationException

@@ -21,7 +21,8 @@
 <div id="th-error-overlay" th:if="${errorsPresent}" th:fragment="errorOverlayTh">
     <input type="checkbox" id="what" th:checked="${errorsPresent}">
     <label for="what" id="th-error-label" class="error-overlay">
-        <p th:if="${fieldErrors != null}" th:each="error : ${fieldErrors}" class="error-text" th:text="#{error.__${error.getDefaultMessage}__}">
+        <p th:if="${globalErrors != null}" th:each="error : ${globalErrors}" class="error-text" th:text="#{error.__${error.getDefaultMessage}__}">
+        <p th:if="${fieldErrors != null}" th:each="error : ${fieldErrors}" class="error-text" th:text="#{error.__${error.getField}__.__${error.getCode}__}">
         <p th:if="${error != null}" class="error-text" th:text="#{${error}}">
     </label>
 </div>

@@ -73,23 +73,23 @@ public class ListController {
      */
     @PostMapping("/list/applications")
     public String listParameters (@Valid @ModelAttribute("listFormObject") ListForm listForm,  BindingResult bindingResult, Model model) {
+        System.out.println("POST!");
 
         if(bindingResult.hasErrors()) {
-            model.addAttribute("error", bindingResult.getAllErrors());
+            model.addAttribute("errorsPresent", true);
+            model.addAttribute("fieldErrors", bindingResult.getFieldErrors());
+            model.addAttribute("globalErrors", bindingResult.getGlobalErrors());
         }
-        if (!bindingResult.hasErrors()) {
-
+        else {
             if (searcher == null)
                 searcher = new SearchService();
-
-                try {
-                    applications = searcher.getApplications(listForm, competences.values());
-                    searched = true;
-                } catch (SearchServiceError e) {
-                    e.printStackTrace();
-                }
-        }else
-            model.addAttribute("error", bindingResult.getAllErrors());
+            try {
+                applications = searcher.getApplications(listForm, competences.values());
+                searched = true;
+            } catch (SearchServiceError e) {
+                e.printStackTrace();
+            }
+        }
 
 
         if(applications == null)
