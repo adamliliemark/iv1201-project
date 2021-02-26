@@ -1,8 +1,8 @@
 name: Pyppeteer
 
 on:
-  push:
-    branches: [ pypp ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
