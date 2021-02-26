@@ -28,14 +28,6 @@ def load_properties_locally(locale):
     return props
 
 
-async def perform_action(action, args):
-    for i in range(10):
-        try:
-            return await action(args)
-        except pypp.errors.NetworkError:
-            print("Something went wrong but I'm ignoring it.")
-
-
 async def nap():
     await asyncio.sleep(0.5)
 

@@ -78,7 +78,8 @@ public class ListController {
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("errorsPresent", true);
-            model.addAttribute("fieldErrors", bindingResult.getAllErrors());
+            model.addAttribute("fieldErrors", bindingResult.getFieldErrors());
+            model.addAttribute("globalErrors", bindingResult.getGlobalErrors());
         }
         else {
             if (searcher == null)

@@ -8,8 +8,6 @@ async def main():
     page = await browser.newPage()
     await retry_connect(BASE_URL, 20, page)
 
-    await page.setJavaScriptEnabled(enabled=True)
-
     await login(page, ADMIN, PASS)
     await nap()
     await page.click("#list-link")
@@ -63,8 +61,9 @@ async def wrong_order_list_dates(page, props):
     await nap()
     actual_error = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(c => c.innerText)")
     expected_error = props['error.form.list.wrongOrder']
-    assert expected_error in actual_error
+    assert expected_error in actual_error, "Actual {}\tExpected: {}".format(actual_error, expected_error)
     await page.click("body")
     print_success()
+
 
 asyncio.get_event_loop().run_until_complete(main())
