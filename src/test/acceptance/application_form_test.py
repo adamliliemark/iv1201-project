@@ -70,7 +70,6 @@ async def wrong_type_availability_dates(page, props):
     await to_input.type("wrong")
     await page.click("#availabilityFormSubmit")
     await nap()
-    await page.screenshot({"path": "hej.png"})
     actual_errors = await page.JJeval("#th-error-label", "node => [...node['0'].children].map(n => n.innerText)")
     expected_errors = [props['error.from.typeMismatch'], props['error.to.typeMismatch'],
                        props['error.form.availability.datesInWrongOrder']]
