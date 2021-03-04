@@ -11,7 +11,7 @@ public class MockBeanConfig {
     public static class EmailDispatcher {
         private static final Logger LOGGER = LoggerFactory.getLogger(RestoreController.class);
         public void sendEmail(String recipient, String content) {
-            LOGGER.trace("Email sent to: '" + recipient + "' with content\n\"\t" + content +"\"");
+            LOGGER.trace("Email sent to: '" + recipient +"'");
         }
     }
     @Bean
