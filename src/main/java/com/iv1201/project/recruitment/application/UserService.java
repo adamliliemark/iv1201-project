@@ -216,7 +216,7 @@ public class UserService {
         emailDispatcher.sendEmail(email, "Your account has been restored, " +
                 "you can login with your email address " +
                 "and the password: " + HARDCODED_RESET_PASSWORD + ".");
-        LOGGER.error("successfully restored user '" + email + "'.");
+        LOGGER.trace("successfully restored user '" + email + "'.");
     }
 
     /**

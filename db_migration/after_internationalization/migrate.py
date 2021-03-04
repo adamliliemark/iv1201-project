@@ -71,6 +71,9 @@ if TEST:
 
 #For testing: remove and recreate example legacy schema
 if TEST:
+    cursor.execute("drop schema if exists {}".format(schema))
+    cursor.execute("create schema  {}".format(schema))
+    cursor.execute("use {}".format(schema))
     executeSQLScript('creat_old_db.sql')
 
 #Create temp schema and dump old schema into it
@@ -85,22 +88,25 @@ cursor.execute("use {}".format(tempSchema))
 executeSQLScript('modify_temp.sql')
 
 #Important: Hash the migrated passwords using BCRYPT 
+#They can either have a non null email
 cursor.execute("select password, email from users")
 passwordEmail = cursor.fetchall()
 for usr in passwordEmail:
-    if usr[0] != None and False:
+    if usr[0] != None and usr[1] != None:
         salt = bcrypt.gensalt()
         hashedPass = bcrypt.hashpw(user[0].encode("utf-8"), salt) 
-        cursor.execute("update users set password = {} where email = {}".format(hashedPass.decode('utf-8'), usr[1]))
+        cursor.execute("update users set password = '{}' where email = '{}'".format(hashedPass.decode('utf-8'), usr[1]))
+
 
 #Also hash the passwords of incomplete users for obvious reasons 
 cursor.execute("select password, person_id from unmigrated_person")
 unmigratedPasswordEmail = cursor.fetchall()
 for usr in unmigratedPasswordEmail:
-    if user[0] != None and False:
+    if usr[0] != None:
         salt = bcrypt.gensalt()
         hashedPass = bcrypt.hashpw(usr[0].encode("utf-8"), salt) 
         cursor.execute("update unmigrated_person set password = '{}' where person_id = {}".format(hashedPass.decode('utf-8'), usr[1]))
+
 
 #Manual translation process if selected
 if MANUALTRANSLATE:

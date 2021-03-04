@@ -2,16 +2,19 @@ drop schema if exists recruitmentdb;
 create schema recruitmentdb;
 use recruitmentdb;
 
+CREATE DATABASE  IF NOT EXISTS `recruitmentdb` 
+/*!40100 DEFAULT CHARACTER SET utf8mb4 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `recruitmentdb`;
 -- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
 --
 -- Host: localhost    Database: recruitmentdb
 -- ------------------------------------------------------
--- Server version       8.0.20
+-- Server version	8.0.20
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -31,9 +34,9 @@ CREATE TABLE `authorities` (
   `authority` varchar(255) NOT NULL,
   `user_email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKkwejet1qepg6ldux6ns5ti8lg` (`user_email`),
+  UNIQUE KEY `UKltl1e0mgxnuxv78eswphc7qvn` (`user_email`,`authority`),
   CONSTRAINT `FKkwejet1qepg6ldux6ns5ti8lg` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,6 +52,7 @@ CREATE TABLE `availability` (
   `to_date` date NOT NULL,
   `user_email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `UK5q40gnjonhjrg0605bqg9domf` (`from_date`,`to_date`,`user_email`),
   KEY `FKme040xvsxikuykxdhliy12k4h` (`user_email`),
   CONSTRAINT `FKme040xvsxikuykxdhliy12k4h` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -64,7 +68,7 @@ DROP TABLE IF EXISTS `competence`;
 CREATE TABLE `competence` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +108,7 @@ CREATE TABLE `competence_translation` (
   KEY `FKccda0nnakys6a6difylemtawb` (`language_language_code`),
   CONSTRAINT `FK3gukvetioeanbv0jvpeej3mx2` FOREIGN KEY (`competence_id`) REFERENCES `competence` (`id`),
   CONSTRAINT `FKccda0nnakys6a6difylemtawb` FOREIGN KEY (`language_language_code`) REFERENCES `language` (`language_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,11 +151,9 @@ DROP TABLE IF EXISTS `unmigrated_competence_profile`;
 CREATE TABLE `unmigrated_competence_profile` (
   `competence_profile_id` bigint NOT NULL,
   `competence_name` varchar(255) DEFAULT NULL,
+  `person_id` bigint DEFAULT NULL,
   `years_of_experience` double DEFAULT NULL,
-  `person_id_person_id` bigint NOT NULL,
-  PRIMARY KEY (`competence_profile_id`),
-  KEY `FKlvr4wbgj98c5bqhq86fwipi6t` (`person_id_person_id`),
-  CONSTRAINT `FKlvr4wbgj98c5bqhq86fwipi6t` FOREIGN KEY (`person_id_person_id`) REFERENCES `unmigrated_person` (`person_id`)
+  PRIMARY KEY (`competence_profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -165,7 +167,6 @@ DROP TABLE IF EXISTS `unmigrated_person`;
 CREATE TABLE `unmigrated_person` (
   `person_id` bigint NOT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `role_id` bigint DEFAULT NULL,
@@ -188,11 +189,12 @@ CREATE TABLE `users` (
   `enabled` bit(1) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
   `ssn` varchar(255) NOT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -202,4 +204,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-29 23:11:20
+-- Dump completed on 2021-03-04 20:24:14
